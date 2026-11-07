@@ -28,7 +28,14 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15p
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
 .wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
-.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-block:14px 8px;flex-wrap:wrap}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-block:14px 8px}
+.brand{min-width:0}
+/* Sağ üstteki Programım düğmesi */
+.minebtn{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;font-family:var(--display);font-size:17px;font-weight:600;line-height:1;
+  background:var(--accent);color:var(--accent-ink);border:1px solid var(--accent);border-radius:8px;padding:8px 12px;cursor:pointer}
+.minebtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.minebtn .badge{min-width:20px;box-sizing:border-box;padding:2px 6px;border-radius:999px;background:var(--surface);color:var(--ink);font-size:14px;text-align:center}
+.minebtn .badge[hidden]{display:none}
 .brand h1{font-family:var(--display);font-weight:700;font-size:26px;line-height:1;margin:0;letter-spacing:.2px;text-wrap:balance}
 .brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
 .count{font-family:var(--display);font-size:15px;font-weight:600;color:var(--accent);white-space:nowrap}
@@ -161,7 +168,7 @@ main.wide,header .wide{max-width:1500px}
         <h1>17. Ulusal Tıbbi Genetik Kongresi</h1>
         <p>2–6 Aralık 2026 · Kaya Palazzo Golf Resort, Antalya</p>
       </div>
-      <div class="count" id="count">0 seçim</div>
+      <button type="button" class="minebtn" id="minebtn" aria-pressed="false">Programım<span class="badge" id="count" hidden>0</span></button>
     </div>
     <button type="button" class="nowbar" id="nowbar" hidden></button>
     <nav class="tabs" id="tabs" role="tablist"></nav>
@@ -553,8 +560,8 @@ function icsText(){
 const view=document.getElementById("view");
 function tabsRender(){
   document.getElementById("tabs").innerHTML=DAYS.map(D=>`<button class="tab" role="tab" data-tab="${D.k}" aria-selected="${tab===D.k}"><small>${D.w}</small><b>${D.l}</b></button>`).join("")
-   +`<button class="tab mine" role="tab" data-tab="oral" aria-selected="${tab==="oral"}"><small>Salonlar yan yana</small><b>Sözlü bildiriler</b></button>`
-   +`<button class="tab mine" role="tab" data-tab="mine" aria-selected="${tab==="mine"}"><small>Seçtiklerim</small><b>Programım (${sel.size})</b></button>`;
+   +`<button class="tab mine" role="tab" data-tab="oral" aria-selected="${tab==="oral"}"><small>Salonlar yan yana</small><b>Sözlü bildiriler</b></button>`;
+  document.getElementById("minebtn").setAttribute("aria-pressed",tab==="mine");
 }
 function render(){
   tabsRender();
@@ -600,7 +607,8 @@ function closeNote(ta){
 }
 function marks(){
   const cx=conflicts();
-  document.getElementById("count").textContent=sel.size+" seçim";
+  const cnt=document.getElementById("count");cnt.textContent=sel.size;cnt.hidden=!sel.size;
+  document.getElementById("minebtn").setAttribute("aria-label",`Programım, ${sel.size} seçim`);
   view.querySelectorAll("[data-id]").forEach(el=>{
     const id=el.dataset.id;el.setAttribute("aria-pressed",sel.has(id));
     const f=el.querySelector(".cflag"),c=cx.get(id);
@@ -615,7 +623,6 @@ function marks(){
     const k=Object.keys(TALKS).filter(i=>TALKS[i].d===el.dataset.oc&&sel.has(i)).length;
     el.textContent=k?k+" bildiri seçili":"Henüz seçim yok";
   });
-  const mt=document.querySelector('[data-tab="mine"] b');if(mt)mt.textContent=`Programım (${sel.size})`;
   nowbar();
 }
 function applyFilter(){
@@ -636,6 +643,10 @@ function fallbackText(txt,anchor){
 document.getElementById("tabs").addEventListener("click",e=>{
   const b=e.target.closest("[data-tab]");if(!b)return;tab=b.dataset.tab;
   try{localStorage.setItem(TKEY,tab)}catch(_){}
+  render();window.scrollTo(0,0);
+});
+document.getElementById("minebtn").addEventListener("click",()=>{
+  tab="mine";try{localStorage.setItem(TKEY,tab)}catch(_){}
   render();window.scrollTo(0,0);
 });
 view.addEventListener("click",e=>{
