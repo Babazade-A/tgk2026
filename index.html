@@ -42,7 +42,22 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var
 .tab.mine{border-color:var(--accent)}
 .tab.mine[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .search{padding-block:0 12px}
-.search input{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:9px 12px;font:inherit}
+.search input{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:9px 12px;font:inherit;font-size:16px}
+/* Şimdi / Sıradaki şeridi (yalnızca kongre günlerinde görünür) */
+.nowbar{display:block;width:100%;box-sizing:border-box;text-align:left;font:inherit;font-size:13.5px;line-height:1.35;color:var(--ink);background:var(--accent-soft);border:1px solid var(--accent);border-radius:8px;padding:6px 10px;margin:0 0 8px;cursor:pointer}
+.nowbar[hidden]{display:none}
+.nowbar .nl{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nowbar b{font-family:var(--display);font-size:14px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin-right:6px}
+.row.live .tm,.ot.live,.mine-row.live .t{color:var(--accent)}
+.row.live .tm::after,.ot.live::after,.mine-row.live .t::after{content:"Şimdi";display:block;font-family:var(--body);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:3px}
+.mine-row.live{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.mine-row.flash{animation:flash 1.8s ease-out}
+@keyframes flash{from{background:var(--accent-soft)}to{background:var(--surface)}}
+/* Notlar */
+.racts{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.ntx{display:block;margin-top:6px;font-size:13.5px;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border-radius:6px;padding:6px 8px;cursor:text}
+.ntin{display:block;width:100%;box-sizing:border-box;margin-top:6px;min-height:76px;font:inherit;font-size:16px;line-height:1.4;border:1px solid var(--accent);border-radius:6px;padding:6px 8px;background:var(--surface);color:var(--ink);resize:vertical}
+.nflag{font-size:11.5px;font-weight:600;color:var(--accent)}
 main{padding-block:16px 48px}
 .dayhead{font-family:var(--display);font-size:22px;font-weight:600;margin:4px 0 12px}
 .row{display:grid;grid-template-columns:60px minmax(0,1fr);gap:12px;margin-bottom:10px}
@@ -148,12 +163,13 @@ main.wide,header .wide{max-width:1500px}
       </div>
       <div class="count" id="count">0 seçim</div>
     </div>
+    <button type="button" class="nowbar" id="nowbar" hidden></button>
     <nav class="tabs" id="tabs" role="tablist"></nav>
     <div class="search"><input id="q" type="search" placeholder="Başlık, konuşmacı, bildiri kodu (ör. S-018) ara" autocomplete="off"></div>
   </div>
 </header>
 <main class="wrap" id="view"></main>
-<footer class="wrap">Seçimleriniz yalnızca bu cihazda saklanır; kimseyle paylaşılmaz. Telefonda ana ekrana eklemek için: iPhone'da Safari, Paylaş, "Ana Ekrana Ekle". Android'de Chrome, üç nokta, "Ana ekrana ekle". Program, kongre web sitesindeki 7 Kasım 2026 tarihli listeden alınmıştır; değişiklikler için resmi programı kontrol edin.</footer>
+<footer class="wrap">Seçimleriniz ve notlarınız yalnızca bu cihazda saklanır; kimseyle paylaşılmaz. Telefonda ana ekrana eklemek için: iPhone'da Safari, Paylaş, "Ana Ekrana Ekle". Android'de Chrome, üç nokta, "Ana ekrana ekle". Program, kongre web sitesindeki 7 Kasım 2026 tarihli listeden alınmıştır; değişiklikler için resmi programı kontrol edin.</footer>
 
 <script>
 const DAYS=[{k:"2",l:"2 Aralık",w:"Çarşamba"},{k:"3",l:"3 Aralık",w:"Perşembe"},{k:"4",l:"4 Aralık",w:"Cuma"},{k:"5",l:"5 Aralık",w:"Cumartesi"},{k:"6",l:"6 Aralık",w:"Pazar"}];
@@ -391,6 +407,22 @@ let persistAsked=false;
 const askPersist=()=>{if(persistAsked)return;persistAsked=true;
   try{const s=navigator.storage;if(s&&s.persist&&s.persisted)s.persisted().then(p=>p||s.persist()).catch(()=>{});}catch(e){}};
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...sel]))}catch(e){}if(sel.size)askPersist();};
+// Notlar: {id: metin}, yalnızca bu cihazda
+const NKEY="tgk2026-notlar";let notes={};
+try{const r=JSON.parse(localStorage.getItem(NKEY)||"{}");if(r&&typeof r==="object"&&!Array.isArray(r))notes=r;}catch(e){}
+const saveNotes=()=>{try{localStorage.setItem(NKEY,JSON.stringify(notes))}catch(e){}askPersist();};
+function setNote(id,v){v=String(v).trim();if(v)notes[id]=v;else delete notes[id];saveNotes();}
+// Türkiye saati (UTC+3, yaz saati yok). Kongre günü değilse null. Test için: ?now=3T09:10
+function nowTR(){
+  const p=new URLSearchParams(location.search).get("now");
+  if(p){const m=p.match(/^(\d)T(\d\d):(\d\d)$/);if(m&&DAYS.some(x=>x.k===m[1]))return{d:m[1],m:+m[2]*60+ +m[3]};}
+  const t=new Date(Date.now()+3*3600e3);
+  if(t.getUTCFullYear()===2026&&t.getUTCMonth()===11){const d=String(t.getUTCDate());if(DAYS.some(x=>x.k===d))return{d,m:t.getUTCHours()*60+t.getUTCMinutes()};}
+  return null;
+}
+// Kongre günlerinde uygulama o günün programıyla açılır
+const NOW0=nowTR();
+if(NOW0){if(tab==="oral"&&ODAYS.includes(NOW0.d))oralDay=NOW0.d;else if(tab!=="mine")tab=NOW0.d;}
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const low=s=>s.toLocaleLowerCase("tr");
@@ -427,24 +459,24 @@ function cardHTML(x){
     <span class="ttl">${esc(x.title)}</span>
     ${x.sp?`<span class="sp">${esc(x.sp)}</span>`:""}
     ${x.mod?`<span class="mod">${ml}${esc(x.mod)}</span>`:""}
-    <span class="cflag" hidden></span><span class="chk" aria-hidden="true"></span></button>`;
+    <span class="nflag" hidden>Notunuz var</span><span class="cflag" hidden></span><span class="chk" aria-hidden="true"></span></button>`;
 }
 function talkHTML(id){
   const t=TALKS[id];
-  return `<button class="talk" data-id="${id}" data-s="${esc(low(id+" "+t.title+" "+t.pn+" "+t.salon))}" aria-pressed="false"><span class="code">${id}</span><span class="tt">${esc(t.title)}</span><span class="pn">${esc(t.pn)}</span><span class="cflag" hidden></span><span class="chk" aria-hidden="true"></span></button>`;
+  return `<button class="talk" data-id="${id}" data-s="${esc(low(id+" "+t.title+" "+t.pn+" "+t.salon))}" aria-pressed="false"><span class="code">${id}</span><span class="tt">${esc(t.title)}</span><span class="pn">${esc(t.pn)}</span><span class="nflag" hidden>Notunuz var</span><span class="cflag" hidden></span><span class="chk" aria-hidden="true"></span></button>`;
 }
 function dayHTML(d){
   let h=`<h2 class="dayhead">${DAYNAME(d)}</h2>`;
   if(ODAYS.includes(d)){
     const n=Object.values(SESS).filter(s=>s.d===d).length;
-    h+=`<div class="row"><div class="tm">08:00<small>08:50</small></div><div class="cards"><button class="card gocard" data-go="${d}"><span class="tags"><span class="tag conf">Sözlü bildiriler</span></span><span class="ttl">${n} salonda aynı anda sözlü bildiri oturumları</span><span class="sp" data-oc="${d}"></span><span class="mod">Salonları yan yana görmek ve seçmek için dokunun</span></button></div></div>`;
+    h+=`<div class="row" data-se="${d}|480|530"><div class="tm">08:00<small>08:50</small></div><div class="cards"><button class="card gocard" data-go="${d}"><span class="tags"><span class="tag conf">Sözlü bildiriler</span></span><span class="ttl">${n} salonda aynı anda sözlü bildiri oturumları</span><span class="sp" data-oc="${d}"></span><span class="mod">Salonları yan yana görmek ve seçmek için dokunun</span></button></div></div>`;
   }
   const items=M.filter(x=>x.d===d);
   for(let i=0;i<items.length;){
     const x=items[i];
     if(x.t==="break"){h+=`<div class="brk" data-brk><span>${x.s}</span>${esc(x.title)} · ${x.e}'e kadar</div>`;i++;continue;}
     const grp=[x];let j=i+1;while(j<items.length&&items[j].s===x.s&&items[j].t!=="break")grp.push(items[j++]);
-    h+=`<div class="row" data-row><div class="tm">${x.s}<small>${x.e}</small></div><div class="cards">${grp.map(cardHTML).join("")}</div></div>`;
+    h+=`<div class="row" data-row data-se="${d}|${mins(x.s)}|${mins(x.e)}"><div class="tm">${x.s}<small>${x.e}</small></div><div class="cards">${grp.map(cardHTML).join("")}</div></div>`;
     i=j;
   }
   return h;
@@ -459,7 +491,7 @@ function oralHTML(){
   <div class="oh corner">Sıra</div>`;
   for(const s of ss)h+=`<div class="oh"><b>${s.salon}</b><small>Oturum ${s.no} · ${esc(s.chair)}</small><span class="scount" data-sc="${s.no}"></span></div>`;
   for(let i=0;i<maxN;i++){
-    h+=`<div class="ot">${i+1}.<small>~${hm(480+7*i)}</small></div>`;
+    h+=`<div class="ot" data-se="${oralDay}|${480+7*i}|${487+7*i}">${i+1}.<small>~${hm(480+7*i)}</small></div>`;
     for(const s of ss)h+=s.ids[i]?`<div>${talkHTML(s.ids[i])}</div>`:`<div></div>`;
   }
   return h+`</div></div>`;
@@ -479,8 +511,8 @@ function mineHTML(){
       let tm,title,meta;
       if(TALKS[e.id]){const t=TALKS[e.id];tm="~"+hm(e.s);title=t.title;meta=`${t.salon} · ${t.id} · ${t.pos+1}. sırada · ${t.pn}`;}
       else{const x=BYID[e.id];tm=x.s+"–"+x.e;title=x.title;meta=[x.room,x.sp].filter(Boolean).join(" · ");}
-      const c=cx.get(e.id);
-      h+=`<div class="mine-row${c?" cx":""}"><span class="t">${tm}</span><div><b>${esc(title)}</b><span class="m">${esc(meta)}</span>${c?`<span class="cflag">Çakışıyor: ${esc([...c].map(label).join(", "))}</span>`:""}</div><button class="rm" data-rm="${e.id}">Kaldır</button></div>`;
+      const c=cx.get(e.id),nt=notes[e.id];
+      h+=`<div class="mine-row${c?" cx":""}" data-mrow="${e.id}" data-se="${e.d}|${e.s}|${e.e}"><span class="t">${tm}</span><div class="mm"><b>${esc(title)}</b><span class="m">${esc(meta)}</span>${c?`<span class="cflag">Çakışıyor: ${esc([...c].map(label).join(", "))}</span>`:""}${nt?`<span class="ntx" data-edit="${e.id}">${esc(nt)}</span>`:""}</div><div class="racts"><button class="rm" data-note="${e.id}">${nt?"Notu düzenle":"Not ekle"}</button><button class="rm" data-rm="${e.id}">Kaldır</button></div></div>`;
     }
     h+=`</section>`;
   }
@@ -494,6 +526,7 @@ function textList(){
     for(const e of rows){
       if(TALKS[e.id]){const t=TALKS[e.id];out+=`~${hm(e.s)}  ${t.salon} · ${t.id} ${t.title} (${t.pn})\n`;}
       else{const x=BYID[e.id];out+=`${x.s}–${x.e}  ${x.room!=="Ana salon"?x.room+" · ":""}${x.title}${x.sp?" ("+x.sp+")":""}\n`;}
+      if(notes[e.id])out+=`   Not: ${notes[e.id].replace(/\n/g,"\n   ")}\n`;
     }
   }
   return out;
@@ -509,6 +542,7 @@ function icsText(){
     let sum,desc;
     if(TALKS[e.id]){const t=TALKS[e.id];sum=`${t.id} · ${t.title}`;desc=`${t.pn} · ${t.salon}, Oturum ${t.no}, ${t.pos+1}. sunum (saat yaklaşık)`;}
     else{const x=BYID[e.id];sum=x.title;desc=[x.sp,x.mod?"Moderatör: "+x.mod:""].filter(Boolean).join("\n");}
+    if(notes[e.id])desc+="\n\nNot: "+notes[e.id];
     L.push("BEGIN:VEVENT",`UID:${e.id}@tgk2026-planlayici`,`DTSTAMP:${stamp}`,`DTSTART:${u(e.s)}`,`DTEND:${u(e.e)}`,
       fold("SUMMARY:"+ie(sum)),fold("LOCATION:"+ie(e.room+" · Kaya Palazzo Golf Resort, Antalya")),fold("DESCRIPTION:"+ie(desc)),
       "BEGIN:VALARM","ACTION:DISPLAY","TRIGGER:-PT10M",fold("DESCRIPTION:"+ie(sum)),"END:VALARM","END:VEVENT");
@@ -527,7 +561,42 @@ function render(){
   view.innerHTML=tab==="mine"?mineHTML():tab==="oral"?oralHTML():dayHTML(tab);
   const wide=tab==="oral";view.classList.toggle("wide",wide);document.getElementById("hwrap").classList.toggle("wide",wide);
   document.querySelector(".search").hidden=tab==="mine";
-  marks();applyFilter();
+  marks();applyFilter();liveMarks();
+}
+// O an süren satırlara "Şimdi" etiketi
+function liveMarks(){
+  const n=nowTR();
+  document.querySelectorAll("[data-se]").forEach(el=>{const [d,s,e]=el.dataset.se.split("|");el.classList.toggle("live",!!n&&n.d===d&&+s<=n.m&&n.m<+e);});
+}
+function nowbar(){
+  const bar=document.getElementById("nowbar"),n=nowTR();
+  if(!n){bar.hidden=true;return;}
+  const es=sorted(n.d),cur=es.filter(e=>e.s<=n.m&&n.m<e.e),nx=es.find(e=>e.s>n.m);
+  const nm=e=>{const t=TALKS[e.id];return e.room+" · "+(t?t.id+" "+t.title:BYID[e.id].title);};
+  const left=m=>m<60?m+" dk sonra":Math.floor(m/60)+" sa "+(m%60?m%60+" dk ":"")+"sonra";
+  const L=[];
+  if(cur.length)L.push(`<span class="nl"><b>Şimdi</b>${esc(nm(cur[0]))}${cur.length>1?` (+${cur.length-1})`:""}</span>`);
+  if(nx)L.push(`<span class="nl"><b>Sıradaki</b>${nx.approx?"~":""}${hm(nx.s)} · ${left(nx.s-n.m)} · ${esc(nm(nx))}</span>`);
+  if(!L.length)L.push(`<span class="nl"><b>Bugün</b>${es.length?"Bugünkü seçimleriniz bitti.":"Henüz seçiminiz yok. Programa bakmak için dokunun."}</span>`);
+  bar.innerHTML=L.join("");bar.dataset.target=(cur[0]||nx||{}).id||"";bar.hidden=false;
+}
+function tick(){nowbar();liveMarks();}
+// Not düzenleyici (Programım sekmesinde)
+let lastClose={id:"",t:0};
+function openNote(id){
+  const row=view.querySelector(`[data-mrow="${id}"]`);if(!row)return;
+  let ta=row.querySelector(".ntin");if(ta){ta.focus();return;}
+  const mm=row.querySelector(".mm"),x=mm.querySelector(".ntx");if(x)x.remove();
+  ta=document.createElement("textarea");ta.className="ntin";ta.dataset.nid=id;ta.value=notes[id]||"";
+  ta.placeholder="Notunuz: soru, makale, kişi… Yalnızca bu cihazda saklanır.";
+  mm.appendChild(ta);ta.focus();row.querySelector("[data-note]").textContent="Bitti";
+}
+function closeNote(ta){
+  const id=ta.dataset.nid,mm=ta.parentNode,row=ta.closest("[data-mrow]");
+  setNote(id,ta.value);ta.remove();
+  if(notes[id])mm.insertAdjacentHTML("beforeend",`<span class="ntx" data-edit="${id}">${esc(notes[id])}</span>`);
+  if(row)row.querySelector("[data-note]").textContent=notes[id]?"Notu düzenle":"Not ekle";
+  lastClose={id,t:Date.now()};
 }
 function marks(){
   const cx=conflicts();
@@ -536,6 +605,7 @@ function marks(){
     const id=el.dataset.id;el.setAttribute("aria-pressed",sel.has(id));
     const f=el.querySelector(".cflag"),c=cx.get(id);
     if(f){f.hidden=!c;if(c)f.textContent="Çakışıyor: "+[...c].map(label).join(", ");}
+    const nf=el.querySelector(".nflag");if(nf)nf.hidden=!notes[id];
   });
   view.querySelectorAll("[data-sc]").forEach(el=>{
     const s=SESS[el.dataset.sc],k=s.ids.filter(i=>sel.has(i)).length;
@@ -546,6 +616,7 @@ function marks(){
     el.textContent=k?k+" bildiri seçili":"Henüz seçim yok";
   });
   const mt=document.querySelector('[data-tab="mine"] b');if(mt)mt.textContent=`Programım (${sel.size})`;
+  nowbar();
 }
 function applyFilter(){
   if(tab==="mine")return;
@@ -574,6 +645,10 @@ view.addEventListener("click",e=>{
   if(od){oralDay=od.dataset.oday;render();return;}
   const rm=e.target.closest("[data-rm]");
   if(rm){sel.delete(rm.dataset.rm);save();render();return;}
+  const ne=e.target.closest("[data-note],[data-edit]");
+  if(ne){const id=ne.dataset.note||ne.dataset.edit;
+    // "Bitti"ye basınca düzenleyici zaten odak kaybıyla kapandı; yeniden açma
+    if(!(lastClose.id===id&&Date.now()-lastClose.t<500))openNote(id);return;}
   const b=e.target.closest("[data-id]");
   if(b){const id=b.dataset.id;sel.has(id)?sel.delete(id):sel.add(id);save();marks();return;}
   const act=e.target.closest(".actions");
@@ -601,7 +676,24 @@ view.addEventListener("click",e=>{
   }
 });
 document.getElementById("q").addEventListener("input",e=>{q=e.target.value;applyFilter();});
+view.addEventListener("input",e=>{if(e.target.classList.contains("ntin"))setNote(e.target.dataset.nid,e.target.value);});
+view.addEventListener("focusout",e=>{if(e.target.classList.contains("ntin"))closeNote(e.target);});
+document.getElementById("nowbar").addEventListener("click",e=>{
+  const id=e.currentTarget.dataset.target,n=nowTR();
+  if(id)tab="mine";else if(n)tab=n.d;
+  try{localStorage.setItem(TKEY,tab)}catch(_){}
+  render();
+  const r=id&&view.querySelector(`[data-mrow="${id}"]`);
+  if(r){r.scrollIntoView({block:"center"});r.classList.add("flash");}else window.scrollTo(0,0);
+});
 render();
+// Kongre gününde açılışta o an süren (ya da sıradaki) oturuma kaydır
+if(NOW0&&tab===NOW0.d){
+  const r=view.querySelector(".row.live")||[...view.querySelectorAll("[data-row]")].find(el=>+el.dataset.se.split("|")[1]>NOW0.m);
+  if(r)r.scrollIntoView({block:"center"});
+}
+setInterval(tick,30000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick();});
 if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude/.test(location.hostname)){
   try{navigator.serviceWorker.register("sw.js").catch(()=>{});}catch(_){}
 }
