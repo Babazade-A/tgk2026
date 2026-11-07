@@ -386,7 +386,11 @@ const KEY="tgk2026-secim",TKEY="tgk2026-sekme",ODAYS=["3","4","5"];
 let sel=new Set(),tab="2",oralDay="3",q="";
 try{const r=JSON.parse(localStorage.getItem(KEY)||"[]");if(Array.isArray(r))r.forEach(i=>{if(BYID[i]||TALKS[i])sel.add(i)});}catch(e){}
 try{const t=localStorage.getItem(TKEY);if(t&&(t==="mine"||t==="oral"||DAYS.some(d=>d.k===t)))tab=t;}catch(e){}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...sel]))}catch(e){}};
+// Tarayıcıdan seçimleri depolama sıkıştığında silmemesini ister (ilk seçimde, bir kez)
+let persistAsked=false;
+const askPersist=()=>{if(persistAsked)return;persistAsked=true;
+  try{const s=navigator.storage;if(s&&s.persist&&s.persisted)s.persisted().then(p=>p||s.persist()).catch(()=>{});}catch(e){}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...sel]))}catch(e){}if(sel.size)askPersist();};
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const low=s=>s.toLocaleLowerCase("tr");
