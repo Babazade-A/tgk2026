@@ -159,7 +159,7 @@ tr:{
   sessionL:"Oturum: ",chairsL:"Moderatör: ",hasNote:"Notunuz var",
   oralTag:"Sözlü bildiriler",oralCard:n=>`${n} salonda aynı anda sözlü bildiri oturumları`,oralTap:"Salonları yan yana görmek ve seçmek için dokunun",
   until:t=>`${t}'${datTR(t)} kadar`,
-  oralHead:"Sözlü bildiriler",oralSmall:"Salonlar yan yana",
+  oralHead:"Sözlü bildiriler",
   oralNote:p=>`Her sütun bir salon, her satır sunum sırası. Aynı satırdaki bildiriler yaklaşık aynı saatte sunulur, bu yüzden bir satırdan tek bildiri seçerseniz salon değiştirerek hepsine yetişebilirsiniz. Saatler, bildiri başına ${p} dakika varsayımıyla yaklaşıktır.`,
   order:"Sıra",sessN:n=>`Oturum ${n}`,
   empty:"Henüz bir şey seçmediniz. Gün sekmelerinden ya da Sözlü bildiriler sekmesinden bir oturuma dokunun; seçtikleriniz burada gün gün listelenir.",
@@ -189,7 +189,7 @@ en:{
   sessionL:"Session: ",chairsL:"Chairs: ",hasNote:"You have a note",
   oralTag:"Oral presentations",oralCard:n=>`Oral presentation sessions in ${n} halls at the same time`,oralTap:"Tap to see the halls side by side and pick talks",
   until:t=>`until ${t}`,
-  oralHead:"Oral presentations",oralSmall:"Halls side by side",
+  oralHead:"Oral presentations",
   oralNote:p=>`Each column is a hall and each row is a presentation slot. Talks in the same row are given at about the same time, so if you pick one talk per row you can switch halls and catch all of them. Times are approximate, assuming ${p} minutes per talk.`,
   order:"Slot",sessN:n=>`Session ${n}`,
   empty:"You haven't selected anything yet. Tap a session in a day tab or in the Oral presentations tab; your selections will be listed here day by day.",
@@ -362,7 +362,7 @@ function tabsRender(){
   const tb=document.getElementById("tabs");
   if(!C||tab==="home"){tb.innerHTML="";}
   else tb.innerHTML=DAYS.map(D=>`<button class="tab" role="tab" data-tab="${esc(D.k)}" aria-selected="${tab===D.k}"><small>${esc(dayW(D))}</small><b>${esc(dayL(D))}</b></button>`).join("")
-   +(ODAYS.length?`<button class="tab mine" role="tab" data-tab="oral" aria-selected="${tab==="oral"}"><small>${esc(T("oralSmall"))}</small><b>${esc(T("oralHead"))}</b></button>`:"");
+   +(ODAYS.length?`<button class="tab mine" role="tab" data-tab="oral" aria-selected="${tab==="oral"}"><b>${esc(T("oralHead"))}</b></button>`:"");
   document.getElementById("minebtn").setAttribute("aria-pressed",tab==="mine");
   document.getElementById("minebtn").hidden=!C||tab==="home";
 }
