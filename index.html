@@ -1,3 +1,7 @@
+<!doctype html>
+<html lang="tr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TGK 2026 Planlayıcı</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="manifest" href="manifest.webmanifest">
@@ -107,7 +111,7 @@ main.wide,header .wide{max-width:1500px}
 .daysw{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .ognote{font-size:12.5px;color:var(--muted);margin:0 0 12px;max-width:70ch}
 .ogwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);-webkit-overflow-scrolling:touch}
-.og{display:grid;gap:0;min-width:max-content}
+.og{display:grid;gap:0;--otw:64px;--ocw:180px}
 .og>div{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:6px;box-sizing:border-box}
 .oh{background:var(--bg);display:flex;flex-direction:column;gap:2px}
 .oh b{font-family:var(--display);font-size:19px;font-weight:600}
@@ -125,6 +129,18 @@ main.wide,header .wide{max-width:1500px}
   .brk span{width:48px;flex-basis:48px}
   .mine-row{grid-template-columns:minmax(0,1fr) auto}
   .mine-row .t{grid-column:1/-1}
+  /* Sözlü bildiriler: telefonda iki salon yan yana sığsın */
+  .og{--otw:42px;--ocw:max(128px,calc((100vw - 100px) / 2))}
+  .og>div{padding:3px}
+  .oh b{font-size:16px}
+  .oh small{font-size:11px}
+  .ot,.oh.corner{font-size:15px}
+  .ot small{font-size:11px}
+  .og .talk{padding:6px 6px 6px 7px;min-height:84px}
+  .og .talk .chk{width:18px;height:18px;top:6px;right:6px;font-size:11px}
+  .og .code{font-size:13px;padding-right:20px}
+  .og .tt{font-size:13px;line-height:1.25;hyphens:auto}
+  .og .pn{font-size:11.5px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -441,7 +457,7 @@ function oralHTML(){
   let h=`<h2 class="dayhead">Sözlü bildiriler</h2>
   <div class="daysw">${ODAYS.map(k=>`<button class="tab" data-oday="${k}" aria-selected="${k===oralDay}"><small>${DAYS.find(x=>x.k===k).w}</small><b>${DAYS.find(x=>x.k===k).l}</b></button>`).join("")}</div>
   <p class="ognote">Her sütun bir salon, her satır sunum sırası. Aynı satırdaki bildiriler yaklaşık aynı saatte sunulur, bu yüzden bir satırdan tek bildiri seçerseniz salon değiştirerek hepsine yetişebilirsiniz. Saatler, bildiri başına 7 dakika varsayımıyla yaklaşıktır.</p>
-  <div class="ogwrap"><div class="og" style="grid-template-columns:72px repeat(${ss.length},minmax(200px,1fr))">
+  <div class="ogwrap"><div class="og" style="grid-template-columns:var(--otw) repeat(${ss.length},minmax(var(--ocw),1fr))">
   <div class="oh corner">Sıra</div>`;
   for(const s of ss)h+=`<div class="oh"><b>${s.salon}</b><small>Oturum ${s.no} · ${esc(s.chair)}</small><span class="scount" data-sc="${s.no}"></span></div>`;
   for(let i=0;i<maxN;i++){
