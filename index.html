@@ -1,0 +1,594 @@
+<title>TGK 2026 Planlayıcı</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TGK 2026">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#0f1a2e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: single reading column, sticky day tabs, time rail on the left, parallel sessions side by side */
+:root{
+  --bg:#eef2f6; --surface:#ffffff; --ink:#0f1a2e; --muted:#5b667a; --line:#d9dfe8;
+  --accent:#0d7681; --accent-ink:#ffffff; --accent-soft:#dbeff0;
+  --warn:#a85a07; --warn-soft:#fcefd9; --brk:#e4e9f0;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b111d; --surface:#131b2b; --ink:#e5eaf2; --muted:#94a0b4; --line:#253149;
+  --accent:#43bfc8; --accent-ink:#06222a; --accent-soft:#103239;
+  --warn:#f0a64c; --warn-soft:#38270f; --brk:#18213400; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b111d; --surface:#131b2b; --ink:#e5eaf2; --muted:#94a0b4; --line:#253149;
+  --accent:#43bfc8; --accent-ink:#06222a; --accent-soft:#103239;
+  --warn:#f0a64c; --warn-soft:#38270f; --brk:#18213400; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-block:14px 8px;flex-wrap:wrap}
+.brand h1{font-family:var(--display);font-weight:700;font-size:26px;line-height:1;margin:0;letter-spacing:.2px;text-wrap:balance}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.count{font-family:var(--display);font-size:15px;font-weight:600;color:var(--accent);white-space:nowrap}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-block:4px 10px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer;text-align:left;line-height:1.15}
+.tab b{display:block;font-family:var(--display);font-size:17px;font-weight:600}
+.tab small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.tab[aria-selected="true"] small{color:inherit;opacity:.75}
+.tab.mine{border-color:var(--accent)}
+.tab.mine[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.search{padding-block:0 12px}
+.search input{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:9px 12px;font:inherit}
+main{padding-block:16px 48px}
+.dayhead{font-family:var(--display);font-size:22px;font-weight:600;margin:4px 0 12px}
+.row{display:grid;grid-template-columns:60px minmax(0,1fr);gap:12px;margin-bottom:10px}
+.tm{font-family:var(--display);font-size:18px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1;padding-top:10px}
+.tm small{display:block;font-size:14px;color:var(--muted);font-weight:500}
+.cards{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));min-width:0}
+.card,.talk{position:relative;display:flex;flex-direction:column;gap:3px;text-align:left;width:100%;box-sizing:border-box;font:inherit;color:inherit;
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 44px 10px 12px;cursor:pointer;min-width:0}
+.card:hover,.talk:hover{border-color:var(--accent)}
+.card:focus-visible,.talk:focus-visible,.tab:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card[aria-pressed="true"],.talk[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.chk{position:absolute;right:12px;top:11px;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);box-sizing:border-box;display:grid;place-items:center;font-size:13px;font-weight:700}
+[aria-pressed="true"] .chk{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+[aria-pressed="true"] .chk::after{content:"✓"}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.tag.conf{color:var(--accent)}
+.ttl{font-weight:600;line-height:1.3}
+.sp{font-size:14px}
+.mod{font-size:12.5px;color:var(--muted)}
+.cflag{align-self:flex-start;font-size:11.5px;font-weight:600;color:var(--warn);background:var(--warn-soft);border-radius:4px;padding:1px 6px;margin-top:3px}
+.card.k-conf{border-left:3px solid var(--accent)}
+.brk{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px;margin:4px 0 14px}
+.brk span{font-family:var(--display);font-size:15px;font-variant-numeric:tabular-nums;width:60px;flex:0 0 60px}
+.brk::after{content:"";flex:1;border-top:1px dashed var(--line)}
+.oral{display:grid;gap:6px;min-width:0}
+.oralhead{font-size:12.5px;color:var(--muted);padding-top:12px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-width:0}
+summary{list-style:none;cursor:pointer;padding:10px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:baseline}
+summary::-webkit-details-marker{display:none}
+.sal{font-family:var(--display);font-size:17px;font-weight:600}
+.sname{color:var(--muted);font-size:13px}
+.scount{font-size:12px;font-weight:600;color:var(--accent);text-align:right}
+.scount.warn{color:var(--warn)}
+.chair{grid-column:1/-1;font-size:12.5px;color:var(--muted)}
+summary::before{content:"▸";grid-row:1;position:absolute;opacity:0}
+details[open] summary{border-bottom:1px solid var(--line)}
+.talks{display:grid;gap:6px;padding:8px}
+.talk{padding:8px 40px 8px 10px}
+.talk .chk{top:9px;right:10px}
+.code{font-family:var(--display);font-size:14px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.tt{font-size:14px;line-height:1.3}
+.pn{font-size:12.5px;color:var(--muted)}
+.mine-day{margin-bottom:22px}
+.mine-row{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px}
+.mine-row .t{font-family:var(--display);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+.mine-row .m{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+.mine-row.cx{border-color:var(--warn)}
+.btn{font:inherit;font-size:13.5px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 12px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.danger{color:var(--warn);border-color:var(--warn)}
+.rm{font:inherit;font-size:12.5px;background:none;border:none;color:var(--muted);cursor:pointer;padding:2px 4px;text-decoration:underline}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.note{font-size:12.5px;color:var(--muted)}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;color:var(--muted);text-align:center}
+.cxsum{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:14px}
+textarea.fallback{width:100%;box-sizing:border-box;min-height:160px;font:12.5px/1.4 ui-monospace,Menlo,monospace;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:8px}
+footer{color:var(--muted);font-size:12px;padding-block:0 32px}
+main.wide,header .wide{max-width:1500px}
+.daysw{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.ognote{font-size:12.5px;color:var(--muted);margin:0 0 12px;max-width:70ch}
+.ogwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);-webkit-overflow-scrolling:touch}
+.og{display:grid;gap:0;min-width:max-content}
+.og>div{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:6px;box-sizing:border-box}
+.oh{background:var(--bg);display:flex;flex-direction:column;gap:2px}
+.oh b{font-family:var(--display);font-size:19px;font-weight:600}
+.oh small{color:var(--muted);font-size:12px;line-height:1.3}
+.oh .scount{text-align:left}
+.ot,.oh.corner{position:sticky;left:0;z-index:1;background:var(--bg);font-family:var(--display);font-weight:600;font-size:18px;font-variant-numeric:tabular-nums}
+.ot small{display:block;font-size:13px;color:var(--muted);font-weight:500}
+.og .talk{height:100%;min-height:96px}
+.og .dim{opacity:.25}
+.gocard{border-style:dashed}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:10px}
+@media (max-width:520px){
+  .row{grid-template-columns:48px minmax(0,1fr);gap:8px}
+  .tm{font-size:16px}.tm small{font-size:13px}
+  .brk span{width:48px;flex-basis:48px}
+  .mine-row{grid-template-columns:minmax(0,1fr) auto}
+  .mine-row .t{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header>
+  <div class="wrap" id="hwrap">
+    <div class="top">
+      <div class="brand">
+        <h1>17. Ulusal Tıbbi Genetik Kongresi</h1>
+        <p>2–6 Aralık 2026 · Kaya Palazzo Golf Resort, Antalya</p>
+      </div>
+      <div class="count" id="count">0 seçim</div>
+    </div>
+    <nav class="tabs" id="tabs" role="tablist"></nav>
+    <div class="search"><input id="q" type="search" placeholder="Başlık, konuşmacı, bildiri kodu (ör. S-018) ara" autocomplete="off"></div>
+  </div>
+</header>
+<main class="wrap" id="view"></main>
+<footer class="wrap">Seçimleriniz yalnızca bu cihazda saklanır; kimseyle paylaşılmaz. Telefonda ana ekrana eklemek için: iPhone'da Safari, Paylaş, "Ana Ekrana Ekle". Android'de Chrome, üç nokta, "Ana ekrana ekle". Program, kongre web sitesindeki 7 Kasım 2026 tarihli listeden alınmıştır; değişiklikler için resmi programı kontrol edin.</footer>
+
+<script>
+const DAYS=[{k:"2",l:"2 Aralık",w:"Çarşamba"},{k:"3",l:"3 Aralık",w:"Perşembe"},{k:"4",l:"4 Aralık",w:"Cuma"},{k:"5",l:"5 Aralık",w:"Cumartesi"},{k:"6",l:"6 Aralık",w:"Pazar"}];
+// id, day, start, end, type, title, speaker, moderators, room
+const M=[
+["p2-1","2","14:15","15:00","cer","Açılış","Taha BAHŞİ",""],
+["p2-2","2","15:00","16:00","conf","İnsan Pangenomu ve Karmaşık Genetik Varyasyon","Evan EICHLER","Taha BAHŞİ, Mehmet Ali ERGÜN","","Açılış Konferansı I"],
+["b2-1","2","16:00","16:30","break","Kahve Molası"],
+["p2-3","2","16:30","16:45","talk","PIK3CA'yı Hedeflemek: Meme Kanserinden Başlayan Hedefe Yönelik Tedavinin Hikâyesi","Nuri KARADURMUŞ","İlter GÜNEY, Timuçin ÇİL, Kanay YARARBAŞ"],
+["p2-4","2","16:45","17:30","talk","Tek Bir Hastadan ABD FDA Onaylı İlaca: Aşırı Büyüme Sendromu ve Vasküler Malformasyonlar İçin İlaç Yeniden Konumlandırmasının Hikâyesi","Guillaume CANAUD","İlter GÜNEY, Timuçin ÇİL, Kanay YARARBAŞ"],
+["p2-5","2","17:30","18:00","sym","Uydu Sempozyumu: Roche","","Ayça AYKUT, Özlem ANLAŞ"],
+["p2-6","2","18:00","18:45","talk","Proje Sunumları","Arda ÇETİNKAYA, Mert KAYA, Selma ÇAKMAK","Volkan BALTACI, Gülay Güleç CEYLAN, Şule ALTINER"],
+
+["p3-1","3","09:00","09:15","talk","Siliopati Araştırmalarının Erken Dönemi: Silia Biyolojisinden İnsan Fenotiplerine","Umut ALTUNOĞLU","Gökay BOZKURT, Deniz TORUN, Esra ARSLAN ATEŞ"],
+["p3-2","3","09:15","10:00","talk","Silianın Genişleyen Dünyası: Nadir Mendelyen Hastalıklar ve Ötesi","Brunella FRANCO","Gökay BOZKURT, Deniz TORUN, Esra ARSLAN ATEŞ"],
+["b3-1","3","10:00","10:30","break","Kahve Molası"],
+["p3-3","3","10:30","10:45","talk","Hastanın Bize Anlattıkları: Fenotipten Genoma","Kadri KARAER","Oya UYGUNER, Nüket YÜRÜR KUTLAY, Aslı SUBAŞIOĞLU"],
+["p3-4","3","10:45","11:30","talk","Genotipten Klinik Öneme: Genomik Çağda Nadir Sendromların Tanımlanması","Sofia DOUZGOU HOUGE","Oya UYGUNER, Nüket YÜRÜR KUTLAY, Aslı SUBAŞIOĞLU"],
+["p3-5","3","11:30","12:00","sym","Uydu Sempozyumu: Invitrotek","","Ebru MARZİOĞLU ÖZDEMİR, Ceren Damla DURMAZ"],
+["p3-6","3","12:00","12:30","sel","Seçilmiş Sözlü Bildiriler","","Sırrı ÇAM, Filiz ÖZEN, Pınar ATA"],
+["b3-2","3","12:30","14:00","break","Öğle Yemeği"],
+["p3-7","3","14:00","15:00","conf","Mozaikler ve Mutasyonlar: Geçmiş ve Bugün","Dian DONNAI","Hülya KAYSERİLİ, Dijana PLASESKA-KARANFILSKA","","Açılış Konferansı II"],
+["p3-8","3","15:00","15:30","sym","Uydu Sempozyumu: Lidya Genomik","","Ayberk TÜRKYILMAZ, Muhsin ELMAS"],
+["b3-3","3","15:30","16:00","break","Kahve Molası"],
+["p3-9","3","16:00","16:45","talk","Yeni Nesil Fenotipleme","Milan MACEK","Hakan GÜRKAN, Asude DURMAZ, Rasime KALKAN"],
+["p3-10","3","16:45","17:30","talk","Perrault Sendromu: Klinik ve Moleküler Açıdan Heterojen Ultra Nadir Bir Durumun Karakterizasyonu","William NEWMAN","Hakan GÜRKAN, Asude DURMAZ, Rasime KALKAN"],
+["p3-11","3","17:30","18:00","sym","Uydu Sempozyumu: Phitech","","Hanife SAAT, Abdullah İhsan GÜRLER"],
+["c3-1","3","18:00","19:00","course","Prenatal Tanı Kursu: NIPT","Meral YIRMIBEŞ KARAOĞUZ (Kurs Başkanı), Sinem KOCAGİL, İsmihan Merve ÖZTÜRK","","Salon 1"],
+["c3-2","3","18:00","19:00","course","Dismorfoloji Kursu I","Ferda PERÇİN (Kurs Başkanı), Alper GEZDİRİCİ, Tuba KALAYCI","","Salon 2"],
+["c3-3","3","18:00","19:00","course","Varyant Analizi Kursu: WES, WGS","Mehmet Ali ERGÜN (Kurs Başkanı), Akif AYAZ, Zafer YÜKSEL","","Salon 3"],
+
+["p4-1","4","09:00","09:15","talk","Tıbbi Genetikte Tanı Yöntemlerinin Evrimi","Zafer YÜKSEL","Serdar CEYLANER, Ahmet DURSUN, Ozan ÇETİN"],
+["p4-2","4","09:15","10:00","talk","Uzun Okuma Dizileme: Tıbbi Genetikte Yeni Bir Standart","Christian GILISSEN","Serdar CEYLANER, Ahmet DURSUN, Ozan ÇETİN"],
+["b4-1","4","10:00","10:30","break","Kahve Molası"],
+["p4-3","4","10:30","10:45","talk","Multifaktöriyel Hastalıklarda Poligenik Risk Skorlaması","Gözde YEŞİL","Munis DÜNDAR, Abdulgani TATAR, Zerrin YILMAZ ÇELİK"],
+["p4-4","4","10:45","11:30","talk","Karmaşık ve Kantitatif Özelliklerin İncelenmesinde Genetik İzolatların Kullanımı","Paolo GASPARINI","Munis DÜNDAR, Abdulgani TATAR, Zerrin YILMAZ ÇELİK"],
+["p4-5","4","11:30","12:00","sym","Uydu Sempozyumu: ATQ","","Pelin ÖZYAVUZ ÇUBUK, Sinem YALÇINTEPE"],
+["p4-6","4","12:00","12:30","sel","Seçilmiş Sözlü Bildiriler","","Burak DURMAZ, Nadir KOÇAK, Alperhan ÇEBİ"],
+["b4-2","4","12:30","14:00","break","Öğle Yemeği"],
+["p4-7","4","14:00","15:00","conf","Nadir Hastalık Tanısında Çoklu Omikler","Stephen MONTGOMERY","Mehmet ALİKAŞİFOĞLU, Haluk AKIN","","Açılış Konferansı III"],
+["p4-8","4","15:00","15:30","sym","Uydu Sempozyumu: Sophia","Dr. Nicola NORMANNO","Saadettin KILIÇKAP, Cengiz YAKICIER"],
+["b4-3","4","15:30","16:00","break","Kahve Molası"],
+["p4-9","4","16:00","16:15","talk","Karyotipten Genoma: Yapısal Varyasyonların Hikâyesi","Altuğ KOÇ","Oğuz ÇİLİNGİR, Sehime Gülsün TEMEL, Esra TUĞ"],
+["p4-10","4","16:15","17:00","talk","Yapısal Genomiğin Klinik Korelasyonları","Gunnar DOUZGOU HOUGE","Oğuz ÇİLİNGİR, Sehime Gülsün TEMEL, Esra TUĞ"],
+["p4-11","4","17:00","17:30","sym","Uydu Sempozyumu: Özgün Kimya","",""],
+["c4-1","4","18:00","19:00","course","Prenatal Tanı Kursu: Prenatal Mikroarray","Birsen KARAMAN (Kurs Başkanı), Erhan PARILTAY, Oğuzhan BAHADIR","","Salon 1"],
+["c4-2","4","18:00","19:00","course","Dismorfoloji Kursu II","Hülya KAYSERİLİ (Kurs Başkanı), Büşranur ÇAVDARLI, Abdullatif BAKIR","","Salon 2"],
+["c4-3","4","18:00","19:00","course","Varyant Analizi Kursu: Likit Biyopsi ve Miyeloid NGS","Ajlan TÜKÜN (Kurs Başkanı), Özge ÖZALP, Özge ÖZERKAYA","","Salon 3"],
+
+["p5-1","5","09:00","09:15","talk","Morfolojik Remisyondan Moleküler Remisyona: AML'de MRD Kavramının Evrimi","Sinem ÇİVRİZ","Ajlan TÜKÜN, Feride İffet ŞAHİN, Beyhan DURAK ARAS"],
+["p5-2","5","09:15","10:00","talk","Mutasyona Özgü MRD ile AML Yönetimi","Mark J. LEVIS","Ajlan TÜKÜN, Feride İffet ŞAHİN, Beyhan DURAK ARAS"],
+["b5-1","5","10:00","10:30","break","Kahve Molası"],
+["p5-3","5","10:30","11:00","sym","Uydu Sempozyumu: EYS Medikal","","Yunus Kasım TERZİ, Özlem SEZER"],
+["p5-4","5","11:00","11:30","sel","Seçilmiş Sözlü Bildiriler","","Yusuf TUNCA, Özden ALTIOK CLARK, Aslıhan KİRAZ"],
+["p5-5","5","11:30","12:30","talk","Sağlık Bakanlığı ve Sosyal Güvenlik Kurumu Oturumu","","Emin KARACA, Selman YILDIRIM, Berk ÖZYILMAZ"],
+["b5-2","5","12:30","13:30","break","Öğle Yemeği"],
+["p5-6","5","13:30","14:00","talk","Tek Hücre Transkriptomiğinin Hipoteze Dayalı Preklinik Araştırmalara Entegrasyonu","Volkan ERGİN","Rıdvan Seçkin ÖZEN, Hilmi TOZKIR, Güven TOKSOY"],
+["p5-7","5","14:00","14:30","talk","Türkiye'de CAR-T Deneyimleri","Ahmet Kürşad GÜNEŞ","Rıdvan Seçkin ÖZEN, Hilmi TOZKIR, Güven TOKSOY"],
+["p5-8","5","14:30","15:00","sym","Uydu Sempozyumu: Illumina","Massimo DELLEDONNE","Okay ÇAĞLAYAN, İbrahim ŞAHİN"],
+["b5-3","5","15:00","15:30","break","Kahve Molası"],
+["p5-9","5","15:30","16:30","talk","Umudun Ötesinde: Tıbbi Bir Buluşun Arkasındaki Hikâye","","Taha BAHŞİ, Mustafa ÖZDOĞAN, Musa KARAKÜKCÜ"],
+["c5-1","5","17:00","18:00","course","Prenatal Tanı Kursu: Tek Gen","Sevilhan ARTAN (Kurs Başkanı), Ayça AYKUT, Gülsüm KAYHAN","","Salon 1"],
+["c5-2","5","17:00","18:00","course","Dismorfoloji Kursu III","Kadri KARAER (Kurs Başkanı), Elif YILMAZ GÜLEÇ, Evren GÜMÜŞ","","Salon 2"],
+["c5-3","5","17:00","18:00","course","Varyant Analizi Kursu: Kalıtsal ve Somatik","Cengiz YAKICIER (Kurs Başkanı), Aslı Ece SOLMAZ, Haktan Bağış ERDEM","","Salon 3"],
+
+["p6-1","6","09:00","09:20","talk","Türkiye'de Nadir Hastalıklar Alanında Kurumsal Gelişim: Bugüne Kadarki Yolculuk","Murat GÜLŞEN","Fatma SILAN, Ahmet Cevdet CEYLAN, Özgür BALASAR"],
+["p6-2","6","09:20","09:40","talk","Nadir ve Tanısız Hastalıklara Entegre Genomik Yaklaşım","Uğur ÖZBEK","Fatma SILAN, Ahmet Cevdet CEYLAN, Özgür BALASAR"],
+["p6-3","6","09:40","10:00","talk","Türkiye Genom Projesi","Duygu ÖZEL DEMİRALP","Fatma SILAN, Ahmet Cevdet CEYLAN, Özgür BALASAR"],
+["b6-1","6","10:00","10:30","break","Kahve Molası"],
+["p6-4","6","10:30","11:30","panel","Vaka Örnekleriyle Genetik Danışmanlık","Panelistler: Onur Burak DURSUN, Ali KANDEĞER, Güneş UYAR, Çiğdem SAV · Vaka sunumları: Hilmi BOLAT, Ceren ALAVANDA, Ezgi GÖKPINAR İLİ, İbrahim KAPLAN","Nur SEMERCİ GÜNDÜZ, Hatice ILGIN RUHİ"],
+["p6-5","6","11:30","12:00","cer","Kapanış","",""]
+].map(a=>({id:a[0],d:a[1],s:a[2],e:a[3],t:a[4],title:a[5],sp:a[6]||"",mod:a[7]||"",room:a[8]||"Ana salon",sub:a[9]||""}));
+
+// session no, day, salon, chairs, talks [title, presenter]
+const OS=[
+[1,"3","Salon 2","Ebru MARZİOĞLU ÖZDEMİR, Ayberk TÜRKYILMAZ",[
+["Sporadik Parkinson Hastalığında RFC1 Tekrar Artışları ve Motif Heterojenitesi: Hasta-Kontrol Karşılaştırması","İlayda Sönmez Baki"],
+["Otizm Spektrum Bozukluklarının Genetiğinde Kopya Sayısı Varyasyonlarının Değerlendirilmesi","Semih Keleş"],
+["Heterozigot PRKN bulgusundan bialelik tanıya: optik genom haritalamanın katkısı","Esma Ertürkmen Aru"],
+["Farklı Klinik Prezantasyonlarla Başvuran İki Olguda 17q12 Mikrodelesyonu: NGS Tabanlı CNV Analizinin Tanısal Katkısı","Afra Berilhan Biçkici"],
+["Investigation of urea cycle defect genes in Parkinson's disease: A retrospective cohort study","Sezin Canbek"],
+["Herediter ataksi şüphesi olan 327 hastada spinoserebellar ataksi alt tiplerinin dağılımı ve ileri moleküler genetik testlerin tanısal katkısı","Delil Serhat Yiğit"],
+["Parkinson Endikasyonu ile Yapılan Genetik Test Sonuçlarımız: 2018–2026 Tek Merkez Deneyimi","Ömer Faruk Karaçorlu"]]],
+[2,"3","Salon 3","Deniz TORUN, Çağrı DOĞAN",[
+["GeneNode: Ulusal Genomik Araştırma Ağı ve Uluslararası Çağrı Takip Platformu","Ayşe Gürel"],
+["Karyoview: A Novel Comprehensive Ideogram Generator Website Integrated with Chromamind (AI) for Chromosomal Rearrangements in Malignancies Including Hematologic Malignancies","Filiz Köroğlu"],
+["Model-Threshold Agreement (MTA): A Soft-Margin Ensemble Framework for Phenotype-Overlap Classification","Mustafa Tarık Alay"],
+["Prematüre Retinopatisinde Poligenik Risk Skoruyla Genetik Yatkınlığın Değerlendirilmesi","Tuba Uğurlu Er"],
+["Genetik Sendromların Ön Tanısında Yapay Zekâ Performansı: Yenidoğan Yoğun Bakım Vakaları Üzerine Bir Çalışma","Kerim Üzümcü"],
+["Dizide Uzak, Yapıda Yakın: SCN2A Varyantlarının Üç Boyutlu Konumu ile Hasta Fenotipleri Arasındaki İlişki","Hüseyin Saylam"],
+["Kanonik Translasyonun Ötesinde: smORF İlişkili Protein Kodlayan Transkriptlerde miRNA Hedef Mimarisinin Karşılaştırmalı Analizi","Hasan Çağlak"]]],
+[3,"3","Salon 4","Ece KESKİN, Semih AŞIKOVALI",[
+["Kopya Sayısı Değişimlerinde Dinamik Yorumlama: Yeniden Analizin Tanısal ve Klinik Katkısı","Derya Hazal Özbakır"],
+["Tüm Ekzom Dizileme Yönteminde Tanısal Verimin Artırılması ve Reanaliz İçin Olgu Önceliklendirme Kriterlerinin Tanımlanması","Gökçen Özbek Kanat"],
+["Varyant Patojenite Sınıflandırmasında AlphaGenome AVI Skorunun Diğer in silico Tahmin Araçlarıyla Karşılaştırılması","Yeşim Berçin"],
+["Calibration of AlphaGenome and SpliceAI2 for PP3/BP4 Evidence Across Coding and Noncoding Variants","Yarkın Dolaş"],
+["SpliceAI for Windows: SpliceAI İçin Yerel Çalışan Bir Masaüstü Uygulaması","Mustafa Mert Aydın"],
+["AllPrime: Varyant Koordinatından Özgüllük Taramasına Uçtan Uca Primer Tasarım ve Değerlendirme Uygulaması","Eren Kılınç"],
+["RET VUS re-analysis in a Clinical Cohort: Integrating ACMG Criteria with Phenotypic Data","Taha Safa Gökçe"]]],
+[4,"3","Salon 5","Tülay TOS, Fahrettin DUYMUŞ",[
+["Kronik Lenfositik Lösemide İmmünogenetik ve Genomik Bulguların Bütünleşik Değerlendirilmesi ve Olumsuz Prognostik Belirteçlerin Dağılımı","Engin Altundağ"],
+["Hormon Reseptörü Pozitif Meme Kanseri Olgularında Somatik PIK3CA Varyantlarının Değerlendirilmesi: Tek Merkez Deneyimi","Emine İpek Ceylan"],
+["MMR İmmünohistokimya Bulguları ve Fragman Analiziyle Elde Edilen MSI Sonuçlarının Birlikte Değerlendirilmesi: Tek Merkez Deneyimi","Dilek Özata Aksoy"],
+["Kayıp Klonu Ararken: Allojenik Nakil Sonrası Santral Sinir Sisteminde Yakalanan FLT3-ITD Pozitif AML","Fethiye Esenkaya"],
+["Evaluation of the Somatic Variant Profile by Next-Generation Sequencing in Non-Small Cell Lung Cancer: A Single-Center Experience of 225 Cases","Pelin Ercoşkun"],
+["Myeloid Neoplazilerde Hedefli Yeni Nesil Dizileme Bulgularının Klinik, Konvansiyonel Moleküler ve Sitogenetik Verilerle Bütünleşik Değerlendirilmesi","Umut Can Tekbaş"],
+["JAK2 V617F Mutant Miyeloproliferatif Neoplazi Hastalarının Eşlik Eden Moleküler Varyantlarının Klinik ve Patolojik Korelasyonu: Tek Merkez Deneyimi","Mustafa Altan"]]],
+[5,"3","Salon 6","Ozan ÇETİN, Sezin CANBEK",[
+["Prostat Kanserinde Germline Varyant Spektrumu ve Yalın Aile Öyküsü Değerlendirmesi: 250 Hastalık Türkiye Kohortu","Zeynep Özdemir Pehlivan"],
+["Çoklu Primer Kanserli Hastalarda Herediter Risk: Genetik Spektrum, Tanısal Verim ve Klinik Belirleyiciler","Sultan Kevser Gangal"],
+["Herediter Kanser Paneli ile Saptanan Germline RET Varyantlarının Dağılımı ve Hastaların Klinik Özellikleri","Özgenur Özen Özkan"],
+["Herediter Kanser Olgularında Genişletilmiş Gen Paneli ile Yeniden Analizin Tanısal Katkısı","Asiye Sevde Can"],
+["Somatik Yeni Nesil Dizileme Analizinde Varyant Allel Frekansı ≥%30 Saptanan Kanser Hastalarında Germline Doğrulama Testlerinin Değerlendirilmesi ve Somatik-Germline Uyumsuzluklarının İncelenmesi: Necmettin Erbakan Üniversitesi Deneyimi","Selen Özata"],
+["Herediter Kanser Kohortunda En Sık Görülen Germline CHEK2 Varyantları: Varyant Spektrumu, Klinik Fenotip ve Meme Kanseri Özellikleri","Veysel Atasoy"],
+["ACMG Sekonder Bulgu Listesine Eklenebilecek Kanser Yatkınlık Genleri: Patojenik Varyant Sıklığı ve Kademeli Değerlendirme","Sultan Buse Türk"],
+["FH Geninde Germline Varyant Saptanan Olgularda Moleküler ve Klinik Spektrum: 20 Olguluk Seri","Ezgi Çevik Demir"]]],
+[6,"3","Salon 7","Burak DURMAZ, Özge ÖZER KAYA",[
+["Monokoryonik Monoamniyotik İkiz Gebelikte Mozaik İnterstisyel 18q21.2–q22.1 Delesyonu: Prenatal Fenotipik Bulgular ve Genetik Danışmanlıkta Karşılaşılan Güçlükler","Atakan Deniz"],
+["Deepening of Prenatal Genetic Diagnosis: From Karyotyping to Microarray and Molecular Testing","Simge Tuana Ay Öner"],
+["Fetal Kayıpların Genetik Tanısında Ekzomik Otopsi Yaklaşımı","Mertcan Tan"],
+["Prenatal Tanı Amacıyla Elde Edilen Örneklerin Sitogenetik ve Moleküler Genetik Sonuçlarının Retrospektif Olarak Değerlendirilmesi","Zeynep Nur Paralı"],
+["Emanuel Sendromu: Prenatal ve Postmortem Fenotipik Spektrumun Dört Olgu Üzerinden Değerlendirilmesi","Olida Çeçen"],
+["Diagnostic Spectrum and Yield of Invasive Prenatal Testing: From Conventional Cytogenetics to Chromosomal Microarray and Clinical Exome Sequencing","Cemal Onur Onaran"],
+["Diagnostic Confirmation of NIPT in Fetal Numerical Chromosomal Abnormalities: Single-Center Validation via Invasive Diagnostic Methods","Aleyna Emeksiz"]]],
+[7,"4","Salon 2","Aslı ECE SOLMAZ, Serhat SEYHAN",[
+["Confirmation of Structural Chromosomal Anomalies Detected by Non-Invasive Prenatal Testing with Prenatal Microarray and Karyotyping: A Single-Center Experience","Zeynep Nergiz Sarıçiçek"],
+["Multiple Konjenital Anomalili Fetüslerde Postmortem Muayene Bulguları Eşliğinde Kromozomal Mikroarray ve WES Deneyimlerimiz","Fatih Ahmet Yürekli"],
+["Düşük Materyallerinde QF-PCR ile STR Lokuslarında Monoallelik Patern Saptanan Olguların Değerlendirmesi","Abdullah İsa Bulat"],
+["Gebelik Kayıplarında Düşük Materyallerinin Sitogenetik Anomali Oranlarının Değerlendirilmesi: 5 Yıllık Tek Merkez Deneyimi","Taha Mustafa Solmaz"],
+["Anomali Tipine Göre Non-İnvaziv Prenatal Testin Pozitif Prediktif Değeri: Tek Merkez Deneyimi","Oğuz Dülger"],
+["TNRC18 dysfunction disrupts ciliogenesis and contributes to congenital heart disease","Nurdeniz Nalbant"],
+["Exploring the Potential Role of MTMR8 in Ciliogenesis","Nida Nur Öner"]]],
+[8,"4","Salon 3","Gözde YEŞİL, Mustafa DOĞAN",[
+["Beyond Balanced Translocations: Uncovering Disease-Relevant Gene Disruptions by Optical Genome Mapping","Merve Kaysin"],
+["Ekzom Dizileme Sonrası Tanı Alamayan Nörogelişimsel Bozukluğu Olan Hastalarda Uzun Okumalı Genom Dizilemenin Tanıya Katkısı","Muhammed Fatih Mulayım"],
+["Kromozomal Mikroarray Analizi Verilerinin Retrospektif Olarak Genotip ve Fenotip Bazlı Değerlendirilmesi","Levent Paralı"],
+["Tüm Ekzom Dizileme ile Tanı Konulamayan Olgularda Tüm Genom Dizileme ve Transkriptomik Yaklaşım","İpek Şahin"],
+["Cinsiyet Gelişim Bozukluklarında Klinik Ekzom Dizileme Analizi: Tek Merkezli Retrospektif Çalışma","Onur Hanoğlu"],
+["Monogenik Hastalık Düşünülen ve Ekzom Dizileme Yöntemiyle Patojenik Varyant Saptanamayan Hastalarda Transkriptom Analizi","Tarık Düzenli"],
+["Tanı Konulamayan Nörogelişimsel Bozukluğa Sahip Vakalarda RNA-Seq'in Tamamlayıcı Rolü","Rüveyda Nur İz"]]],
+[9,"4","Salon 4","Gülsüm KAYHAN, Hanife SAAT",[
+["İskemik İnme Vakalarındaki Diyagnostik/Prognostik miRNA Ekspresyon Profillerinin Trombüs Materyalinde Belirlenmesi","Efsun Tosumoğlu"],
+["Transcriptomic Profiling of TFE3 Gain-of-Function Validates CLEAR Network Upregulation and Identifies mTORC1 and TCR Signaling Pathways as Potential Therapeutic Targets","Alp Peker"],
+["Parkinson Hastalığında Gen Ekspresyonunun Ötesinde: İzoform Kullanım Değişiklikleri","Oya Demirkaya"],
+["Meme Kanseri Hücrelerinde PhoCl2c-Bid Tabanlı Optogenetik Apoptoz Kontrolü","Hasan Çağlak"],
+["Meme Kanserinde Patojen Uyarımı Sonrası TLR4 ve Endoplazmik Retikulum Stresi Arasındaki Moleküler Çapraz Etkileşim","Muhammed Emin Sarı"],
+["Ailesel Akdeniz Ateşi Hastalarında ALPK1 Geni Ekspresyon Seviyelerinin Değerlendirilmesi","Büşra Yılmaz"],
+["Kanser Genomunun Aşil Topuğu: CpG-Bağımlı Arginin Kırılganlığı ve Paralog Tamponlama Dinamikleri","Sakine Dirikolu Buğrul"]]],
+[10,"4","Salon 5","Altuğ KOÇ, Kenan DELİL",[
+["Genetik Olarak Açıklanamayan 46,XY Cinsiyet Gelişim Bozukluklarında Optik Genom Haritalama: Tanısal Verim ve Klinik Değer","Uğur Cem Yılmaz"],
+["Nonsendromik Retinal Distrofilerin Mutasyon Spektrumunun Yeni Nesil Dizileme Yöntemi ile İncelenmesi","Fatma Zehra Yalçın"],
+["Uzun QT Sendromu Ön Tanılı Hastalarda Çoklu Gen Paneli ile Saptanan Varyant Spektrumu: Tek Merkez Deneyimi","Sılanur Uğur"],
+["LARP7 ile İlişkili Alazami Sendromunun Klinik ve Moleküler Spektrumunun Genişletilmesi: Beş Aileden Sekiz Olguluk Bir Kohort","Betül Kesriklioğlu"],
+["Ölümcül Olabilen Kalıtsal Genodermatoz: Epidermolizis Bülloza Ön Tanılı Hastalarda Merkezimizin Genetik Tanı Deneyimi","Javid Taghiyev"],
+["Fraser Sendromunda Genotipik ve Fenotipik Heterojenite: FRAS1, FREM2 ve GRIP1 Genlerinde Biallelik Varyant Saptanan Üç Olgu","Rumeysa Atasay"],
+["Nadir Bir Nörogelişimsel Tablo: KMT2A Varyantı Saptanan İki Wiedemann-Steiner Sendromu Olgusu","Mina Balasar"]]],
+[11,"4","Salon 6","Aslı SUBAŞIOĞLU, Semih AŞIKOVALI",[
+["Somatic Mosaicism Beyond Blood: A Clinical and Molecular Cohort Study","Furkan Baştan"],
+["2020-2026 Yılları Arasında MODY Şüphesiyle Genetik Tanısal Verim, Gen Dağılımı ve Moleküler Tanıyı Öngören Klinik Belirteçler: Tek Merkez Deneyimi","Meryem Akcan"],
+["Herediter Multipl Ekzostoz Tanılı Hastaların Moleküler Genetik ve Klinik Değerlendirmesi","Gizem Merve Şirvancı"],
+["Allele Dropout due to SMN1 c.842G>C in Digital PCR: A False Homozygous SMN1 Exon 7 Deletion in Newborn Screening","Burak Emiroğlu"],
+["Güneydoğu Anadolu'da SMARCAL1 İlişkili Schimke İmmünoosseöz Displazi: Tekrarlayan p.Arg820His Varyantı, Olası Bölgesel Kurucu Etki ve Fenotipik Heterojenite","Murat Öztürk"],
+["Kalıtsal Göz Hastalıklarında Yeni Nesil Dizileme ile Saptanan Genetik Varyantların Değerlendirilmesi","Süheyl Önal"],
+["Primer Ailesel Beyin Kalsifikasyonunun Klinik ve Genetik Spektrumu: Ege Deneyimi","Şevval Zeycan Şahan"]]],
+[12,"4","Salon 7","Erhan PARILTAY, Pelin ÖZYAVUZ ÇUBUK",[
+["PYGM Varyantları Saptanan Bireylerde Klinik ve Moleküler Spektrum: Tek Merkez Deneyimi","Meryem Nur Murt"],
+["Kabuki Sendromu Tanılı Üç Olgunun Klinik ve Moleküler Bulguları","Hilal Onay İlhan"],
+["Göz Hastalıkları Paneli Yapılan 76 Hastada Varyant Spektrumu ve Klinik Deneyimlerimiz","Elif Gül"],
+["Demans ve İlişkili Nörolojik Tablolarla Başvuran 79 Hastada Klinik ve Tüm Ekzom Dizileme Bulguları: Tek Merkez Deneyimi","Öykü Özbek"],
+["TRIP12 Geninde Farklı Varyantlar Taşıyan Üç Aileden Dört Hastanın Ayrıntılı Klinik ve Moleküler Değerlendirmesi","Esra Habiloğlu"],
+["İzole Kreatin Kinaz Yüksekliğinden Yürüme Kaybına: Biallelik ANO5 Varyantı Taşıyan 14 Olguda Klinik Çeşitlilik ve Olası Kurucu Etki","Afife Büke"],
+["Monogenik Obezite Panelinde Patojenik/Olası Patojenik Varyant Saptanmayan Hastalarda Poligenik Risk ile İlişkili SNP'lerin Retrospektif Değerlendirilmesi: Tek Merkez Deneyimi","Mizgin Köprücü"]]],
+[13,"5","Salon 2","Büşranur ÇAVDARLI, Sinem YALÇINTEPE",[
+["Evaluation and Reclassification of MC4R Variants of Uncertain Significance (VUS) in the Turkish Population: The Most Common Cause of Monogenic Obesity","Zeki Sakallı"],
+["Herediter Kas Hastalıklarında Genetik Spektrum: Tek Merkez Deneyimi","Tuna Apuhan"],
+["PCDH19 İlişkili Gelişimsel ve Epileptik Ensefalopatide Fenotipik Değişkenlik ve X'e Bağlı Atipik Kalıtım","Mükerrem Yılmaz"],
+["Evidence for a Putative Founder Allele in SPG11: Shared Haplotype Analysis in Families from Central and Southeastern Anatolia","Ayşe Nur Şenocak"],
+["Pediyatrik İnflamatuvar Bağırsak Hastalıklarında Genetik Etiyolojinin Değerlendirilmesi: Tek Merkez Deneyimi","Elif Saraç"],
+["Gaucher Hastalığında Moleküler Tanısal Güçlükler: 2432 Bireylik Kohorttan Dersler","Gizem Kök"],
+["Clinical Variability in POU3F3-Related Snijders Blok–Fisher Syndrome: Three Cases with De Novo Variants","Ceren Furtana"]]],
+[14,"5","Salon 3","Özge ÖZALP, Alperhan ÇEBİ",[
+["Klinik Ekzomdan Mitokondriyal Tanıya: 11.825 Hastada mtDNA Varyantlarının Sistematik Analizi","Öznur Kaya Güneş"],
+["Tekrarlayan Alt Solunum Yolu Enfeksiyonu ve Kronik Akciğer Hastalığı Olan Çocuklarda Yeni Nesil Dizilemenin Uygulanması","Mustafa Güneş"],
+["NOTCH3 Sistein Değişimlerine Lokalizasyon Temelli Sınıflama Işığında Yaklaşım","Kutalp Özekicioğlu"],
+["Mitokondriyal Genom Varyantlarının Dokuya Özgü Heteroplazmi Dağılımı, Eşik Değer Etkisi ve Türk Popülasyonundaki Haplogrup Profilinin Değerlendirilmesi","Miray Zorluer"],
+["TrioWGS: Tüm Genom Dizilemede Varyant Karmaşasını Klinik Açıdan Anlamlandırmak","Ömer Çağrı Akçin"],
+["Klinik Önemi Belirsiz Varyantlar Gerçekten Belirsiz mi Kalıyor? Genetik Danışmanlık Sonrası Klinik Kararların Retrospektif Analizi","Emre Akbaş"],
+["Soft-Clipped Read Analysis in IGV Combined with Sanger Sequencing for Base-Pair Resolution of Intragenic Deletions: An Affordable CNV Validation Strategy in Four Patients","Özge Beyza Gündoğdu Öğütlü"]]],
+[15,"5","Salon 4","Evren GÜMÜŞ, Elif YILMAZ GÜLEÇ",[
+["Noonan Sendromu ve Noonan Benzeri Fenotipe Sahip Olgularda Klinik ve Moleküler Spektrum: Tek Merkez Deneyimi","Maide Korkmaz Özkan"],
+["FGFR3 Varyantlarının Dağılımı ve Klinik Bulgularla İlişkisi: Tek Merkezli Retrospektif Çalışma","Samet Ercan"],
+["Yeni Nesil Dizileme ile Patojenik Üçlü Tekrar Artışı Saptamak Mümkün: Bir Okulofaringeal Musküler Distrofi Olgusu","Hatice Gündoğan"],
+["Herediter Spastik Parapleji Ön Tanılı Olgularda Genetik Tanıya Ulaşma Oranı ve Otozomal Resesif Formların Baskınlığı","Mehmet Akif Yücesoy"],
+["C9orf72 Tekrar Sayısı Artışı Olan ALS Olgularında Hayat Kalitesi ve Genetik Danışmanlık Sürecinin Değerlendirilmesi; Multidisipliner Takip ve Tekrarlayan Genetik Danışmanın Önemi","Hande Demirci"],
+["Dislipidemi Ön Tanılı Hastalarda Moleküler Genetik İncelemenin Katkısı: Tek Merkez Deneyimi","Kübra Müge Çelik"],
+["Nonsendromik Orantılı Boy Kısalığı Olan Bireylerde Yeni Nesil Dizilemenin Uygulanması","Sena Çetin Topal"]]],
+[16,"5","Salon 5","Esra ARSLAN ATEŞ, Güneş ÇAKMAK GENÇ",[
+["Kalıtsal Periferik Nöropati Şüphesi Olan Hastalarda Ardışık PMP22 Kopya Sayısı Analizi ve NGS Yaklaşımının Tanısal Verimi","Hacer Ukba Altundağ"],
+["Prenatal Korpus Kallozum Anomalilerinde Genetik Tanı ve Postnatal Nörogelişim: Danışmanlıkta Belirsizlik","Ayşe Ceren Sağdıç"],
+["Tanısız Nörogelişimsel Bozukluklarda Gözden Kaçan Sık Bir Neden: Fenotipik Veri Madenciliği ile ReNU Sendromu Tanısı Alan Üç Olgu","Süleyman Talha Özden"],
+["Clinical Heterogeneity in Three Patients with Different Molecular Alterations in the SLC7A7 Gene","Müberra Dağlar"],
+["Ailesel İntrakranial Anevrizmalı Hastalarda Periferik Kandan Tüm Ekzom Dizileme Çalışması","Etkin Özkan"],
+["Kerubizm Tanısı Alan Olguda OGFRL1 Geninde Tanımlanan Novel c.351_376del Varyantının Hastalık ile İlişkisinin mRNA ve Protein Düzeyinde Değerlendirilmesi","İpek Şahin"],
+["A Retrospective Evaluation of the Relationship Between BTD Gene Variants and Enzyme Activity","Sena Nur Subaşı"]]],
+[17,"5","Salon 6","Özgür BALASAR, Umut ALTUNOĞLU",[
+["21-Hidroksilaz Eksikliğinde CYP21A2 MLPA Bulgularının ve Genetik Yeniden Düzenlenmelerin Retrospektif Değerlendirilmesi: Tek Merkez Deneyimi","Fatma Nur Önal"],
+["Novel RAB3GAP1 Variant Expanding the Mutational Spectrum of Warburg Micro Syndrome: Two New Cases and a Single-Center Experience","İremnur Kansu"],
+["Three Siblings Harboring the Same SMARCE1 Variant: Evidence Suggestive of Parental Gonadal Mosaicism in Coffin–Siris Syndrome 5","Esra Dirimtekin"],
+["CLCN7 Geni ve PERCC1 Düzenleyici Bölgesini İçeren 16p13.3 Delesyonunda Olası Kurucu Etkinin Araştırılması","Yusuf Bahap"],
+["At the Intersection of Bone and Genome: Clinical and Genetic Diversity in Skeletal Dysplasias","Şenol Demir"],
+["Renal Agenezi/Displazili Olguda Homozigot WNT9B c.11dup Varyantı: Aday Bir CAKUT Geninde Türkiye'den İlk Aile ve Değişken Ekspresivite","Alperen Fettahlıoğlu"],
+["Klasik Alternan Hemipleji Ön Tanısı Olmadan ATP1A3 Patojenik Varyantı Saptanan Üç Olgu: Fenotipik Heterojenite ve Tanısal Zorluk","Murat Tezdiğ"],
+["Primer Siliyer Diskinezi Ön Tanılı Hastalarda Tüm Genom Dizilemenin ve Kopya Sayısı Değişikliklerinin Tanısal Katkısının Araştırılması","Fatma Demir"]]],
+[18,"5","Salon 7","Filiz ÖZEN, Hilmi BOLAT",[
+["A Wide Diagnostic Spectrum in Dyslipidemia: From Polymorphism to Rare Disease","Emine Karataş"],
+["Aynı Merkez, İki Farklı Aile: PHARC Sendromunun Tanınmasında Klinik Farkındalığın Önemi","Zeynep Su İstanbullu"],
+["Joubert Sendromunda Klinik Tablodan Genetik Tanıya: COACH Sendromu Dahil Beş Hastanın Tek Merkezli Retrospektif Analizi","Erkam Başar"],
+["Doğuştan Bağışıklık Kusuru Şüphesiyle Değerlendirilen Hastalarda Tüm Ekzom Dizileme Temelli Genetik İncelemelerin Tanısal Katkısı: Tek Merkezli Retrospektif Çalışma","Oğuzhan Demir"],
+["Beyond Williams-Beuren Syndrome: Clinical and Molecular Spectrum of 7q11.23 Copy Number Variations in Seven Pediatric Cases","Saliha Esra Kayıkçı"],
+["Moleküler Tanı Konulamamış Konjenital Böbrek ve Üriner Kanal Anomalisi Olan Hastalarda Tüm Ekzom Dizileme Verilerinin Retrospektif Analizi ve Aday Genlerin Değerlendirilmesi","Hilal Esmanur Kaya"],
+["DNA Onarım Genlerinde Moleküler Alt Tipe Bağlı Kopya Sayısı–Ekspresyon Etkileşimlerinin Değerlendirilmesi","Sezin Sungur"],
+["RNA-Seq Kullanımının Klinik Tanıdaki Rolü: Ekzom Analiziyle Sonuç Alınamayan Dismorfik Vakaların İncelenmesi","Leyla Rezan Eren"]]]
+];
+const TALKS={};const SESS={};
+(function(){let n=1;for(const [no,d,salon,chair,list] of OS){SESS[no]={no,d,salon,chair,ids:[]};
+  list.forEach(([title,pn],pos)=>{const id="S-"+String(n++).padStart(3,"0");TALKS[id]={id,no,d,salon,title,pn,pos};SESS[no].ids.push(id);});}})();
+const BYID={};M.forEach(x=>BYID[x.id]=x);
+
+const KEY="tgk2026-secim",TKEY="tgk2026-sekme",ODAYS=["3","4","5"];
+let sel=new Set(),tab="2",oralDay="3",q="";
+try{const r=JSON.parse(localStorage.getItem(KEY)||"[]");if(Array.isArray(r))r.forEach(i=>{if(BYID[i]||TALKS[i])sel.add(i)});}catch(e){}
+try{const t=localStorage.getItem(TKEY);if(t&&(t==="mine"||t==="oral"||DAYS.some(d=>d.k===t)))tab=t;}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...sel]))}catch(e){}};
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const low=s=>s.toLocaleLowerCase("tr");
+const mins=t=>{const [h,m]=t.split(":").map(Number);return h*60+m};
+const hm=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+const TAG={cer:"Tören",conf:"",talk:"",sym:"Uydu sempozyumu",sel:"Sözlü bildiri",course:"Kurs",panel:"Panel"};
+const DAYNAME=k=>{const D=DAYS.find(x=>x.k===k);return D.l+" "+D.w;};
+
+// Programda bildiri başına 7 dakika verildiği için saatler sıraya göre yaklaşık hesaplanır
+function entry(id){
+  if(TALKS[id]){const t=TALKS[id],s=480+7*t.pos;return{id,d:t.d,s,e:s+7,room:t.salon,approx:true};}
+  const x=BYID[id];return{id,d:x.d,s:mins(x.s),e:mins(x.e),room:x.room};
+}
+function conflicts(){
+  const es=[...sel].map(entry),cx=new Map();
+  for(let i=0;i<es.length;i++)for(let j=i+1;j<es.length;j++){
+    const a=es[i],b=es[j];
+    if(a.d===b.d&&a.room!==b.room&&a.s<b.e&&b.s<a.e){
+      (cx.get(a.id)||cx.set(a.id,new Set()).get(a.id)).add(b.id);
+      (cx.get(b.id)||cx.set(b.id,new Set()).get(b.id)).add(a.id);
+    }}
+  return cx;
+}
+function label(id){if(TALKS[id])return TALKS[id].salon+" "+id;const x=BYID[id];return x.room==="Ana salon"?x.title:x.room;}
+const sorted=d=>[...sel].map(entry).filter(e=>e.d===d).sort((a,b)=>a.s-b.s||a.room.localeCompare(b.room,"tr")||a.id.localeCompare(b.id));
+
+function cardHTML(x){
+  const tag=x.t==="conf"?`<span class="tag conf">${esc(x.sub)}</span>`:(TAG[x.t]?`<span class="tag">${TAG[x.t]}</span>`:"");
+  const room=x.room!=="Ana salon"?`<span class="tag">${esc(x.room)}</span>`:"";
+  const ml=x.t==="course"?"":(x.t==="talk"&&!x.sp?"Oturum: ":"Moderatör: ");
+  const srch=low([x.title,x.sp,x.mod,x.sub,x.room].join(" "));
+  return `<button class="card k-${x.t}" data-id="${x.id}" data-s="${esc(srch)}" aria-pressed="false">
+    ${tag||room?`<span class="tags">${tag}${room}</span>`:""}
+    <span class="ttl">${esc(x.title)}</span>
+    ${x.sp?`<span class="sp">${esc(x.sp)}</span>`:""}
+    ${x.mod?`<span class="mod">${ml}${esc(x.mod)}</span>`:""}
+    <span class="cflag" hidden></span><span class="chk" aria-hidden="true"></span></button>`;
+}
+function talkHTML(id){
+  const t=TALKS[id];
+  return `<button class="talk" data-id="${id}" data-s="${esc(low(id+" "+t.title+" "+t.pn+" "+t.salon))}" aria-pressed="false"><span class="code">${id}</span><span class="tt">${esc(t.title)}</span><span class="pn">${esc(t.pn)}</span><span class="cflag" hidden></span><span class="chk" aria-hidden="true"></span></button>`;
+}
+function dayHTML(d){
+  let h=`<h2 class="dayhead">${DAYNAME(d)}</h2>`;
+  if(ODAYS.includes(d)){
+    const n=Object.values(SESS).filter(s=>s.d===d).length;
+    h+=`<div class="row"><div class="tm">08:00<small>08:50</small></div><div class="cards"><button class="card gocard" data-go="${d}"><span class="tags"><span class="tag conf">Sözlü bildiriler</span></span><span class="ttl">${n} salonda aynı anda sözlü bildiri oturumları</span><span class="sp" data-oc="${d}"></span><span class="mod">Salonları yan yana görmek ve seçmek için dokunun</span></button></div></div>`;
+  }
+  const items=M.filter(x=>x.d===d);
+  for(let i=0;i<items.length;){
+    const x=items[i];
+    if(x.t==="break"){h+=`<div class="brk" data-brk><span>${x.s}</span>${esc(x.title)} · ${x.e}'e kadar</div>`;i++;continue;}
+    const grp=[x];let j=i+1;while(j<items.length&&items[j].s===x.s&&items[j].t!=="break")grp.push(items[j++]);
+    h+=`<div class="row" data-row><div class="tm">${x.s}<small>${x.e}</small></div><div class="cards">${grp.map(cardHTML).join("")}</div></div>`;
+    i=j;
+  }
+  return h;
+}
+function oralHTML(){
+  const ss=Object.values(SESS).filter(s=>s.d===oralDay);
+  const maxN=Math.max(...ss.map(s=>s.ids.length));
+  let h=`<h2 class="dayhead">Sözlü bildiriler</h2>
+  <div class="daysw">${ODAYS.map(k=>`<button class="tab" data-oday="${k}" aria-selected="${k===oralDay}"><small>${DAYS.find(x=>x.k===k).w}</small><b>${DAYS.find(x=>x.k===k).l}</b></button>`).join("")}</div>
+  <p class="ognote">Her sütun bir salon, her satır sunum sırası. Aynı satırdaki bildiriler yaklaşık aynı saatte sunulur, bu yüzden bir satırdan tek bildiri seçerseniz salon değiştirerek hepsine yetişebilirsiniz. Saatler, bildiri başına 7 dakika varsayımıyla yaklaşıktır.</p>
+  <div class="ogwrap"><div class="og" style="grid-template-columns:72px repeat(${ss.length},minmax(200px,1fr))">
+  <div class="oh corner">Sıra</div>`;
+  for(const s of ss)h+=`<div class="oh"><b>${s.salon}</b><small>Oturum ${s.no} · ${esc(s.chair)}</small><span class="scount" data-sc="${s.no}"></span></div>`;
+  for(let i=0;i<maxN;i++){
+    h+=`<div class="ot">${i+1}.<small>~${hm(480+7*i)}</small></div>`;
+    for(const s of ss)h+=s.ids[i]?`<div>${talkHTML(s.ids[i])}</div>`:`<div></div>`;
+  }
+  return h+`</div></div>`;
+}
+function mineHTML(){
+  const cx=conflicts();
+  if(!sel.size)return `<h2 class="dayhead">Programım</h2><div class="empty">Henüz bir şey seçmediniz. Gün sekmelerinden ya da Sözlü bildiriler sekmesinden bir oturuma dokunun; seçtikleriniz burada gün gün listelenir.</div>`;
+  let h=`<h2 class="dayhead">Programım</h2><div class="actions">
+    <button class="btn primary" id="cal">Takvime ekle (10 dk önce hatırlatır)</button>
+    <button class="btn" id="share">Listeyi paylaş</button>
+    <button class="btn danger" id="clear">Tümünü temizle</button><span class="note" id="msg"></span></div>`;
+  if(cx.size)h+=`<div class="cxsum">${cx.size} seçim başka bir salonla aynı saate denk geliyor. Turuncu çerçeveli satırlara bakın.</div>`;
+  for(const D of DAYS){
+    const rows=sorted(D.k);if(!rows.length)continue;
+    h+=`<section class="mine-day"><h3 class="dayhead" style="font-size:19px">${D.l} ${D.w}</h3>`;
+    for(const e of rows){
+      let tm,title,meta;
+      if(TALKS[e.id]){const t=TALKS[e.id];tm="~"+hm(e.s);title=t.title;meta=`${t.salon} · ${t.id} · ${t.pos+1}. sırada · ${t.pn}`;}
+      else{const x=BYID[e.id];tm=x.s+"–"+x.e;title=x.title;meta=[x.room,x.sp].filter(Boolean).join(" · ");}
+      const c=cx.get(e.id);
+      h+=`<div class="mine-row${c?" cx":""}"><span class="t">${tm}</span><div><b>${esc(title)}</b><span class="m">${esc(meta)}</span>${c?`<span class="cflag">Çakışıyor: ${esc([...c].map(label).join(", "))}</span>`:""}</div><button class="rm" data-rm="${e.id}">Kaldır</button></div>`;
+    }
+    h+=`</section>`;
+  }
+  return h;
+}
+function textList(){
+  let out="17. Ulusal Tıbbi Genetik Kongresi · Programım\n";
+  for(const D of DAYS){
+    const rows=sorted(D.k);if(!rows.length)continue;
+    out+=`\n${D.l} ${D.w}\n`;
+    for(const e of rows){
+      if(TALKS[e.id]){const t=TALKS[e.id];out+=`~${hm(e.s)}  ${t.salon} · ${t.id} ${t.title} (${t.pn})\n`;}
+      else{const x=BYID[e.id];out+=`${x.s}–${x.e}  ${x.room!=="Ana salon"?x.room+" · ":""}${x.title}${x.sp?" ("+x.sp+")":""}\n`;}
+    }
+  }
+  return out;
+}
+// Takvim dosyası: Türkiye saati UTC+3 (yaz saati yok), olaylar UTC olarak yazılır
+function icsText(){
+  const ie=s=>String(s).replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
+  const fold=l=>{let o="",i=0;while(l.length-i>73){o+=l.slice(i,i+73)+"\r\n ";i+=73;}return o+l.slice(i);};
+  const stamp=new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d+/,"");
+  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//TGK2026 Planlayici//TR","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:TGK 2026"];
+  for(const e of [...sel].map(entry)){
+    const u=m=>{const x=m-180;return `202612${String(e.d).padStart(2,"0")}T${String(Math.floor(x/60)).padStart(2,"0")}${String(x%60).padStart(2,"0")}00Z`;};
+    let sum,desc;
+    if(TALKS[e.id]){const t=TALKS[e.id];sum=`${t.id} · ${t.title}`;desc=`${t.pn} · ${t.salon}, Oturum ${t.no}, ${t.pos+1}. sunum (saat yaklaşık)`;}
+    else{const x=BYID[e.id];sum=x.title;desc=[x.sp,x.mod?"Moderatör: "+x.mod:""].filter(Boolean).join("\n");}
+    L.push("BEGIN:VEVENT",`UID:${e.id}@tgk2026-planlayici`,`DTSTAMP:${stamp}`,`DTSTART:${u(e.s)}`,`DTEND:${u(e.e)}`,
+      fold("SUMMARY:"+ie(sum)),fold("LOCATION:"+ie(e.room+" · Kaya Palazzo Golf Resort, Antalya")),fold("DESCRIPTION:"+ie(desc)),
+      "BEGIN:VALARM","ACTION:DISPLAY","TRIGGER:-PT10M",fold("DESCRIPTION:"+ie(sum)),"END:VALARM","END:VEVENT");
+  }
+  L.push("END:VCALENDAR");return L.join("\r\n")+"\r\n";
+}
+
+const view=document.getElementById("view");
+function tabsRender(){
+  document.getElementById("tabs").innerHTML=DAYS.map(D=>`<button class="tab" role="tab" data-tab="${D.k}" aria-selected="${tab===D.k}"><small>${D.w}</small><b>${D.l}</b></button>`).join("")
+   +`<button class="tab mine" role="tab" data-tab="oral" aria-selected="${tab==="oral"}"><small>Salonlar yan yana</small><b>Sözlü bildiriler</b></button>`
+   +`<button class="tab mine" role="tab" data-tab="mine" aria-selected="${tab==="mine"}"><small>Seçtiklerim</small><b>Programım (${sel.size})</b></button>`;
+}
+function render(){
+  tabsRender();
+  view.innerHTML=tab==="mine"?mineHTML():tab==="oral"?oralHTML():dayHTML(tab);
+  const wide=tab==="oral";view.classList.toggle("wide",wide);document.getElementById("hwrap").classList.toggle("wide",wide);
+  document.querySelector(".search").hidden=tab==="mine";
+  marks();applyFilter();
+}
+function marks(){
+  const cx=conflicts();
+  document.getElementById("count").textContent=sel.size+" seçim";
+  view.querySelectorAll("[data-id]").forEach(el=>{
+    const id=el.dataset.id;el.setAttribute("aria-pressed",sel.has(id));
+    const f=el.querySelector(".cflag"),c=cx.get(id);
+    if(f){f.hidden=!c;if(c)f.textContent="Çakışıyor: "+[...c].map(label).join(", ");}
+  });
+  view.querySelectorAll("[data-sc]").forEach(el=>{
+    const s=SESS[el.dataset.sc],k=s.ids.filter(i=>sel.has(i)).length;
+    el.textContent=k?k+" seçili":"";el.classList.toggle("warn",s.ids.some(i=>cx.has(i)));
+  });
+  view.querySelectorAll("[data-oc]").forEach(el=>{
+    const k=Object.keys(TALKS).filter(i=>TALKS[i].d===el.dataset.oc&&sel.has(i)).length;
+    el.textContent=k?k+" bildiri seçili":"Henüz seçim yok";
+  });
+  const mt=document.querySelector('[data-tab="mine"] b');if(mt)mt.textContent=`Programım (${sel.size})`;
+}
+function applyFilter(){
+  if(tab==="mine")return;
+  const s=low(q.trim());
+  const hit=el=>!s||el.dataset.s.includes(s);
+  if(tab==="oral"){view.querySelectorAll("[data-id]").forEach(el=>el.classList.toggle("dim",!hit(el)));return;}
+  view.querySelectorAll("[data-id]").forEach(el=>{el.hidden=!hit(el);});
+  view.querySelectorAll("[data-row]").forEach(r=>{r.hidden=![...r.querySelectorAll("[data-id]")].some(e=>!e.hidden);});
+  view.querySelectorAll("[data-brk]").forEach(b=>b.hidden=!!s);
+}
+function say(t){const m=document.getElementById("msg");if(m)m.textContent=t;}
+function fallbackText(txt,anchor){
+  if(document.querySelector("textarea.fallback"))return;
+  const ta=document.createElement("textarea");ta.className="fallback";ta.value=txt;ta.readOnly=true;anchor.after(ta);ta.select();
+}
+
+document.getElementById("tabs").addEventListener("click",e=>{
+  const b=e.target.closest("[data-tab]");if(!b)return;tab=b.dataset.tab;
+  try{localStorage.setItem(TKEY,tab)}catch(_){}
+  render();window.scrollTo(0,0);
+});
+view.addEventListener("click",e=>{
+  const go=e.target.closest("[data-go]");
+  if(go){oralDay=go.dataset.go;tab="oral";try{localStorage.setItem(TKEY,tab)}catch(_){}render();window.scrollTo(0,0);return;}
+  const od=e.target.closest("[data-oday]");
+  if(od){oralDay=od.dataset.oday;render();return;}
+  const rm=e.target.closest("[data-rm]");
+  if(rm){sel.delete(rm.dataset.rm);save();render();return;}
+  const b=e.target.closest("[data-id]");
+  if(b){const id=b.dataset.id;sel.has(id)?sel.delete(id):sel.add(id);save();marks();return;}
+  const act=e.target.closest(".actions");
+  if(e.target.id==="cal"){
+    try{
+      const blob=new Blob([icsText()],{type:"text/calendar;charset=utf-8"});
+      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="TGK2026-programim.ics";
+      document.body.appendChild(a);a.click();a.remove();
+      say("Takvim dosyası açıldı. Telefonunuz sorarsa \"Tümünü ekle\" deyin.");
+    }catch(_){say("Takvim dosyası bu görünümde açılamadı.");}
+    return;
+  }
+  if(e.target.id==="share"){
+    const txt=textList();
+    if(navigator.share){navigator.share({title:"TGK 2026 programım",text:txt}).catch(()=>{});return;}
+    try{navigator.clipboard.writeText(txt).then(()=>say("Liste kopyalandı. WhatsApp ya da e-postaya yapıştırabilirsiniz."),()=>{say("Aşağıdaki metni seçip kopyalayın.");fallbackText(txt,act);});}
+    catch(_){say("Aşağıdaki metni seçip kopyalayın.");fallbackText(txt,act);}
+    return;
+  }
+  if(e.target.id==="clear"){
+    const b2=e.target;
+    if(b2.dataset.arm){sel.clear();save();render();return;}
+    b2.dataset.arm="1";b2.textContent="Emin misiniz? Tekrar dokunun";
+    setTimeout(()=>{if(b2.isConnected){delete b2.dataset.arm;b2.textContent="Tümünü temizle";}},3500);
+  }
+});
+document.getElementById("q").addEventListener("input",e=>{q=e.target.value;applyFilter();});
+render();
+if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude/.test(location.hostname)){
+  try{navigator.serviceWorker.register("sw.js").catch(()=>{});}catch(_){}
+}
+</script>
