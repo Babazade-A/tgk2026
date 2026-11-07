@@ -12,15 +12,16 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="TGK 2026">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#0f1a2e">
+<meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light only">
 <link rel="stylesheet" href="fonts.css">
 <style>
 /* Layout: single reading column, sticky day tabs, time rail on the left, parallel sessions side by side */
 :root{
-  --bg:#eef2f6; --surface:#ffffff; --ink:#0f1a2e; --muted:#5b667a; --line:#d9dfe8;
-  --accent:#0d7681; --accent-ink:#ffffff; --accent-soft:#dbeff0;
-  --warn:#a85a07; --warn-soft:#fcefd9; --brk:#e4e9f0;
+  --bg:#ffffff; --surface:#ffffff; --field:#f3f6fc; --ink:#0b1d51; --muted:#5a6785; --line:#dde4f0;
+  --accent:#1d4ed8; --accent-ink:#ffffff; --accent-soft:#eaf0ff;
+  --warn:#b45309; --warn-soft:#fff4e5; --brk:#eef2f8;
+  --shadow:0 1px 2px rgba(11,29,81,.06),0 1px 1px rgba(11,29,81,.03);
   --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   color-scheme:light only;
@@ -52,7 +53,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var
 .count{font-family:var(--display);font-size:15px;font-weight:600;color:var(--accent);white-space:nowrap}
 .tabs{display:flex;gap:6px;overflow-x:auto;padding-block:4px 10px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer;text-align:left;line-height:1.15}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer;text-align:left;line-height:1.15}
 .tab b{display:block;font-family:var(--display);font-size:17px;font-weight:600}
 .tab small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
 .tab[aria-selected="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
@@ -60,7 +61,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var
 .tab.mine{border-color:var(--accent);display:flex;align-items:center}
 .tab.mine[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .search{padding-block:0 12px}
-.search input{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:9px 12px;font:inherit;font-size:16px}
+.search input{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:8px;padding:9px 12px;font:inherit;font-size:16px}
 /* Şimdi / Sıradaki şeridi (yalnızca kongre günlerinde görünür) */
 .nowbar{display:block;width:100%;box-sizing:border-box;text-align:left;font:inherit;font-size:13.5px;line-height:1.35;color:var(--ink);background:var(--accent-soft);border:1px solid var(--accent);border-radius:8px;padding:6px 10px;margin:0 0 8px;cursor:pointer}
 .nowbar[hidden]{display:none}
@@ -73,7 +74,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var
 @keyframes flash{from{background:var(--accent-soft)}to{background:var(--surface)}}
 /* Notlar */
 .racts{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-.ntx{display:block;margin-top:6px;font-size:13.5px;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border-radius:6px;padding:6px 8px;cursor:text}
+.ntx{display:block;margin-top:6px;font-size:13.5px;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--field);border-radius:6px;padding:6px 8px;cursor:text}
 .ntin{display:block;width:100%;box-sizing:border-box;margin-top:6px;min-height:76px;font:inherit;font-size:16px;line-height:1.4;border:1px solid var(--accent);border-radius:6px;padding:6px 8px;background:var(--surface);color:var(--ink);resize:vertical}
 .nflag{font-size:11.5px;font-weight:600;color:var(--accent)}
 main{padding-block:16px 48px}
@@ -83,7 +84,7 @@ main{padding-block:16px 48px}
 .tm small{display:block;font-size:14px;color:var(--muted);font-weight:500}
 .cards{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));min-width:0}
 .card,.talk{position:relative;display:flex;flex-direction:column;gap:3px;text-align:left;width:100%;box-sizing:border-box;font:inherit;color:inherit;
-  background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 44px 10px 12px;cursor:pointer;min-width:0}
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 44px 10px 12px;cursor:pointer;min-width:0;box-shadow:var(--shadow)}
 .card:hover,.talk:hover{border-color:var(--accent)}
 .card:focus-visible,.talk:focus-visible,.tab:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .card[aria-pressed="true"],.talk[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
@@ -140,11 +141,11 @@ main.wide,header .wide{max-width:1500px}
 .ogwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);-webkit-overflow-scrolling:touch}
 .og{display:grid;gap:0;--otw:64px;--ocw:180px}
 .og>div{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:6px;box-sizing:border-box}
-.oh{background:var(--bg);display:flex;flex-direction:column;gap:2px}
+.oh{background:var(--field);display:flex;flex-direction:column;gap:2px}
 .oh b{font-family:var(--display);font-size:19px;font-weight:600}
 .oh small{color:var(--muted);font-size:12px;line-height:1.3}
 .oh .scount{text-align:left}
-.ot,.oh.corner{position:sticky;left:0;z-index:1;background:var(--bg);font-family:var(--display);font-weight:600;font-size:18px;font-variant-numeric:tabular-nums}
+.ot,.oh.corner{position:sticky;left:0;z-index:1;background:var(--field);font-family:var(--display);font-weight:600;font-size:18px;font-variant-numeric:tabular-nums}
 .ot small{display:block;font-size:13px;color:var(--muted);font-weight:500}
 .og .talk{height:100%;min-height:96px}
 .og .dim{opacity:.25}

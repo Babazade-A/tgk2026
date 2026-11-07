@@ -591,6 +591,8 @@ document.getElementById("nowbar").addEventListener("click",e=>{
   const id=(want&&/^[a-z0-9-]{2,40}$/.test(want)&&want)||(last&&ids.includes(last)&&last)||(ids.length===1?ids[0]:null)||(ids.length?null:"tgk2026");
   if(id&&await openConf(id)){applyLang();render();}
   else{C=null;tab="home";applyLang();render();}
+  // Uygulama: açılış ekranını sayfa çizildikten sonra kapat (yapılandırmada 4 sn'lik güvenlik süresi var)
+  if(NATIVE&&NP.SplashScreen)requestAnimationFrame(()=>NP.SplashScreen.hide({fadeOutDuration:200}).catch(()=>{}));
   // Kongre gününde açılışta o an süren (ya da sıradaki) oturuma kaydır
   if(C&&NOW0&&tab===NOW0.d){
     const r=view.querySelector(".row.live")||[...view.querySelectorAll("[data-row]")].find(el=>+el.dataset.se.split("|")[1]>NOW0.m);
