@@ -12,8 +12,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#0f1a2e">
 <meta name="color-scheme" content="light only">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="fonts.css">
 <style>
 /* Layout: single reading column, sticky day tabs, time rail on the left, parallel sessions side by side */
 :root{
@@ -175,6 +174,9 @@ main.wide,header .wide{max-width:1500px}
   .og .tt{font-size:13px;line-height:1.25;hyphens:auto}
   .og .pn{font-size:11.5px}
 }
+html.native button{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+html.native footer a{color:var(--accent)}
+button{-webkit-tap-highlight-color:transparent}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -581,6 +583,13 @@ const TALKS={};const SESS={};
   list.forEach(([title,pn],pos)=>{const id="S-"+String(n++).padStart(3,"0");TALKS[id]={id,no,d,salon,title,pn,pos};SESS[no].ids.push(id);});}})();
 const BYID={};M.forEach(x=>BYID[x.id]=x);
 
+// ---- iOS/Android uygulaması içinde mi? (Capacitor). Web'de bu kısımlar devre dışıdır.
+const CAP=window.Capacitor,NATIVE=!!(CAP&&CAP.isNativePlatform&&CAP.isNativePlatform());
+// Eklentiler adıyla kaydedilir (uygulama derlemesine eklenen capacitor.js sağlar)
+const NP=NATIVE?Object.fromEntries(["LocalNotifications","Preferences","Share","App","SplashScreen"].map(n=>{try{return[n,CAP.registerPlugin?CAP.registerPlugin(n):CAP.Plugins&&CAP.Plugins[n]];}catch(e){return[n,null];}})):{};
+if(NATIVE)document.documentElement.classList.add("native");
+// Kayıt: tarayıcı belleği + uygulamada sistemin silmediği yerel depolama (Preferences)
+function store(k,v){try{localStorage.setItem(k,v)}catch(e){}if(NATIVE&&NP.Preferences)NP.Preferences.set({key:k,value:v}).catch(()=>{});}
 const KEY="tgk2026-secim",TKEY="tgk2026-sekme",ODAYS=["3","4","5"];
 let sel=new Set(),tab="2",oralDay="3",q="";
 try{const r=JSON.parse(localStorage.getItem(KEY)||"[]");if(Array.isArray(r))r.forEach(i=>{if(BYID[i]||TALKS[i])sel.add(i)});}catch(e){}
@@ -589,11 +598,11 @@ try{const t=localStorage.getItem(TKEY);if(t&&(t==="mine"||t==="oral"||DAYS.some(
 let persistAsked=false;
 const askPersist=()=>{if(persistAsked)return;persistAsked=true;
   try{const s=navigator.storage;if(s&&s.persist&&s.persisted)s.persisted().then(p=>p||s.persist()).catch(()=>{});}catch(e){}};
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...sel]))}catch(e){}if(sel.size)askPersist();};
+const save=()=>{try{store(KEY,JSON.stringify([...sel]))}catch(e){}if(sel.size)askPersist();planNotifs();};
 // Notlar: {id: metin}, yalnızca bu cihazda
 const NKEY="tgk2026-notlar";let notes={};
 try{const r=JSON.parse(localStorage.getItem(NKEY)||"{}");if(r&&typeof r==="object"&&!Array.isArray(r))notes=r;}catch(e){}
-const saveNotes=()=>{try{localStorage.setItem(NKEY,JSON.stringify(notes))}catch(e){}askPersist();};
+const saveNotes=()=>{try{store(NKEY,JSON.stringify(notes))}catch(e){}askPersist();};
 function setNote(id,v){v=String(v).trim();if(v)notes[id]=v;else delete notes[id];saveNotes();}
 // Türkiye saati (UTC+3, yaz saati yok). Kongre günü değilse null. Test için: ?now=3T09:10
 function nowTR(){
@@ -641,7 +650,10 @@ tr:{
   calOk:"Takvim dosyası açıldı. Telefonunuz sorarsa \"Tümünü ekle\" deyin.",calErr:"Takvim dosyası bu görünümde açılamadı.",
   shareTitle:"TGK 2026 programım",copied:"Liste kopyalandı. WhatsApp ya da e-postaya yapıştırabilirsiniz.",copyManual:"Aşağıdaki metni seçip kopyalayın.",
   instT:"Telefonda ana ekrana eklemek için",instIos:"iPhone'da Safari, Paylaş, \"Ana Ekrana Ekle\".",instAnd:"Android'de Chrome, üç nokta, \"Ana ekrana ekle\".",
-  instWhy:"Ana ekrandan açtığınızda uygulama gibi tam ekran açılır, seçimleriniz ve notlarınız da kalıcı olur.",instGo:"Şimdi ekle",ok:"Tamam"
+  instWhy:"Ana ekrandan açtığınızda uygulama gibi tam ekran açılır, seçimleriniz ve notlarınız da kalıcı olur.",instGo:"Şimdi ekle",ok:"Tamam",
+  footerApp:"Seçimleriniz ve notlarınız yalnızca bu cihazda saklanır; kimseyle paylaşılmaz. Program, kongre web sitesindeki 7 Kasım 2026 tarihli listeden alınmıştır; değişiklikler için resmi programı kontrol edin.",privacy:"Gizlilik politikası",
+  remOn:"Hatırlatma açık · 10 dk önce",remOff:"Hatırlatma kapalı",remDenied:"Bildirim izni kapalı. Hatırlatmalar için: Ayarlar › TGK 2026 › Bildirimler.",
+  nTitle:(r,tm)=>`${tm} · ${r} · 10 dk sonra`
 },
 en:{
   title:"TGK 2026 Planner",h1:"17th National Medical Genetics Congress",sub:"December 2–6, 2026 · Kaya Palazzo Golf Resort, Antalya",
@@ -669,7 +681,10 @@ en:{
   calOk:"Calendar file opened. If your phone asks, choose “Add All”.",calErr:"The calendar file couldn't be opened here.",
   shareTitle:"My TGK 2026 program",copied:"List copied. You can paste it into WhatsApp or an email.",copyManual:"Select and copy the text below.",
   instT:"Add it to your home screen",instIos:"iPhone: open this page in Safari, tap Share, then “Add to Home Screen”.",instAnd:"Android: open this page in Chrome, tap the three dots, then “Add to Home screen”.",
-  instWhy:"Opened from the home screen, it runs full screen like an app, and your selections and notes are kept.",instGo:"Add now",ok:"OK"
+  instWhy:"Opened from the home screen, it runs full screen like an app, and your selections and notes are kept.",instGo:"Add now",ok:"OK",
+  footerApp:"Your selections and notes are stored only on this device and are not shared with anyone. The program is taken from the list on the congress website dated November 7, 2026; check the official program for changes. English titles are translations made for this app; the official titles are in Turkish.",privacy:"Privacy policy",
+  remOn:"Reminders on · 10 min before",remOff:"Reminders off",remDenied:"Notifications are turned off. To get reminders: Settings › TGK 2026 › Notifications.",
+  nTitle:(r,tm)=>`${tm} · ${r} · in 10 min`
 }};
 const T=k=>UI[lang][k];
 // İçerik çevirisi: başlıklar, salonlar, roller
@@ -758,9 +773,9 @@ function mineHTML(){
   const cx=conflicts();
   if(!sel.size)return `<h2 class="dayhead">${T("mine")}</h2><div class="empty">${T("empty")}</div>`;
   let h=`<h2 class="dayhead">${T("mine")}</h2><div class="actions">
-    <button class="btn primary" id="cal">${T("cal")}</button>
+    ${NATIVE?`<button class="btn${remOn?" primary":""}" id="rem" aria-pressed="${remOn}">${remOn?T("remOn"):T("remOff")}</button>`:`<button class="btn primary" id="cal">${T("cal")}</button>`}
     <button class="btn" id="share">${T("share")}</button>
-    <button class="btn danger" id="clear">${T("clear")}</button><span class="note" id="msg"></span></div>`;
+    <button class="btn danger" id="clear">${T("clear")}</button><span class="note" id="msg">${NATIVE&&remOn&&notifDenied?T("remDenied"):""}</span></div>`;
   if(cx.size)h+=`<div class="cxsum">${T("cx")(cx.size)}</div>`;
   for(const D of DAYS){
     const rows=sorted(D.k);if(!rows.length)continue;
@@ -828,7 +843,8 @@ function applyLang(){
   document.getElementById("h1").textContent=T("h1");document.getElementById("sub").textContent=T("sub");
   document.getElementById("minelbl").textContent=T("mine");
   document.getElementById("q").placeholder=T("search");
-  document.getElementById("foot").textContent=T("footer");
+  const ft=document.getElementById("foot");ft.textContent=NATIVE?T("footerApp")+" ":T("footer");
+  if(NATIVE){const a=document.createElement("a");a.href="https://babazade-a.github.io/tgk2026/privacy.html";a.textContent=T("privacy");a.target="_blank";a.rel="noopener";ft.appendChild(a);}
   const lg=document.getElementById("lang");lg.setAttribute("aria-label",T("langAria"));
   lg.querySelectorAll("[data-lang]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
   if(!document.getElementById("install").hidden)installFill();
@@ -917,7 +933,7 @@ function installFill(){
   document.getElementById("instOk").textContent=T("ok");
 }
 function installOpen(){installFill();document.getElementById("install").hidden=false;document.getElementById("instOk").focus();}
-function installClose(){document.getElementById("install").hidden=true;try{localStorage.setItem(IKEY,"1")}catch(e){}}
+function installClose(){document.getElementById("install").hidden=true;try{store(IKEY,"1")}catch(e){}}
 window.addEventListener("beforeinstallprompt",e=>{if(standalone()||installSeen())return;e.preventDefault();bip=e;
   const go=document.getElementById("instGo");if(go)go.hidden=false;});
 window.addEventListener("appinstalled",()=>{bip=null;installClose();});
@@ -928,21 +944,21 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!document.getElemen
 
 document.getElementById("lang").addEventListener("click",e=>{
   const b=e.target.closest("[data-lang]");if(!b||b.dataset.lang===lang)return;
-  lang=b.dataset.lang;try{localStorage.setItem(LKEY,lang)}catch(_){}
-  applyLang();render();
+  lang=b.dataset.lang;try{store(LKEY,lang)}catch(_){}
+  applyLang();render();planNotifs();
 });
 document.getElementById("tabs").addEventListener("click",e=>{
   const b=e.target.closest("[data-tab]");if(!b)return;tab=b.dataset.tab;
-  try{localStorage.setItem(TKEY,tab)}catch(_){}
+  try{store(TKEY,tab)}catch(_){}
   render();window.scrollTo(0,0);
 });
 document.getElementById("minebtn").addEventListener("click",()=>{
-  tab="mine";try{localStorage.setItem(TKEY,tab)}catch(_){}
+  tab="mine";try{store(TKEY,tab)}catch(_){}
   render();window.scrollTo(0,0);
 });
 view.addEventListener("click",e=>{
   const go=e.target.closest("[data-go]");
-  if(go){oralDay=go.dataset.go;tab="oral";try{localStorage.setItem(TKEY,tab)}catch(_){}render();window.scrollTo(0,0);return;}
+  if(go){oralDay=go.dataset.go;tab="oral";try{store(TKEY,tab)}catch(_){}render();window.scrollTo(0,0);return;}
   const od=e.target.closest("[data-oday]");
   if(od){oralDay=od.dataset.oday;render();return;}
   const rm=e.target.closest("[data-rm]");
@@ -963,8 +979,10 @@ view.addEventListener("click",e=>{
     }catch(_){say(T("calErr"));}
     return;
   }
+  if(e.target.id==="rem"){remOn=!remOn;store(RKEY,remOn?"1":"0");planNotifs(true);render();return;}
   if(e.target.id==="share"){
     const txt=textList();
+    if(NATIVE&&NP.Share){NP.Share.share({title:T("shareTitle"),text:txt,dialogTitle:T("share")}).catch(()=>{});return;}
     if(navigator.share){navigator.share({title:T("shareTitle"),text:txt}).catch(()=>{});return;}
     try{navigator.clipboard.writeText(txt).then(()=>say(T("copied")),()=>{say(T("copyManual"));fallbackText(txt,act);});}
     catch(_){say(T("copyManual"));fallbackText(txt,act);}
@@ -983,22 +1001,78 @@ view.addEventListener("focusout",e=>{if(e.target.classList.contains("ntin"))clos
 document.getElementById("nowbar").addEventListener("click",e=>{
   const id=e.currentTarget.dataset.target,n=nowTR();
   if(id)tab="mine";else if(n)tab=n.d;
-  try{localStorage.setItem(TKEY,tab)}catch(_){}
+  try{store(TKEY,tab)}catch(_){}
   render();
   const r=id&&view.querySelector(`[data-mrow="${id}"]`);
   if(r){r.scrollIntoView({block:"center"});r.classList.add("flash");}else window.scrollTo(0,0);
 });
+// ---- Uygulama: yerel hatırlatma bildirimleri (seçilen her oturumdan 10 dk önce)
+const RKEY="tgk2026-hatirlatma";
+let remOn=true,notifDenied=false;try{remOn=localStorage.getItem(RKEY)!=="0";}catch(e){}
+// Oturum başlangıcı (Türkiye saati UTC+3) → zaman damgası
+const startMs=e=>Date.UTC(2026,11,+e.d,0,e.s-180);
+const notifId=id=>{let h=7;for(const c of id)h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)%2000000000+1;};
+let planT=null;
+function planNotifs(now){if(!NATIVE||!NP.LocalNotifications)return;clearTimeout(planT);planT=setTimeout(doPlan,now?0:700);}
+async function doPlan(){
+  const LN=NP.LocalNotifications;
+  try{
+    const pend=await LN.getPending();
+    if(pend.notifications.length)await LN.cancel({notifications:pend.notifications.map(n=>({id:n.id}))});
+    if(!remOn||!sel.size)return;
+    let perm=await LN.checkPermissions();
+    if(perm.display!=="granted"&&perm.display!=="denied")perm=await LN.requestPermissions();
+    const denied=perm.display!=="granted";
+    if(denied!==notifDenied){notifDenied=denied;if(tab==="mine")render();}
+    if(denied)return;
+    // iOS en fazla 64 bekleyen bildirime izin verir: en yakın 60 tanesi planlanır, kalanlar uygulama açıldıkça eklenir
+    const soon=[...sel].map(entry).map(e=>({e,at:startMs(e)-600000})).filter(x=>x.at>Date.now()+5000).sort((a,b)=>a.at-b.at).slice(0,60);
+    if(!soon.length)return;
+    await LN.schedule({notifications:soon.map(({e,at})=>{const t=TALKS[e.id];
+      return{id:notifId(e.id),title:T("nTitle")(roomN(e.room),(e.approx?"~":"")+hm(e.s)),
+        body:t?t.id+" · "+tTitle(t):mTitle(BYID[e.id]),schedule:{at:new Date(at),allowWhileIdle:true},extra:{tgk:e.id}};})});
+  }catch(err){console.warn("bildirim planlanamadı",err);}
+}
+function openItem(id){
+  if(!id||!(BYID[id]||TALKS[id]))return;
+  tab="mine";store(TKEY,tab);render();
+  const r=view.querySelector(`[data-mrow="${id}"]`);if(r){r.scrollIntoView({block:"center"});r.classList.add("flash");}
+}
+async function nativeBoot(){
+  // Sistem depolamasındaki kayıtlar esas alınır (tarayıcı belleği silinmiş olabilir)
+  try{
+    const P=NP.Preferences,get=async k=>(await P.get({key:k})).value;
+    const [s0,n0,l0,r0,t0]=await Promise.all([KEY,NKEY,LKEY,RKEY,TKEY].map(get));
+    if(s0!=null){const a=JSON.parse(s0);if(Array.isArray(a)){sel=new Set(a.filter(i=>BYID[i]||TALKS[i]));try{localStorage.setItem(KEY,s0)}catch(e){}}}
+    else if(sel.size)P.set({key:KEY,value:JSON.stringify([...sel])});
+    if(n0!=null){const o=JSON.parse(n0);if(o&&typeof o==="object"&&!Array.isArray(o)){notes=o;try{localStorage.setItem(NKEY,n0)}catch(e){}}}
+    else if(Object.keys(notes).length)P.set({key:NKEY,value:JSON.stringify(notes)});
+    if(l0==="tr"||l0==="en")lang=l0;
+    if(r0==="0"||r0==="1")remOn=r0==="1";
+    if(!NOW0&&t0&&(t0==="mine"||t0==="oral"||DAYS.some(d=>d.k===t0)))tab=t0;
+    applyLang();render();
+  }catch(err){console.warn("kayıtlar okunamadı",err);}
+  const LN=NP.LocalNotifications;
+  if(LN){LN.addListener("localNotificationActionPerformed",ev=>openItem(ev&&ev.notification&&ev.notification.extra&&ev.notification.extra.tgk));}
+  if(NP.App){
+    NP.App.addListener("appStateChange",st=>{if(st.isActive){tick();planNotifs();}});
+    // Android geri tuşu: Programım/Sözlü bildirilerden güne dön, gün sekmesinde uygulamadan çık
+    NP.App.addListener("backButton",()=>{if(tab==="mine"||tab==="oral"){tab=(NOW0&&NOW0.d)||"2";store(TKEY,tab);render();window.scrollTo(0,0);}else NP.App.exitApp();});
+  }
+  planNotifs(true);
+}
 applyLang();
 render();
+if(NATIVE)nativeBoot();
 // Kongre gününde açılışta o an süren (ya da sıradaki) oturuma kaydır
 if(NOW0&&tab===NOW0.d){
   const r=view.querySelector(".row.live")||[...view.querySelectorAll("[data-row]")].find(el=>+el.dataset.se.split("|")[1]>NOW0.m);
   if(r)r.scrollIntoView({block:"center"});
 }
-if(!standalone()&&!installSeen())installOpen();
+if(!NATIVE&&!standalone()&&!installSeen())installOpen();
 setInterval(tick,30000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick();});
-if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude/.test(location.hostname)){
+if(!NATIVE&&"serviceWorker" in navigator&&location.protocol==="https:"&&!/claude/.test(location.hostname)){
   try{navigator.serviceWorker.register("sw.js").catch(()=>{});}catch(_){}
 }
 </script>
