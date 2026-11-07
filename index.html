@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="TGK 2026">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#0f1a2e">
+<meta name="color-scheme" content="light only">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
@@ -21,15 +22,8 @@
   --warn:#a85a07; --warn-soft:#fcefd9; --brk:#e4e9f0;
   --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light only;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0b111d; --surface:#131b2b; --ink:#e5eaf2; --muted:#94a0b4; --line:#253149;
-  --accent:#43bfc8; --accent-ink:#06222a; --accent-soft:#103239;
-  --warn:#f0a64c; --warn-soft:#38270f; --brk:#18213400; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0b111d; --surface:#131b2b; --ink:#e5eaf2; --muted:#94a0b4; --line:#253149;
-  --accent:#43bfc8; --accent-ink:#06222a; --accent-soft:#103239;
-  --warn:#f0a64c; --warn-soft:#38270f; --brk:#18213400; color-scheme:dark}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
 .wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
