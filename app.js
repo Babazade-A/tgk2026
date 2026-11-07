@@ -41,7 +41,8 @@ let C=null;      // açık kongre (veri dosyası)
 let DAYS=[],M=[],BYID={},TALKS={},SESS={},ODAYS=[],ORAL_S=480,ORAL_E=530,PER=7;
 let sel=new Set(),notes={},tab="",oralDay="",q="",NOW0=null;
 let lang=(()=>{const v=lsGet(G.lang)||lsGet("tgk2026-dil");return v==="tr"||v==="en"?v:(/^tr/i.test(navigator.language||"tr")?"tr":"en");})();
-let remOn=lsGet(G.rem)!=="0"&&lsGet("tgk2026-hatirlatma")!=="0",notifDenied=false;
+let remOn=lsGet(G.rem)!=="0"&&lsGet("tgk2026-hatirlatma")!=="0",notifDenied=false,exactOK=true;
+const ANDROID=NATIVE&&CAP.getPlatform&&CAP.getPlatform()==="android";
 
 // ---- Yardımcılar
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -180,7 +181,8 @@ tr:{
   remOn:"Hatırlatma açık · 10 dk önce",remOff:"Hatırlatma kapalı",remDenied:"Bildirim izni kapalı. Hatırlatmalar için: Ayarlar › Kongrem › Bildirimler.",
   nTitle:(r,tm)=>`${tm} · ${r} · 10 dk sonra`,
   confs:"Kongreler",confsSub:"Programını görmek istediğiniz kongreyi seçin.",nPicked:k=>`${k} seçim`,loading:"Yükleniyor…",
-  loadErr:"Program yüklenemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.",retry:"Tekrar dene"
+  loadErr:"Program yüklenemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.",retry:"Tekrar dene",
+  exactHint:"Telefonunuz hatırlatmaları birkaç dakika geciktirebilir. Tam zamanında gelmeleri için \"Alarmlar ve hatırlatıcılar\" iznini verin.",exactBtn:"İzin ver"
 },
 en:{
   brand:"Kongrem",planner:"Planner",mine:"My Program",mineAria:n=>`My Program, ${n} selected`,langAria:"Language / Dil",
@@ -212,7 +214,8 @@ en:{
   remOn:"Reminders on · 10 min before",remOff:"Reminders off",remDenied:"Notifications are turned off. To get reminders: Settings › Kongrem › Notifications.",
   nTitle:(r,tm)=>`${tm} · ${r} · in 10 min`,
   confs:"Congresses",confsSub:"Choose the congress whose program you want to see.",nPicked:k=>`${k} selected`,loading:"Loading…",
-  loadErr:"The program couldn't be loaded. Check your internet connection and try again.",retry:"Try again"
+  loadErr:"The program couldn't be loaded. Check your internet connection and try again.",retry:"Try again",
+  exactHint:"Your phone may deliver reminders a few minutes late. To get them on time, allow \"Alarms & reminders\".",exactBtn:"Allow"
 }};
 const T=k=>UI[lang][k];
 // İçerik: başlıklar, salonlar, roller, günler
@@ -301,6 +304,7 @@ function mineHTML(){
     ${NATIVE?`<button class="btn${remOn?" primary":""}" id="rem" aria-pressed="${remOn}">${esc(remOn?T("remOn"):T("remOff"))}</button>`:`<button class="btn primary" id="cal">${esc(T("cal"))}</button>`}
     <button class="btn" id="share">${esc(T("share"))}</button>
     <button class="btn danger" id="clear">${esc(T("clear"))}</button><span class="note" id="msg">${NATIVE&&remOn&&notifDenied?esc(T("remDenied")):""}</span></div>`;
+  if(ANDROID&&remOn&&!notifDenied&&!exactOK)h+=`<div class="cxsum">${esc(T("exactHint"))} <button class="btn" id="exact">${esc(T("exactBtn"))}</button></div>`;
   if(cx.size)h+=`<div class="cxsum">${esc(T("cx")(cx.size))}</div>`;
   for(const D of DAYS){
     const rows=sorted(D.k);if(!rows.length)continue;
@@ -510,13 +514,18 @@ async function doPlan(){
     const denied=perm.display!=="granted";
     if(denied!==notifDenied){notifDenied=denied;if(tab==="mine")render();}
     if(denied)return;
+    // Android 12+: tam zamanlı alarm izni yoksa eklenti her planlamada ayarlar ekranını açar. Önce denetle;
+    // izin yoksa sessizce yaklaşık zamanlı planla ve Programım'da tek seferlik bir "İzin ver" düğmesi göster.
+    let exact=true;
+    if(ANDROID&&LN.checkExactNotificationSetting){try{exact=(await LN.checkExactNotificationSetting()).exact_alarm==="granted";}catch(e){}}
+    if(exact!==exactOK){exactOK=exact;if(tab==="mine")render();}
     // iOS en fazla 64 bekleyen bildirime izin verir: en yakın olanlar planlanır, kalanlar uygulama açıldıkça eklenir
     const room=Math.max(0,60-others);
     const soon=[...sel].map(entry).map(e=>({e,at:startMs(e)-600000})).filter(x=>x.at>Date.now()+5000).sort((a,b)=>a.at-b.at).slice(0,room);
     if(!soon.length)return;
     await LN.schedule({notifications:soon.map(({e,at})=>{const t=TALKS[e.id];
       return{id:notifId(cid+":"+e.id),title:T("nTitle")(roomN(e.room),(e.approx?"~":"")+hm(e.s)),
-        body:t?t.id+" · "+tTitle(t):mTitle(BYID[e.id]),schedule:{at:new Date(at),allowWhileIdle:true},extra:{k:cid,tgk:e.id}};})});
+        body:t?t.id+" · "+tTitle(t):mTitle(BYID[e.id]),schedule:{at:new Date(at),allowWhileIdle:true},isExactNotification:exact,extra:{k:cid,tgk:e.id}};})});
   }catch(err){console.warn("bildirim planlanamadı",err);}
 }
 async function openItem(k,id){
@@ -559,6 +568,8 @@ view.addEventListener("click",e=>{
   const b=e.target.closest("[data-id]");
   if(b){const id=b.dataset.id;sel.has(id)?sel.delete(id):sel.add(id);save();marks();return;}
   const act=e.target.closest(".actions");
+  if(e.target.id==="exact"&&NP.LocalNotifications&&NP.LocalNotifications.changeExactNotificationSetting){
+    NP.LocalNotifications.changeExactNotificationSetting().then(()=>planNotifs(true)).catch(()=>{});return;}
   if(e.target.id==="rem"){remOn=!remOn;store(G.rem,remOn?"1":"0");planNotifs(true);render();return;}
   if(e.target.id==="cal"){
     try{

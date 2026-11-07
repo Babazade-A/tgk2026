@@ -1,0 +1,41 @@
+{
+ "schema": 1,
+ "id": "ornek2027",
+ "rev": 1,
+ "updated": "2027-01-01",
+ "short": "ÖRNEK 2027",
+ "name": { "tr": "Örnek Kongre", "en": "Example Congress" },
+ "dates": { "tr": "10–11 Mayıs 2027", "en": "May 10–11, 2027" },
+ "venue": "Otel adı, Şehir",
+ "utcOffsetMin": 180,
+ "officialLang": "tr",
+ "note": {
+  "tr": "Program, kongre web sitesindeki listeden alınmıştır; değişiklikler için resmi programı kontrol edin.",
+  "en": "The program is taken from the list on the congress website; check the official program for changes."
+ },
+ "mainRoom": "Ana salon",
+ "rooms": {
+  "Ana salon": { "en": "Main Hall" },
+  "Salon A": { "en": "Hall A" }
+ },
+ "days": [
+  { "k": "10", "date": "2027-05-10", "label": { "tr": "10 Mayıs", "en": "May 10" }, "weekday": { "tr": "Pazartesi", "en": "Monday" } },
+  { "k": "11", "date": "2027-05-11", "label": { "tr": "11 Mayıs", "en": "May 11" }, "weekday": { "tr": "Salı", "en": "Tuesday" } }
+ ],
+ "items": [
+  { "id": "p10-1", "day": "10", "start": "09:00", "end": "09:30", "type": "cer", "title": { "tr": "Açılış", "en": "Opening Ceremony" }, "speakers": "Ad SOYAD" },
+  { "id": "p10-2", "day": "10", "start": "09:30", "end": "10:30", "type": "conf", "title": { "tr": "Konferans başlığı", "en": "Lecture title" }, "speakers": "Ad SOYAD", "chairs": "Ad SOYAD, Ad SOYAD", "sub": { "tr": "Açılış Konferansı", "en": "Opening Lecture" } },
+  { "id": "b10-1", "day": "10", "start": "10:30", "end": "11:00", "type": "break", "title": { "tr": "Kahve Molası", "en": "Coffee Break" } },
+  { "id": "c10-1", "day": "10", "start": "11:00", "end": "12:00", "type": "course", "title": { "tr": "Kurs başlığı", "en": "Course title" }, "speakers": "Ad SOYAD (Kurs Başkanı), Ad SOYAD", "room": "Salon A" }
+ ],
+ "oral": {
+  "start": "08:00",
+  "end": "08:50",
+  "minutesPerTalk": 7,
+  "sessions": [
+   { "no": 1, "day": "11", "room": "Salon A", "chairs": "Ad SOYAD, Ad SOYAD", "talks": [
+    { "id": "S-001", "title": { "tr": "Bildiri başlığı", "en": "Abstract title" }, "presenter": "Ad Soyad" }
+   ] }
+  ]
+ }
+}
