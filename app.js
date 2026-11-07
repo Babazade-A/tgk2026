@@ -17,11 +17,11 @@ const SCHEMA=1; // bu sürümün okuyabildiği veri biçimi
 const lsGet=k=>{try{return localStorage.getItem(k);}catch(e){return null;}};
 function store(k,v){try{localStorage.setItem(k,v)}catch(e){}if(NATIVE&&NP.Preferences)NP.Preferences.set({key:k,value:v}).catch(()=>{});}
 // Anahtarlar: genel olanlar + kongre başına olanlar
-const G={lang:"kongrem:dil",rem:"kongrem:hatirlatma",inst:"kongrem:kurulum",last:"kongrem:kongre",index:"kongrem:liste"};
+const G={lang:"kongrem:dil",rem:"kongrem:hatirlatma",last:"kongrem:kongre",index:"kongrem:liste"};
 const K=id=>({sel:`kongrem:${id}:secim`,notes:`kongrem:${id}:notlar`,tab:`kongrem:${id}:sekme`,data:`kongrem:${id}:veri`});
 // Eski (tek kongreli) sürümün kayıtlarını bir kez taşı: o sürümü kullananların seçimleri ve notları kaybolmasın
 function migrateLegacy(){
-  const pairs=[[G.lang,"tgk2026-dil"],[G.rem,"tgk2026-hatirlatma"],[G.inst,"tgk2026-kurulum"],
+  const pairs=[[G.lang,"tgk2026-dil"],[G.rem,"tgk2026-hatirlatma"],
     [K("tgk2026").sel,"tgk2026-secim"],[K("tgk2026").notes,"tgk2026-notlar"],[K("tgk2026").tab,"tgk2026-sekme"]];
   for(const [n,o] of pairs){const v=lsGet(o);if(v!=null&&lsGet(n)==null)store(n,v);}
 }
@@ -155,7 +155,6 @@ tr:{
   brand:"Kongrem",planner:"Planlayıcı",mine:"Programım",mineAria:n=>`Programım, ${n} seçim`,langAria:"Dil / Language",
   search:"Başlık, konuşmacı, bildiri kodu (ör. S-018) ara",
   footBase:"Seçimleriniz ve notlarınız yalnızca bu cihazda saklanır; kimseyle paylaşılmaz.",
-  footInst:"Telefonda ana ekrana eklemek için: iPhone'da Safari, Paylaş, \"Ana Ekrana Ekle\". Android'de Chrome, üç nokta, \"Ana ekrana ekle\".",
   tag:{cer:"Tören",sym:"Uydu sempozyumu",sel:"Sözlü bildiri",course:"Kurs",panel:"Panel",conf:"Konferans",talk:"",break:""},
   sessionL:"Oturum: ",chairsL:"Moderatör: ",hasNote:"Notunuz var",
   oralTag:"Sözlü bildiriler",oralCard:n=>`${n} salonda aynı anda sözlü bildiri oturumları`,oralTap:"Salonları yan yana görmek ve seçmek için dokunun",
@@ -175,8 +174,6 @@ tr:{
   nSel:k=>`${k} seçili`,nTalks:k=>`${k} bildiri seçili`,noSel:"Henüz seçim yok",
   calOk:"Takvim dosyası açıldı. Telefonunuz sorarsa \"Tümünü ekle\" deyin.",calErr:"Takvim dosyası bu görünümde açılamadı.",
   shareTitle:s=>`${s} programım`,copied:"Liste kopyalandı. WhatsApp ya da e-postaya yapıştırabilirsiniz.",copyManual:"Aşağıdaki metni seçip kopyalayın.",
-  instT:"Telefonda ana ekrana eklemek için",instIos:"iPhone'da Safari, Paylaş, \"Ana Ekrana Ekle\".",instAnd:"Android'de Chrome, üç nokta, \"Ana ekrana ekle\".",
-  instWhy:"Ana ekrandan açtığınızda uygulama gibi tam ekran açılır, seçimleriniz ve notlarınız da kalıcı olur.",instGo:"Şimdi ekle",ok:"Tamam",
   privacy:"Gizlilik politikası",
   remOn:"Hatırlatma açık · 10 dk önce",remOff:"Hatırlatma kapalı",remDenied:"Bildirim izni kapalı. Hatırlatmalar için: Ayarlar › Kongrem › Bildirimler.",
   nTitle:(r,tm)=>`${tm} · ${r} · 10 dk sonra`,
@@ -188,7 +185,6 @@ en:{
   brand:"Kongrem",planner:"Planner",mine:"My Program",mineAria:n=>`My Program, ${n} selected`,langAria:"Language / Dil",
   search:"Search by title, speaker or abstract code (e.g. S-018)",
   footBase:"Your selections and notes are stored only on this device and are not shared with anyone.",
-  footInst:"To add this to your phone's home screen: on iPhone, open it in Safari, tap Share, then “Add to Home Screen”. On Android, open it in Chrome, tap the three dots, then “Add to Home screen”.",
   tag:{cer:"Ceremony",sym:"Satellite symposium",sel:"Oral session",course:"Course",panel:"Panel",conf:"Lecture",talk:"",break:""},
   sessionL:"Session: ",chairsL:"Chairs: ",hasNote:"You have a note",
   oralTag:"Oral presentations",oralCard:n=>`Oral presentation sessions in ${n} halls at the same time`,oralTap:"Tap to see the halls side by side and pick talks",
@@ -208,8 +204,6 @@ en:{
   nSel:k=>`${k} selected`,nTalks:k=>`${k} ${k===1?"talk":"talks"} selected`,noSel:"Nothing selected yet",
   calOk:"Calendar file opened. If your phone asks, choose “Add All”.",calErr:"The calendar file couldn't be opened here.",
   shareTitle:s=>`My ${s} program`,copied:"List copied. You can paste it into WhatsApp or an email.",copyManual:"Select and copy the text below.",
-  instT:"Add it to your home screen",instIos:"iPhone: open this page in Safari, tap Share, then “Add to Home Screen”.",instAnd:"Android: open this page in Chrome, tap the three dots, then “Add to Home screen”.",
-  instWhy:"Opened from the home screen, it runs full screen like an app, and your selections and notes are kept.",instGo:"Add now",ok:"OK",
   privacy:"Privacy policy",
   remOn:"Reminders on · 10 min before",remOff:"Reminders off",remDenied:"Notifications are turned off. To get reminders: Settings › Kongrem › Notifications.",
   nTitle:(r,tm)=>`${tm} · ${r} · in 10 min`,
@@ -398,11 +392,10 @@ function applyLang(){
   document.getElementById("minelbl").textContent=T("mine");
   document.getElementById("q").placeholder=T("search");
   const ft=document.getElementById("foot");
-  ft.textContent=[T("footBase"),NATIVE?"":T("footInst"),C?tx(C.note):""].filter(Boolean).join(" ")+" ";
+  ft.textContent=[T("footBase"),C?tx(C.note):""].filter(Boolean).join(" ")+" ";
   if(NATIVE){const a=document.createElement("a");a.href="https://babazade-a.github.io/tgk2026/privacy.html";a.textContent=T("privacy");a.target="_blank";a.rel="noopener";ft.appendChild(a);}
   const lg=document.getElementById("lang");lg.setAttribute("aria-label",T("langAria"));
   lg.querySelectorAll("[data-lang]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
-  if(!document.getElementById("install").hidden)installFill();
   updateHeader();
 }
 // O an süren satırlara "Şimdi" etiketi
@@ -474,28 +467,6 @@ function fallbackText(txt,anchor){
   const ta=document.createElement("textarea");ta.className="fallback";ta.value=txt;ta.readOnly=true;anchor.after(ta);ta.select();
 }
 
-// ---- İlk açılışta "ana ekrana ekle" penceresi (yalnızca web). Ana ekrandan açıldıysa ya da bir kez kapatıldıysa gösterilmez.
-const standalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
-const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
-let bip=null; // Android Chrome'un kendi "yükle" penceresi
-function installSeen(){try{return !!localStorage.getItem(G.inst);}catch(e){return true;}}
-function installFill(){
-  document.getElementById("instT").textContent=T("instT");
-  const L=document.getElementById("instL");L.textContent="";
-  for(const s of isIOS?[T("instIos"),T("instAnd")]:[T("instAnd"),T("instIos")]){const li=document.createElement("li");li.textContent=s;L.appendChild(li);}
-  document.getElementById("instWhy").textContent=T("instWhy");
-  const go=document.getElementById("instGo");go.textContent=T("instGo");go.hidden=!bip;
-  document.getElementById("instOk").textContent=T("ok");
-}
-function installOpen(){installFill();document.getElementById("install").hidden=false;document.getElementById("instOk").focus();}
-function installClose(){document.getElementById("install").hidden=true;store(G.inst,"1");}
-window.addEventListener("beforeinstallprompt",e=>{if(standalone()||installSeen())return;e.preventDefault();bip=e;
-  const go=document.getElementById("instGo");if(go)go.hidden=false;});
-window.addEventListener("appinstalled",()=>{bip=null;installClose();});
-document.getElementById("instOk").addEventListener("click",installClose);
-document.getElementById("instGo").addEventListener("click",()=>{if(!bip)return;bip.prompt();bip.userChoice.finally(()=>{bip=null;installClose();});});
-document.getElementById("install").addEventListener("click",e=>{if(e.target.id==="install")installClose();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!document.getElementById("install").hidden)installClose();});
 
 // ---- Uygulama: yerel hatırlatma bildirimleri (seçilen her oturumdan 10 dk önce)
 // Bildirimler kongreye göre etiketlenir; başka kongrelerin hatırlatmalarına dokunulmaz.
@@ -625,7 +596,6 @@ document.getElementById("nowbar").addEventListener("click",e=>{
     const r=view.querySelector(".row.live")||[...view.querySelectorAll("[data-row]")].find(el=>+el.dataset.se.split("|")[1]>NOW0.m);
     if(r)r.scrollIntoView({block:"center"});
   }
-  if(!NATIVE&&!standalone()&&!installSeen())installOpen();
   setInterval(tick,30000);
   document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick();});
   if(NATIVE){
