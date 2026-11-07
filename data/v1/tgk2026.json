@@ -1,0 +1,2049 @@
+{
+ "schema": 1,
+ "id": "tgk2026",
+ "rev": 1,
+ "updated": "2026-11-07",
+ "short": "TGK 2026",
+ "name": {
+  "tr": "17. Ulusal Tıbbi Genetik Kongresi",
+  "en": "17th National Medical Genetics Congress"
+ },
+ "dates": {
+  "tr": "2–6 Aralık 2026",
+  "en": "December 2–6, 2026"
+ },
+ "venue": "Kaya Palazzo Golf Resort, Antalya",
+ "utcOffsetMin": 180,
+ "officialLang": "tr",
+ "note": {
+  "tr": "Program, kongre web sitesindeki 7 Kasım 2026 tarihli listeden alınmıştır; değişiklikler için resmi programı kontrol edin.",
+  "en": "The program is taken from the list on the congress website dated November 7, 2026; check the official program for changes. English titles are translations made for this app; the official titles are in Turkish."
+ },
+ "mainRoom": "Ana salon",
+ "rooms": {
+  "Ana salon": {
+   "en": "Main Hall"
+  },
+  "Salon 1": {
+   "en": "Hall 1"
+  },
+  "Salon 2": {
+   "en": "Hall 2"
+  },
+  "Salon 3": {
+   "en": "Hall 3"
+  },
+  "Salon 4": {
+   "en": "Hall 4"
+  },
+  "Salon 5": {
+   "en": "Hall 5"
+  },
+  "Salon 6": {
+   "en": "Hall 6"
+  },
+  "Salon 7": {
+   "en": "Hall 7"
+  }
+ },
+ "days": [
+  {
+   "k": "2",
+   "date": "2026-12-02",
+   "label": {
+    "tr": "2 Aralık",
+    "en": "December 2"
+   },
+   "weekday": {
+    "tr": "Çarşamba",
+    "en": "Wednesday"
+   }
+  },
+  {
+   "k": "3",
+   "date": "2026-12-03",
+   "label": {
+    "tr": "3 Aralık",
+    "en": "December 3"
+   },
+   "weekday": {
+    "tr": "Perşembe",
+    "en": "Thursday"
+   }
+  },
+  {
+   "k": "4",
+   "date": "2026-12-04",
+   "label": {
+    "tr": "4 Aralık",
+    "en": "December 4"
+   },
+   "weekday": {
+    "tr": "Cuma",
+    "en": "Friday"
+   }
+  },
+  {
+   "k": "5",
+   "date": "2026-12-05",
+   "label": {
+    "tr": "5 Aralık",
+    "en": "December 5"
+   },
+   "weekday": {
+    "tr": "Cumartesi",
+    "en": "Saturday"
+   }
+  },
+  {
+   "k": "6",
+   "date": "2026-12-06",
+   "label": {
+    "tr": "6 Aralık",
+    "en": "December 6"
+   },
+   "weekday": {
+    "tr": "Pazar",
+    "en": "Sunday"
+   }
+  }
+ ],
+ "items": [
+  {
+   "id": "p2-1",
+   "day": "2",
+   "start": "14:15",
+   "end": "15:00",
+   "type": "cer",
+   "title": {
+    "tr": "Açılış",
+    "en": "Opening Ceremony"
+   },
+   "speakers": "Taha BAHSİ"
+  },
+  {
+   "id": "p2-2",
+   "day": "2",
+   "start": "15:00",
+   "end": "16:00",
+   "type": "conf",
+   "title": {
+    "tr": "İnsan Pangenomu ve Karmaşık Genetik Varyasyon",
+    "en": "The Human Pangenome and Complex Genetic Variation"
+   },
+   "speakers": "Evan EICHLER",
+   "chairs": "Taha BAHSİ, Mehmet Ali ERGÜN",
+   "sub": {
+    "tr": "Açılış Konferansı I",
+    "en": "Opening Lecture I"
+   }
+  },
+  {
+   "id": "b2-1",
+   "day": "2",
+   "start": "16:00",
+   "end": "16:30",
+   "type": "break",
+   "title": {
+    "tr": "Kahve Molası",
+    "en": "Coffee Break"
+   }
+  },
+  {
+   "id": "p2-3",
+   "day": "2",
+   "start": "16:30",
+   "end": "16:45",
+   "type": "talk",
+   "title": {
+    "tr": "PIK3CA'yı Hedeflemek: Meme Kanserinden Başlayan Hedefe Yönelik Tedavinin Hikâyesi",
+    "en": "Targeting PIK3CA: The Story of a Targeted Therapy That Began with Breast Cancer"
+   },
+   "speakers": "Nuri KARADURMUŞ",
+   "chairs": "İlter GÜNEY, Timuçin ÇİL, Kanay YARARBAŞ"
+  },
+  {
+   "id": "p2-4",
+   "day": "2",
+   "start": "16:45",
+   "end": "17:30",
+   "type": "talk",
+   "title": {
+    "tr": "Tek Bir Hastadan ABD FDA Onaylı İlaca: Aşırı Büyüme Sendromu ve Vasküler Malformasyonlar İçin İlaç Yeniden Konumlandırmasının Hikâyesi",
+    "en": "From a Single Patient to an FDA-Approved Drug: The Story of Drug Repurposing for Overgrowth Syndromes and Vascular Malformations"
+   },
+   "speakers": "Guillaume CANAUD",
+   "chairs": "İlter GÜNEY, Timuçin ÇİL, Kanay YARARBAŞ"
+  },
+  {
+   "id": "p2-5",
+   "day": "2",
+   "start": "17:30",
+   "end": "18:00",
+   "type": "sym",
+   "title": {
+    "tr": "Uydu Sempozyumu: Roche",
+    "en": "Satellite Symposium: Roche"
+   },
+   "chairs": "Ayça AYKUT, Özlem ANLAŞ"
+  },
+  {
+   "id": "p2-6",
+   "day": "2",
+   "start": "18:00",
+   "end": "18:45",
+   "type": "talk",
+   "title": {
+    "tr": "Proje Sunumları",
+    "en": "Project Presentations"
+   },
+   "speakers": "Arda ÇETİNKAYA, Mert KAYA, Selma ÇAKMAK",
+   "chairs": "Volkan BALTACI, Gülay Güleç CEYLAN, Şule ALTINER"
+  },
+  {
+   "id": "p3-1",
+   "day": "3",
+   "start": "09:00",
+   "end": "09:15",
+   "type": "talk",
+   "title": {
+    "tr": "Siliopati Araştırmalarının Erken Dönemi: Silia Biyolojisinden İnsan Fenotiplerine",
+    "en": "The Early Days of Ciliopathy Research: From Cilia Biology to Human Phenotypes"
+   },
+   "speakers": "Umut ALTUNOĞLU",
+   "chairs": "Gökay BOZKURT, Deniz TORUN, Esra ARSLAN ATEŞ"
+  },
+  {
+   "id": "p3-2",
+   "day": "3",
+   "start": "09:15",
+   "end": "10:00",
+   "type": "talk",
+   "title": {
+    "tr": "Silianın Genişleyen Dünyası: Nadir Mendelyen Hastalıklar ve Ötesi",
+    "en": "The Expanding World of Cilia: Rare Mendelian Disorders and Beyond"
+   },
+   "speakers": "Brunella FRANCO",
+   "chairs": "Gökay BOZKURT, Deniz TORUN, Esra ARSLAN ATEŞ"
+  },
+  {
+   "id": "b3-1",
+   "day": "3",
+   "start": "10:00",
+   "end": "10:30",
+   "type": "break",
+   "title": {
+    "tr": "Kahve Molası",
+    "en": "Coffee Break"
+   }
+  },
+  {
+   "id": "p3-3",
+   "day": "3",
+   "start": "10:30",
+   "end": "10:45",
+   "type": "talk",
+   "title": {
+    "tr": "Hastanın Bize Anlattıkları: Fenotipten Genoma",
+    "en": "What the Patient Tells Us: From Phenotype to Genome"
+   },
+   "speakers": "Kadri KARAER",
+   "chairs": "Oya UYGUNER, Nüket YÜRÜR KUTLAY, Aslı SUBAŞIOĞLU"
+  },
+  {
+   "id": "p3-4",
+   "day": "3",
+   "start": "10:45",
+   "end": "11:30",
+   "type": "talk",
+   "title": {
+    "tr": "Genotipten Klinik Öneme: Genomik Çağda Nadir Sendromların Tanımlanması",
+    "en": "From Genotype to Clinical Significance: Delineating Rare Syndromes in the Genomic Era"
+   },
+   "speakers": "Sofia DOUZGOU HOUGE",
+   "chairs": "Oya UYGUNER, Nüket YÜRÜR KUTLAY, Aslı SUBAŞIOĞLU"
+  },
+  {
+   "id": "p3-5",
+   "day": "3",
+   "start": "11:30",
+   "end": "12:00",
+   "type": "sym",
+   "title": {
+    "tr": "Uydu Sempozyumu: Invitrotek",
+    "en": "Satellite Symposium: Invitrotek"
+   },
+   "chairs": "Ebru MARZİOĞLU ÖZDEMİR, Ceren Damla DURMAZ"
+  },
+  {
+   "id": "p3-6",
+   "day": "3",
+   "start": "12:00",
+   "end": "12:30",
+   "type": "sel",
+   "title": {
+    "tr": "Seçilmiş Sözlü Bildiriler",
+    "en": "Selected Oral Presentations"
+   },
+   "chairs": "Sırrı ÇAM, Filiz ÖZEN, Pınar ATA"
+  },
+  {
+   "id": "b3-2",
+   "day": "3",
+   "start": "12:30",
+   "end": "14:00",
+   "type": "break",
+   "title": {
+    "tr": "Öğle Yemeği",
+    "en": "Lunch"
+   }
+  },
+  {
+   "id": "p3-7",
+   "day": "3",
+   "start": "14:00",
+   "end": "15:00",
+   "type": "conf",
+   "title": {
+    "tr": "Mozaikler ve Mutasyonlar: Geçmiş ve Bugün",
+    "en": "Mosaics and Mutations: Past and Present"
+   },
+   "speakers": "Dian DONNAI",
+   "chairs": "Hülya KAYSERİLİ, Dijana PLASESKA-KARANFILSKA",
+   "sub": {
+    "tr": "Açılış Konferansı II",
+    "en": "Opening Lecture II"
+   }
+  },
+  {
+   "id": "p3-8",
+   "day": "3",
+   "start": "15:00",
+   "end": "15:30",
+   "type": "sym",
+   "title": {
+    "tr": "Uydu Sempozyumu: Lidya Genomik",
+    "en": "Satellite Symposium: Lidya Genomik"
+   },
+   "chairs": "Ayberk TÜRKYILMAZ, Muhsin ELMAS"
+  },
+  {
+   "id": "b3-3",
+   "day": "3",
+   "start": "15:30",
+   "end": "16:00",
+   "type": "break",
+   "title": {
+    "tr": "Kahve Molası",
+    "en": "Coffee Break"
+   }
+  },
+  {
+   "id": "p3-9",
+   "day": "3",
+   "start": "16:00",
+   "end": "16:45",
+   "type": "talk",
+   "title": {
+    "tr": "Yeni Nesil Fenotipleme",
+    "en": "Next-Generation Phenotyping"
+   },
+   "speakers": "Milan MACEK",
+   "chairs": "Hakan GÜRKAN, Asude DURMAZ, Rasime KALKAN"
+  },
+  {
+   "id": "p3-10",
+   "day": "3",
+   "start": "16:45",
+   "end": "17:30",
+   "type": "talk",
+   "title": {
+    "tr": "Perrault Sendromu: Klinik ve Moleküler Açıdan Heterojen Ultra Nadir Bir Durumun Karakterizasyonu",
+    "en": "Perrault Syndrome: Characterizing a Clinically and Molecularly Heterogeneous Ultra-Rare Condition"
+   },
+   "speakers": "William NEWMAN",
+   "chairs": "Hakan GÜRKAN, Asude DURMAZ, Rasime KALKAN"
+  },
+  {
+   "id": "p3-11",
+   "day": "3",
+   "start": "17:30",
+   "end": "18:00",
+   "type": "sym",
+   "title": {
+    "tr": "Uydu Sempozyumu: Phitech",
+    "en": "Satellite Symposium: Phitech"
+   },
+   "chairs": "Hanife SAAT, Abdullah İhsan GÜRLER"
+  },
+  {
+   "id": "c3-1",
+   "day": "3",
+   "start": "18:00",
+   "end": "19:00",
+   "type": "course",
+   "title": {
+    "tr": "Prenatal Tanı Kursu: NIPT",
+    "en": "Prenatal Diagnosis Course: NIPT"
+   },
+   "speakers": "Meral YIRMIBEŞ KARAOĞUZ (Kurs Başkanı), Sinem KOCAGİL, İsmihan Merve ÖZTÜRK",
+   "room": "Salon 1"
+  },
+  {
+   "id": "c3-2",
+   "day": "3",
+   "start": "18:00",
+   "end": "19:00",
+   "type": "course",
+   "title": {
+    "tr": "Dismorfoloji Kursu I",
+    "en": "Dysmorphology Course I"
+   },
+   "speakers": "Ferda PERÇİN (Kurs Başkanı), Alper GEZDİRİCİ, Tuba KALAYCI",
+   "room": "Salon 2"
+  },
+  {
+   "id": "c3-3",
+   "day": "3",
+   "start": "18:00",
+   "end": "19:00",
+   "type": "course",
+   "title": {
+    "tr": "Varyant Analizi Kursu: WES, WGS",
+    "en": "Variant Analysis Course: WES, WGS"
+   },
+   "speakers": "Mehmet Ali ERGÜN (Kurs Başkanı), Akif AYAZ, Zafer YÜKSEL",
+   "room": "Salon 3"
+  },
+  {
+   "id": "p4-1",
+   "day": "4",
+   "start": "09:00",
+   "end": "09:15",
+   "type": "talk",
+   "title": {
+    "tr": "Tıbbi Genetikte Tanı Yöntemlerinin Evrimi",
+    "en": "The Evolution of Diagnostic Methods in Medical Genetics"
+   },
+   "speakers": "Zafer YÜKSEL",
+   "chairs": "Serdar CEYLANER, Ahmet DURSUN, Ozan ÇETİN"
+  },
+  {
+   "id": "p4-2",
+   "day": "4",
+   "start": "09:15",
+   "end": "10:00",
+   "type": "talk",
+   "title": {
+    "tr": "Uzun Okuma Dizileme: Tıbbi Genetikte Yeni Bir Standart",
+    "en": "Long-Read Sequencing: A New Standard in Medical Genetics"
+   },
+   "speakers": "Christian GILISSEN",
+   "chairs": "Serdar CEYLANER, Ahmet DURSUN, Ozan ÇETİN"
+  },
+  {
+   "id": "b4-1",
+   "day": "4",
+   "start": "10:00",
+   "end": "10:30",
+   "type": "break",
+   "title": {
+    "tr": "Kahve Molası",
+    "en": "Coffee Break"
+   }
+  },
+  {
+   "id": "p4-3",
+   "day": "4",
+   "start": "10:30",
+   "end": "10:45",
+   "type": "talk",
+   "title": {
+    "tr": "Multifaktöriyel Hastalıklarda Poligenik Risk Skorlaması",
+    "en": "Polygenic Risk Scoring in Multifactorial Diseases"
+   },
+   "speakers": "Gözde YEŞİL",
+   "chairs": "Munis DÜNDAR, Abdulgani TATAR, Zerrin YILMAZ ÇELİK"
+  },
+  {
+   "id": "p4-4",
+   "day": "4",
+   "start": "10:45",
+   "end": "11:30",
+   "type": "talk",
+   "title": {
+    "tr": "Karmaşık ve Kantitatif Özelliklerin İncelenmesinde Genetik İzolatların Kullanımı",
+    "en": "Using Genetic Isolates to Study Complex and Quantitative Traits"
+   },
+   "speakers": "Paolo GASPARINI",
+   "chairs": "Munis DÜNDAR, Abdulgani TATAR, Zerrin YILMAZ ÇELİK"
+  },
+  {
+   "id": "p4-5",
+   "day": "4",
+   "start": "11:30",
+   "end": "12:00",
+   "type": "sym",
+   "title": {
+    "tr": "Uydu Sempozyumu: ATQ",
+    "en": "Satellite Symposium: ATQ"
+   },
+   "chairs": "Pelin ÖZYAVUZ ÇUBUK, Sinem YALÇINTEPE"
+  },
+  {
+   "id": "p4-6",
+   "day": "4",
+   "start": "12:00",
+   "end": "12:30",
+   "type": "sel",
+   "title": {
+    "tr": "Seçilmiş Sözlü Bildiriler",
+    "en": "Selected Oral Presentations"
+   },
+   "chairs": "Burak DURMAZ, Nadir KOÇAK, Alperhan ÇEBİ"
+  },
+  {
+   "id": "b4-2",
+   "day": "4",
+   "start": "12:30",
+   "end": "14:00",
+   "type": "break",
+   "title": {
+    "tr": "Öğle Yemeği",
+    "en": "Lunch"
+   }
+  },
+  {
+   "id": "p4-7",
+   "day": "4",
+   "start": "14:00",
+   "end": "15:00",
+   "type": "conf",
+   "title": {
+    "tr": "Nadir Hastalık Tanısında Çoklu Omikler",
+    "en": "Multi-Omics in Rare Disease Diagnosis"
+   },
+   "speakers": "Stephen MONTGOMERY",
+   "chairs": "Mehmet ALİKAŞİFOĞLU, Haluk AKIN",
+   "sub": {
+    "tr": "Açılış Konferansı III",
+    "en": "Opening Lecture III"
+   }
+  },
+  {
+   "id": "p4-8",
+   "day": "4",
+   "start": "15:00",
+   "end": "15:30",
+   "type": "sym",
+   "title": {
+    "tr": "Uydu Sempozyumu: Sophia",
+    "en": "Satellite Symposium: Sophia"
+   },
+   "speakers": "Nicola NORMANNO",
+   "chairs": "Saadettin KILIÇKAP, Cengiz YAKICIER"
+  },
+  {
+   "id": "b4-3",
+   "day": "4",
+   "start": "15:30",
+   "end": "16:00",
+   "type": "break",
+   "title": {
+    "tr": "Kahve Molası",
+    "en": "Coffee Break"
+   }
+  },
+  {
+   "id": "p4-9",
+   "day": "4",
+   "start": "16:00",
+   "end": "16:15",
+   "type": "talk",
+   "title": {
+    "tr": "Karyotipten Genoma: Yapısal Varyasyonların Hikâyesi",
+    "en": "From Karyotype to Genome: The Story of Structural Variation"
+   },
+   "speakers": "Altuğ KOÇ",
+   "chairs": "Oğuz ÇİLİNGİR, Sehime Gülsün TEMEL, Esra TUĞ"
+  },
+  {
+   "id": "p4-10",
+   "day": "4",
+   "start": "16:15",
+   "end": "17:00",
+   "type": "talk",
+   "title": {
+    "tr": "Yapısal Genomiğin Klinik Korelasyonları",
+    "en": "Clinical Correlations of Structural Genomics"
+   },
+   "speakers": "Gunnar DOUZGOU HOUGE",
+   "chairs": "Oğuz ÇİLİNGİR, Sehime Gülsün TEMEL, Esra TUĞ"
+  },
+  {
+   "id": "p4-11",
+   "day": "4",
+   "start": "17:00",
+   "end": "17:30",
+   "type": "sym",
+   "title": {
+    "tr": "Uydu Sempozyumu: Özgün Kimya",
+    "en": "Satellite Symposium: Özgün Kimya"
+   }
+  },
+  {
+   "id": "c4-1",
+   "day": "4",
+   "start": "18:00",
+   "end": "19:00",
+   "type": "course",
+   "title": {
+    "tr": "Prenatal Tanı Kursu: Prenatal Mikroarray",
+    "en": "Prenatal Diagnosis Course: Prenatal Microarray"
+   },
+   "speakers": "Birsen KARAMAN (Kurs Başkanı), Erhan PARILTAY, Oğuzhan BAHADIR",
+   "room": "Salon 1"
+  },
+  {
+   "id": "c4-2",
+   "day": "4",
+   "start": "18:00",
+   "end": "19:00",
+   "type": "course",
+   "title": {
+    "tr": "Dismorfoloji Kursu II",
+    "en": "Dysmorphology Course II"
+   },
+   "speakers": "Hülya KAYSERİLİ (Kurs Başkanı), Büşranur ÇAVDARLI, Abdullatif BAKIR",
+   "room": "Salon 2"
+  },
+  {
+   "id": "c4-3",
+   "day": "4",
+   "start": "18:00",
+   "end": "19:00",
+   "type": "course",
+   "title": {
+    "tr": "Varyant Analizi Kursu: Likit Biyopsi ve Miyeloid NGS",
+    "en": "Variant Analysis Course: Liquid Biopsy and Myeloid NGS"
+   },
+   "speakers": "Ajlan TÜKÜN (Kurs Başkanı), Özge ÖZALP, Özge ÖZER KAYA",
+   "room": "Salon 3"
+  },
+  {
+   "id": "p5-1",
+   "day": "5",
+   "start": "09:00",
+   "end": "09:15",
+   "type": "talk",
+   "title": {
+    "tr": "Morfolojik Remisyondan Moleküler Remisyona: AML'de MRD Kavramının Evrimi",
+    "en": "From Morphological to Molecular Remission: The Evolution of the MRD Concept in AML"
+   },
+   "speakers": "Sinem ÇİVRİZ",
+   "chairs": "Ajlan TÜKÜN, Feride İffet ŞAHİN, Beyhan DURAK ARAS"
+  },
+  {
+   "id": "p5-2",
+   "day": "5",
+   "start": "09:15",
+   "end": "10:00",
+   "type": "talk",
+   "title": {
+    "tr": "Mutasyona Özgü MRD ile AML Yönetimi",
+    "en": "Managing AML with Mutation-Specific MRD"
+   },
+   "speakers": "Mark J. LEVIS",
+   "chairs": "Ajlan TÜKÜN, Feride İffet ŞAHİN, Beyhan DURAK ARAS"
+  },
+  {
+   "id": "b5-1",
+   "day": "5",
+   "start": "10:00",
+   "end": "10:30",
+   "type": "break",
+   "title": {
+    "tr": "Kahve Molası",
+    "en": "Coffee Break"
+   }
+  },
+  {
+   "id": "p5-3",
+   "day": "5",
+   "start": "10:30",
+   "end": "11:00",
+   "type": "sym",
+   "title": {
+    "tr": "Uydu Sempozyumu: EYS Medikal",
+    "en": "Satellite Symposium: EYS Medikal"
+   },
+   "chairs": "Yunus Kasım TERZİ, Özlem SEZER"
+  },
+  {
+   "id": "p5-4",
+   "day": "5",
+   "start": "11:00",
+   "end": "11:30",
+   "type": "sel",
+   "title": {
+    "tr": "Seçilmiş Sözlü Bildiriler",
+    "en": "Selected Oral Presentations"
+   },
+   "chairs": "Yusuf TUNCA, Özden ALTIOK CLARK, Aslıhan KİRAZ"
+  },
+  {
+   "id": "p5-5",
+   "day": "5",
+   "start": "11:30",
+   "end": "12:30",
+   "type": "talk",
+   "title": {
+    "tr": "Sağlık Bakanlığı ve Sosyal Güvenlik Kurumu Oturumu",
+    "en": "Ministry of Health and Social Security Institution Session"
+   },
+   "chairs": "Emin KARACA, Selman YILDIRIM, Berk ÖZYILMAZ"
+  },
+  {
+   "id": "b5-2",
+   "day": "5",
+   "start": "12:30",
+   "end": "13:30",
+   "type": "break",
+   "title": {
+    "tr": "Öğle Yemeği",
+    "en": "Lunch"
+   }
+  },
+  {
+   "id": "p5-6",
+   "day": "5",
+   "start": "13:30",
+   "end": "14:00",
+   "type": "talk",
+   "title": {
+    "tr": "Tek Hücre Transkriptomiğinin Hipoteze Dayalı Preklinik Araştırmalara Entegrasyonu",
+    "en": "Integrating Single-Cell Transcriptomics into Hypothesis-Driven Preclinical Research"
+   },
+   "speakers": "Volkan ERGİN",
+   "chairs": "Rıdvan Seçkin ÖZEN, Hilmi TOZKIR, Güven TOKSOY"
+  },
+  {
+   "id": "p5-7",
+   "day": "5",
+   "start": "14:00",
+   "end": "14:30",
+   "type": "talk",
+   "title": {
+    "tr": "Türkiye'de CAR-T Deneyimleri",
+    "en": "CAR-T Experience in Türkiye"
+   },
+   "speakers": "Ahmet Kürşad GÜNEŞ",
+   "chairs": "Rıdvan Seçkin ÖZEN, Hilmi TOZKIR, Güven TOKSOY"
+  },
+  {
+   "id": "p5-8",
+   "day": "5",
+   "start": "14:30",
+   "end": "15:00",
+   "type": "sym",
+   "title": {
+    "tr": "Uydu Sempozyumu: Illumina",
+    "en": "Satellite Symposium: Illumina"
+   },
+   "speakers": "Massimo DELLEDONNE",
+   "chairs": "Okay ÇAĞLAYAN, İbrahim ŞAHİN"
+  },
+  {
+   "id": "b5-3",
+   "day": "5",
+   "start": "15:00",
+   "end": "15:30",
+   "type": "break",
+   "title": {
+    "tr": "Kahve Molası",
+    "en": "Coffee Break"
+   }
+  },
+  {
+   "id": "p5-9",
+   "day": "5",
+   "start": "15:30",
+   "end": "16:30",
+   "type": "talk",
+   "title": {
+    "tr": "Umudun Ötesinde: Tıbbi Bir Buluşun Arkasındaki Hikâye",
+    "en": "Beyond Hope: The Story Behind a Medical Discovery"
+   },
+   "chairs": "Taha BAHSİ, Mustafa ÖZDOĞAN, Musa KARAKÜKCÜ"
+  },
+  {
+   "id": "c5-1",
+   "day": "5",
+   "start": "17:00",
+   "end": "18:00",
+   "type": "course",
+   "title": {
+    "tr": "Prenatal Tanı Kursu: Tek Gen",
+    "en": "Prenatal Diagnosis Course: Single-Gene Disorders"
+   },
+   "speakers": "Sevilhan ARTAN (Kurs Başkanı), Ayça AYKUT, Gülsüm KAYHAN",
+   "room": "Salon 1"
+  },
+  {
+   "id": "c5-2",
+   "day": "5",
+   "start": "17:00",
+   "end": "18:00",
+   "type": "course",
+   "title": {
+    "tr": "Dismorfoloji Kursu III",
+    "en": "Dysmorphology Course III"
+   },
+   "speakers": "Kadri KARAER (Kurs Başkanı), Elif YILMAZ GÜLEÇ, Evren GÜMÜŞ",
+   "room": "Salon 2"
+  },
+  {
+   "id": "c5-3",
+   "day": "5",
+   "start": "17:00",
+   "end": "18:00",
+   "type": "course",
+   "title": {
+    "tr": "Varyant Analizi Kursu: Kalıtsal ve Somatik",
+    "en": "Variant Analysis Course: Hereditary and Somatic"
+   },
+   "speakers": "Cengiz YAKICIER (Kurs Başkanı), Aslı Ece SOLMAZ, Haktan Bağış ERDEM",
+   "room": "Salon 3"
+  },
+  {
+   "id": "p6-1",
+   "day": "6",
+   "start": "09:00",
+   "end": "09:20",
+   "type": "talk",
+   "title": {
+    "tr": "Türkiye'de Nadir Hastalıklar Alanında Kurumsal Gelişim: Bugüne Kadarki Yolculuk",
+    "en": "Institutional Development in Rare Diseases in Türkiye: The Journey So Far"
+   },
+   "speakers": "Murat GÜLŞEN",
+   "chairs": "Fatma SILAN, Ahmet Cevdet CEYLAN, Özgür BALASAR"
+  },
+  {
+   "id": "p6-2",
+   "day": "6",
+   "start": "09:20",
+   "end": "09:40",
+   "type": "talk",
+   "title": {
+    "tr": "Nadir ve Tanısız Hastalıklara Entegre Genomik Yaklaşım",
+    "en": "An Integrated Genomic Approach to Rare and Undiagnosed Diseases"
+   },
+   "speakers": "Uğur ÖZBEK",
+   "chairs": "Fatma SILAN, Ahmet Cevdet CEYLAN, Özgür BALASAR"
+  },
+  {
+   "id": "p6-3",
+   "day": "6",
+   "start": "09:40",
+   "end": "10:00",
+   "type": "talk",
+   "title": {
+    "tr": "Türkiye Genom Projesi",
+    "en": "The Türkiye Genome Project"
+   },
+   "speakers": "Duygu ÖZEL DEMİRALP",
+   "chairs": "Fatma SILAN, Ahmet Cevdet CEYLAN, Özgür BALASAR"
+  },
+  {
+   "id": "b6-1",
+   "day": "6",
+   "start": "10:00",
+   "end": "10:30",
+   "type": "break",
+   "title": {
+    "tr": "Kahve Molası",
+    "en": "Coffee Break"
+   }
+  },
+  {
+   "id": "p6-4",
+   "day": "6",
+   "start": "10:30",
+   "end": "11:30",
+   "type": "panel",
+   "title": {
+    "tr": "Vaka Örnekleriyle Genetik Danışmanlık",
+    "en": "Genetic Counseling Through Case Examples"
+   },
+   "speakers": "Panelistler: Onur Burak DURSUN, Ali KANDEĞER, Güneş UYAR, Çiğdem SAV · Vaka sunumları: Hilmi BOLAT, Ceren ALAVANDA, Ezgi GÖKPINAR İLİ, İbrahim KAPLAN",
+   "chairs": "Nur SEMERCİ GÜNDÜZ, Hatice ILGIN RUHİ"
+  },
+  {
+   "id": "p6-5",
+   "day": "6",
+   "start": "11:30",
+   "end": "12:00",
+   "type": "cer",
+   "title": {
+    "tr": "Kapanış",
+    "en": "Closing Ceremony"
+   }
+  }
+ ],
+ "oral": {
+  "start": "08:00",
+  "end": "08:50",
+  "minutesPerTalk": 7,
+  "sessions": [
+   {
+    "no": 1,
+    "day": "3",
+    "room": "Salon 2",
+    "chairs": "Ebru MARZİOĞLU ÖZDEMİR, Ayberk TÜRKYILMAZ",
+    "talks": [
+     {
+      "id": "S-001",
+      "title": {
+       "tr": "Sporadik Parkinson Hastalığında RFC1 Tekrar Artışları ve Motif Heterojenitesi: Hasta-Kontrol Karşılaştırması",
+       "en": "RFC1 Repeat Expansions and Motif Heterogeneity in Sporadic Parkinson's Disease: A Case-Control Comparison"
+      },
+      "presenter": "İlayda Sönmez Baki"
+     },
+     {
+      "id": "S-002",
+      "title": {
+       "tr": "Otizm Spektrum Bozukluklarının Genetiğinde Kopya Sayısı Varyasyonlarının Değerlendirilmesi",
+       "en": "Evaluation of Copy Number Variations in the Genetics of Autism Spectrum Disorders"
+      },
+      "presenter": "Semih Keleş"
+     },
+     {
+      "id": "S-003",
+      "title": {
+       "tr": "Heterozigot PRKN Bulgusundan Biallelik Tanıya: Optik Genom Haritalamanın Katkısı",
+       "en": "From a Heterozygous PRKN Finding to a Biallelic Diagnosis: The Contribution of Optical Genome Mapping"
+      },
+      "presenter": "Esma Ertürkmen Aru"
+     },
+     {
+      "id": "S-004",
+      "title": {
+       "tr": "Farklı Klinik Prezantasyonlarla Başvuran İki Olguda 17q12 Mikrodelesyonu: NGS Tabanlı CNV Analizinin Tanısal Katkısı",
+       "en": "17q12 Microdeletion in Two Cases with Different Clinical Presentations: The Diagnostic Contribution of NGS-Based CNV Analysis"
+      },
+      "presenter": "Afra Berilhan Biçkici"
+     },
+     {
+      "id": "S-005",
+      "title": {
+       "tr": "Investigation of Urea Cycle Defect Genes in Parkinson's Disease: A Retrospective Cohort Study"
+      },
+      "presenter": "Sezin Canbek"
+     },
+     {
+      "id": "S-006",
+      "title": {
+       "tr": "Herediter Ataksi Şüphesi Olan 327 Hastada Spinoserebellar Ataksi Alt Tiplerinin Dağılımı ve İleri Moleküler Genetik Testlerin Tanısal Katkısı",
+       "en": "Distribution of Spinocerebellar Ataxia Subtypes and the Diagnostic Contribution of Advanced Molecular Genetic Testing in 327 Patients with Suspected Hereditary Ataxia"
+      },
+      "presenter": "Delil Serhat Yiğit"
+     },
+     {
+      "id": "S-007",
+      "title": {
+       "tr": "Parkinson Endikasyonu ile Yapılan Genetik Test Sonuçlarımız: 2018–2026 Tek Merkez Deneyimi",
+       "en": "Our Genetic Testing Results in Patients Referred for Parkinson's Disease: A Single-Center Experience, 2018–2026"
+      },
+      "presenter": "Ömer Faruk Karaçorlu"
+     }
+    ]
+   },
+   {
+    "no": 2,
+    "day": "3",
+    "room": "Salon 3",
+    "chairs": "Deniz TORUN, Çağrı DOĞAN",
+    "talks": [
+     {
+      "id": "S-008",
+      "title": {
+       "tr": "GeneNode: Ulusal Genomik Araştırma Ağı ve Uluslararası Çağrı Takip Platformu",
+       "en": "GeneNode: A National Genomic Research Network and International Funding Call Tracking Platform"
+      },
+      "presenter": "Ayşe Gürel"
+     },
+     {
+      "id": "S-009",
+      "title": {
+       "tr": "Karyoview: A Novel Comprehensive Ideogram Generator Website Integrated with Chromamind (AI) for Chromosomal Rearrangements in Malignancies Including Hematologic Malignancies"
+      },
+      "presenter": "Filiz Köroğlu"
+     },
+     {
+      "id": "S-010",
+      "title": {
+       "tr": "Model-Threshold Agreement (MTA): A Soft-Margin Ensemble Framework for Phenotype-Overlap Classification"
+      },
+      "presenter": "Mustafa Tarık Alay"
+     },
+     {
+      "id": "S-011",
+      "title": {
+       "tr": "Prematüre Retinopatisinde Poligenik Risk Skoruyla Genetik Yatkınlığın Değerlendirilmesi",
+       "en": "Assessing Genetic Susceptibility to Retinopathy of Prematurity with a Polygenic Risk Score"
+      },
+      "presenter": "Tuba Uğurlu Er"
+     },
+     {
+      "id": "S-012",
+      "title": {
+       "tr": "Genetik Sendromların Ön Tanısında Yapay Zekâ Performansı: Yenidoğan Yoğun Bakım Vakaları Üzerine Bir Çalışma",
+       "en": "Artificial Intelligence Performance in the Preliminary Diagnosis of Genetic Syndromes: A Study of Neonatal Intensive Care Cases"
+      },
+      "presenter": "Kerim Üzümcü"
+     },
+     {
+      "id": "S-013",
+      "title": {
+       "tr": "Dizide Uzak, Yapıda Yakın: SCN2A Varyantlarının Üç Boyutlu Konumu ile Hasta Fenotipleri Arasındaki İlişki",
+       "en": "Distant in Sequence, Close in Structure: The Relationship Between the Three-Dimensional Position of SCN2A Variants and Patient Phenotypes"
+      },
+      "presenter": "Hüseyin Saylam"
+     },
+     {
+      "id": "S-014",
+      "title": {
+       "tr": "Kanonik Translasyonun Ötesinde: smORF İlişkili Protein Kodlayan Transkriptlerde miRNA Hedef Mimarisinin Karşılaştırmalı Analizi",
+       "en": "Beyond Canonical Translation: Comparative Analysis of miRNA Target Architecture in smORF-Associated Protein-Coding Transcripts"
+      },
+      "presenter": "Hasan Çağlak"
+     }
+    ]
+   },
+   {
+    "no": 3,
+    "day": "3",
+    "room": "Salon 4",
+    "chairs": "Ece KESKİN, Semih AŞIKOVALI",
+    "talks": [
+     {
+      "id": "S-015",
+      "title": {
+       "tr": "Kopya Sayısı Değişimlerinde Dinamik Yorumlama: Yeniden Analizin Tanısal ve Klinik Katkısı",
+       "en": "Dynamic Interpretation of Copy Number Changes: The Diagnostic and Clinical Contribution of Reanalysis"
+      },
+      "presenter": "Derya Hazal Özbakır"
+     },
+     {
+      "id": "S-016",
+      "title": {
+       "tr": "Tüm Ekzom Dizileme Yönteminde Tanısal Verimin Artırılması ve Reanaliz İçin Olgu Önceliklendirme Kriterlerinin Tanımlanması",
+       "en": "Improving Diagnostic Yield in Whole Exome Sequencing and Defining Case Prioritization Criteria for Reanalysis"
+      },
+      "presenter": "Gökçen Özbek Kanat"
+     },
+     {
+      "id": "S-017",
+      "title": {
+       "tr": "Varyant Patojenite Sınıflandırmasında AlphaGenome AVI Skorunun Diğer in silico Tahmin Araçlarıyla Karşılaştırılması",
+       "en": "Comparing the AlphaGenome AVI Score with Other In Silico Prediction Tools in Variant Pathogenicity Classification"
+      },
+      "presenter": "Yeşim Berçin"
+     },
+     {
+      "id": "S-018",
+      "title": {
+       "tr": "Calibration of AlphaGenome and SpliceAI2 for PP3/BP4 Evidence Across Coding and Noncoding Variants"
+      },
+      "presenter": "Yarkın Dolaş"
+     },
+     {
+      "id": "S-019",
+      "title": {
+       "tr": "SpliceAI for Windows: SpliceAI İçin Yerel Çalışan Bir Masaüstü Uygulaması",
+       "en": "SpliceAI for Windows: A Desktop Application That Runs SpliceAI Locally"
+      },
+      "presenter": "Mustafa Mert Aydın"
+     },
+     {
+      "id": "S-020",
+      "title": {
+       "tr": "AllPrime: Varyant Koordinatından Özgüllük Taramasına Uçtan Uca Primer Tasarım ve Değerlendirme Uygulaması",
+       "en": "AllPrime: An End-to-End Primer Design and Evaluation Application, from Variant Coordinates to Specificity Screening"
+      },
+      "presenter": "Eren Kılınç"
+     },
+     {
+      "id": "S-021",
+      "title": {
+       "tr": "RET VUS Re-analysis in a Clinical Cohort: Integrating ACMG Criteria with Phenotypic Data"
+      },
+      "presenter": "Taha Safa Gökçe"
+     }
+    ]
+   },
+   {
+    "no": 4,
+    "day": "3",
+    "room": "Salon 5",
+    "chairs": "Tülay TOS, Fahrettin DUYMUŞ",
+    "talks": [
+     {
+      "id": "S-022",
+      "title": {
+       "tr": "Kronik Lenfositik Lösemide İmmünogenetik ve Genomik Bulguların Bütünleşik Değerlendirilmesi ve Olumsuz Prognostik Belirteçlerin Dağılımı",
+       "en": "Integrated Evaluation of Immunogenetic and Genomic Findings and the Distribution of Adverse Prognostic Markers in Chronic Lymphocytic Leukemia"
+      },
+      "presenter": "Engin Altundağ"
+     },
+     {
+      "id": "S-023",
+      "title": {
+       "tr": "Hormon Reseptörü Pozitif Meme Kanseri Olgularında Somatik PIK3CA Varyantlarının Değerlendirilmesi: Tek Merkez Deneyimi",
+       "en": "Evaluation of Somatic PIK3CA Variants in Hormone Receptor-Positive Breast Cancer: A Single-Center Experience"
+      },
+      "presenter": "Emine İpek Ceylan"
+     },
+     {
+      "id": "S-024",
+      "title": {
+       "tr": "MMR İmmünohistokimya Bulguları ve Fragman Analiziyle Elde Edilen MSI Sonuçlarının Birlikte Değerlendirilmesi: Tek Merkez Deneyimi",
+       "en": "Combined Evaluation of MMR Immunohistochemistry Findings and MSI Results from Fragment Analysis: A Single-Center Experience"
+      },
+      "presenter": "Dilek Özata Aksoy"
+     },
+     {
+      "id": "S-025",
+      "title": {
+       "tr": "Kayıp Klonu Ararken: Allojenik Nakil Sonrası Santral Sinir Sisteminde Yakalanan FLT3-ITD Pozitif AML",
+       "en": "In Search of the Lost Clone: FLT3-ITD-Positive AML Detected in the Central Nervous System After Allogeneic Transplantation"
+      },
+      "presenter": "Fethiye Esenkaya"
+     },
+     {
+      "id": "S-026",
+      "title": {
+       "tr": "Evaluation of the Somatic Variant Profile by Next-Generation Sequencing in Non-Small Cell Lung Cancer: A Single-Center Experience of 225 Cases"
+      },
+      "presenter": "Pelin Ercoşkun"
+     },
+     {
+      "id": "S-027",
+      "title": {
+       "tr": "Miyeloid Neoplazilerde Hedefli Yeni Nesil Dizileme Bulgularının Klinik, Konvansiyonel Moleküler ve Sitogenetik Verilerle Bütünleşik Değerlendirilmesi",
+       "en": "Integrated Evaluation of Targeted Next-Generation Sequencing Findings in Myeloid Neoplasms with Clinical, Conventional Molecular and Cytogenetic Data"
+      },
+      "presenter": "Umut Can Tekbaş"
+     },
+     {
+      "id": "S-028",
+      "title": {
+       "tr": "JAK2 V617F Mutant Miyeloproliferatif Neoplazi Hastalarının Eşlik Eden Moleküler Varyantlarının Klinik ve Patolojik Korelasyonu: Tek Merkez Deneyimi",
+       "en": "Clinical and Pathological Correlation of Co-occurring Molecular Variants in Patients with JAK2 V617F-Mutated Myeloproliferative Neoplasms: A Single-Center Experience"
+      },
+      "presenter": "Mustafa Altan"
+     }
+    ]
+   },
+   {
+    "no": 5,
+    "day": "3",
+    "room": "Salon 6",
+    "chairs": "Ozan ÇETİN, Sezin CANBEK",
+    "talks": [
+     {
+      "id": "S-029",
+      "title": {
+       "tr": "Prostat Kanserinde Germline Varyant Spektrumu ve Yalın Aile Öyküsü Değerlendirmesi: 250 Hastalık Türkiye Kohortu",
+       "en": "Germline Variant Spectrum and Assessment of Family History Alone in Prostate Cancer: A Turkish Cohort of 250 Patients"
+      },
+      "presenter": "Zeynep Özdemir Pehlivan"
+     },
+     {
+      "id": "S-030",
+      "title": {
+       "tr": "Çoklu Primer Kanserli Hastalarda Herediter Risk: Genetik Spektrum, Tanısal Verim ve Klinik Belirleyiciler",
+       "en": "Hereditary Risk in Patients with Multiple Primary Cancers: Genetic Spectrum, Diagnostic Yield and Clinical Predictors"
+      },
+      "presenter": "Sultan Kevser Gangal"
+     },
+     {
+      "id": "S-031",
+      "title": {
+       "tr": "Herediter Kanser Paneli ile Saptanan Germline RET Varyantlarının Dağılımı ve Hastaların Klinik Özellikleri",
+       "en": "Distribution of Germline RET Variants Detected by a Hereditary Cancer Panel and Clinical Characteristics of the Patients"
+      },
+      "presenter": "Özgenur Özen Özkan"
+     },
+     {
+      "id": "S-032",
+      "title": {
+       "tr": "Herediter Kanser Olgularında Genişletilmiş Gen Paneli ile Yeniden Analizin Tanısal Katkısı",
+       "en": "Diagnostic Contribution of Reanalysis with an Expanded Gene Panel in Hereditary Cancer Cases"
+      },
+      "presenter": "Asiye Sevde Can"
+     },
+     {
+      "id": "S-033",
+      "title": {
+       "tr": "Somatik Yeni Nesil Dizileme Analizinde Varyant Allel Frekansı ≥%30 Saptanan Kanser Hastalarında Germline Doğrulama Testlerinin Değerlendirilmesi ve Somatik-Germline Uyumsuzluklarının İncelenmesi: Necmettin Erbakan Üniversitesi Deneyimi",
+       "en": "Germline Confirmation Testing in Cancer Patients with a Variant Allele Frequency ≥30% on Somatic Next-Generation Sequencing and Somatic–Germline Discordance: The Necmettin Erbakan University Experience"
+      },
+      "presenter": "Selen Özata"
+     },
+     {
+      "id": "S-034",
+      "title": {
+       "tr": "Herediter Kanser Kohortunda En Sık Görülen Germline CHEK2 Varyantları: Varyant Spektrumu, Klinik Fenotip ve Meme Kanseri Özellikleri",
+       "en": "The Most Common Germline CHEK2 Variants in a Hereditary Cancer Cohort: Variant Spectrum, Clinical Phenotype and Breast Cancer Characteristics"
+      },
+      "presenter": "Veysel Atasoy"
+     },
+     {
+      "id": "S-035",
+      "title": {
+       "tr": "ACMG Sekonder Bulgu Listesine Eklenebilecek Kanser Yatkınlık Genleri: Patojenik Varyant Sıklığı ve Kademeli Değerlendirme",
+       "en": "Cancer Predisposition Genes That Could Be Added to the ACMG Secondary Findings List: Pathogenic Variant Frequency and Tiered Assessment"
+      },
+      "presenter": "Sultan Buse Türk"
+     },
+     {
+      "id": "S-036",
+      "title": {
+       "tr": "FH Geninde Germline Varyant Saptanan Olgularda Moleküler ve Klinik Spektrum: 20 Olguluk Seri",
+       "en": "Molecular and Clinical Spectrum in Cases with Germline FH Variants: A Series of 20 Cases"
+      },
+      "presenter": "Ezgi Çevik Demir"
+     }
+    ]
+   },
+   {
+    "no": 6,
+    "day": "3",
+    "room": "Salon 7",
+    "chairs": "Burak DURMAZ, Özge ÖZER KAYA",
+    "talks": [
+     {
+      "id": "S-037",
+      "title": {
+       "tr": "Monokoryonik Monoamniyotik İkiz Gebelikte Mozaik İnterstisyel 18q21.2–q22.1 Delesyonu: Prenatal Fenotipik Bulgular ve Genetik Danışmanlıkta Karşılaşılan Güçlükler",
+       "en": "Mosaic Interstitial 18q21.2–q22.1 Deletion in a Monochorionic Monoamniotic Twin Pregnancy: Prenatal Phenotypic Findings and Challenges in Genetic Counseling"
+      },
+      "presenter": "Atakan Deniz"
+     },
+     {
+      "id": "S-038",
+      "title": {
+       "tr": "Deepening of Prenatal Genetic Diagnosis: From Karyotyping to Microarray and Molecular Testing"
+      },
+      "presenter": "Simge Tuana Ay Öner"
+     },
+     {
+      "id": "S-039",
+      "title": {
+       "tr": "Fetal Kayıpların Genetik Tanısında Ekzomik Otopsi Yaklaşımı",
+       "en": "The Exomic Autopsy Approach in the Genetic Diagnosis of Fetal Loss"
+      },
+      "presenter": "Mertcan Tan"
+     },
+     {
+      "id": "S-040",
+      "title": {
+       "tr": "Prenatal Tanı Amacıyla Elde Edilen Örneklerin Sitogenetik ve Moleküler Genetik Sonuçlarının Retrospektif Olarak Değerlendirilmesi",
+       "en": "Retrospective Evaluation of Cytogenetic and Molecular Genetic Results of Samples Obtained for Prenatal Diagnosis"
+      },
+      "presenter": "Zeynep Nur Paralı"
+     },
+     {
+      "id": "S-041",
+      "title": {
+       "tr": "Emanuel Sendromu: Prenatal ve Postmortem Fenotipik Spektrumun Dört Olgu Üzerinden Değerlendirilmesi",
+       "en": "Emanuel Syndrome: The Prenatal and Postmortem Phenotypic Spectrum in Four Cases"
+      },
+      "presenter": "Olida Çeçen"
+     },
+     {
+      "id": "S-042",
+      "title": {
+       "tr": "Diagnostic Spectrum and Yield of Invasive Prenatal Testing: From Conventional Cytogenetics to Chromosomal Microarray and Clinical Exome Sequencing"
+      },
+      "presenter": "Cemal Onur Onaran"
+     },
+     {
+      "id": "S-043",
+      "title": {
+       "tr": "Diagnostic Confirmation of NIPT in Fetal Numerical Chromosomal Abnormalities: Single-Center Validation via Invasive Diagnostic Methods"
+      },
+      "presenter": "Aleyna Emeksiz"
+     }
+    ]
+   },
+   {
+    "no": 7,
+    "day": "4",
+    "room": "Salon 2",
+    "chairs": "Aslı Ece SOLMAZ, Serhat SEYHAN",
+    "talks": [
+     {
+      "id": "S-044",
+      "title": {
+       "tr": "Confirmation of Structural Chromosomal Anomalies Detected by Non-Invasive Prenatal Testing with Prenatal Microarray and Karyotyping: A Single-Center Experience"
+      },
+      "presenter": "Zeynep Nergiz Sarıçiçek"
+     },
+     {
+      "id": "S-045",
+      "title": {
+       "tr": "Multipl Konjenital Anomalili Fetüslerde Postmortem Muayene Bulguları Eşliğinde Kromozomal Mikroarray ve WES Deneyimlerimiz",
+       "en": "Our Experience with Chromosomal Microarray and WES Guided by Postmortem Examination Findings in Fetuses with Multiple Congenital Anomalies"
+      },
+      "presenter": "Fatih Ahmet Yürekli"
+     },
+     {
+      "id": "S-046",
+      "title": {
+       "tr": "Düşük Materyallerinde QF-PCR ile STR Lokuslarında Monoallelik Patern Saptanan Olguların Değerlendirmesi",
+       "en": "Evaluation of Miscarriage Samples Showing a Monoallelic Pattern at STR Loci on QF-PCR"
+      },
+      "presenter": "Abdullah İsa Bulat"
+     },
+     {
+      "id": "S-047",
+      "title": {
+       "tr": "Gebelik Kayıplarında Düşük Materyallerinin Sitogenetik Anomali Oranlarının Değerlendirilmesi: 5 Yıllık Tek Merkez Deneyimi",
+       "en": "Cytogenetic Abnormality Rates in Miscarriage Material from Pregnancy Losses: A 5-Year Single-Center Experience"
+      },
+      "presenter": "Taha Mustafa Solmaz"
+     },
+     {
+      "id": "S-048",
+      "title": {
+       "tr": "Anomali Tipine Göre Non-İnvaziv Prenatal Testin Pozitif Prediktif Değeri: Tek Merkez Deneyimi",
+       "en": "Positive Predictive Value of Non-Invasive Prenatal Testing by Anomaly Type: A Single-Center Experience"
+      },
+      "presenter": "Oğuz Dülger"
+     },
+     {
+      "id": "S-049",
+      "title": {
+       "tr": "TNRC18 Dysfunction Disrupts Ciliogenesis and Contributes to Congenital Heart Disease"
+      },
+      "presenter": "Nurdeniz Nalbant"
+     },
+     {
+      "id": "S-050",
+      "title": {
+       "tr": "Exploring the Potential Role of MTMR8 in Ciliogenesis"
+      },
+      "presenter": "Nida Nur Öner"
+     }
+    ]
+   },
+   {
+    "no": 8,
+    "day": "4",
+    "room": "Salon 3",
+    "chairs": "Gözde YEŞİL, Mustafa DOĞAN",
+    "talks": [
+     {
+      "id": "S-051",
+      "title": {
+       "tr": "Beyond Balanced Translocations: Uncovering Disease-Relevant Gene Disruptions by Optical Genome Mapping"
+      },
+      "presenter": "Merve Kaysin"
+     },
+     {
+      "id": "S-052",
+      "title": {
+       "tr": "Ekzom Dizileme Sonrası Tanı Alamayan Nörogelişimsel Bozukluğu Olan Hastalarda Uzun Okumalı Genom Dizilemenin Tanıya Katkısı",
+       "en": "Diagnostic Contribution of Long-Read Genome Sequencing in Patients with Neurodevelopmental Disorders Left Undiagnosed After Exome Sequencing"
+      },
+      "presenter": "Muhammed Fatih Mulayım"
+     },
+     {
+      "id": "S-053",
+      "title": {
+       "tr": "Kromozomal Mikroarray Analizi Verilerinin Retrospektif Olarak Genotip ve Fenotip Bazlı Değerlendirilmesi",
+       "en": "Retrospective Genotype- and Phenotype-Based Evaluation of Chromosomal Microarray Data"
+      },
+      "presenter": "Levent Paralı"
+     },
+     {
+      "id": "S-054",
+      "title": {
+       "tr": "Tüm Ekzom Dizileme ile Tanı Konulamayan Olgularda Tüm Genom Dizileme ve Transkriptomik Yaklaşım",
+       "en": "Whole Genome Sequencing and a Transcriptomic Approach in Cases Undiagnosed by Whole Exome Sequencing"
+      },
+      "presenter": "İpek Şahin"
+     },
+     {
+      "id": "S-055",
+      "title": {
+       "tr": "Cinsiyet Gelişim Bozukluklarında Klinik Ekzom Dizileme Analizi: Tek Merkezli Retrospektif Çalışma",
+       "en": "Clinical Exome Sequencing in Disorders of Sex Development: A Single-Center Retrospective Study"
+      },
+      "presenter": "Onur Hanoğlu"
+     },
+     {
+      "id": "S-056",
+      "title": {
+       "tr": "Monogenik Hastalık Düşünülen ve Ekzom Dizileme Yöntemiyle Patojenik Varyant Saptanamayan Hastalarda Transkriptom Analizi",
+       "en": "Transcriptome Analysis in Patients with Suspected Monogenic Disease and No Pathogenic Variant on Exome Sequencing"
+      },
+      "presenter": "Tarık Düzenli"
+     },
+     {
+      "id": "S-057",
+      "title": {
+       "tr": "Tanı Konulamayan Nörogelişimsel Bozukluğa Sahip Vakalarda RNA-Seq'in Tamamlayıcı Rolü",
+       "en": "The Complementary Role of RNA-Seq in Undiagnosed Neurodevelopmental Disorders"
+      },
+      "presenter": "Rüveyda Nur İz"
+     }
+    ]
+   },
+   {
+    "no": 9,
+    "day": "4",
+    "room": "Salon 4",
+    "chairs": "Gülsüm KAYHAN, Hanife SAAT",
+    "talks": [
+     {
+      "id": "S-058",
+      "title": {
+       "tr": "İskemik İnme Vakalarındaki Diyagnostik/Prognostik miRNA Ekspresyon Profillerinin Trombüs Materyalinde Belirlenmesi",
+       "en": "Identifying Diagnostic/Prognostic miRNA Expression Profiles in Thrombus Material from Ischemic Stroke Cases"
+      },
+      "presenter": "Efsun Tosumoğlu"
+     },
+     {
+      "id": "S-059",
+      "title": {
+       "tr": "Transcriptomic Profiling of TFE3 Gain-of-Function Validates CLEAR Network Upregulation and Identifies mTORC1 and TCR Signaling Pathways as Potential Therapeutic Targets"
+      },
+      "presenter": "Alp Peker"
+     },
+     {
+      "id": "S-060",
+      "title": {
+       "tr": "Parkinson Hastalığında Gen Ekspresyonunun Ötesinde: İzoform Kullanım Değişiklikleri",
+       "en": "Beyond Gene Expression in Parkinson's Disease: Changes in Isoform Usage"
+      },
+      "presenter": "Oya Demirkaya"
+     },
+     {
+      "id": "S-061",
+      "title": {
+       "tr": "Meme Kanseri Hücrelerinde PhoCl2c-Bid Tabanlı Optogenetik Apoptoz Kontrolü",
+       "en": "PhoCl2c-Bid-Based Optogenetic Control of Apoptosis in Breast Cancer Cells"
+      },
+      "presenter": "Hasan Çağlak"
+     },
+     {
+      "id": "S-062",
+      "title": {
+       "tr": "Meme Kanserinde Patojen Uyarımı Sonrası TLR4 ve Endoplazmik Retikulum Stresi Arasındaki Moleküler Çapraz Etkileşim",
+       "en": "Molecular Crosstalk Between TLR4 and Endoplasmic Reticulum Stress After Pathogen Stimulation in Breast Cancer"
+      },
+      "presenter": "Muhammed Emin Sarı"
+     },
+     {
+      "id": "S-063",
+      "title": {
+       "tr": "Ailesel Akdeniz Ateşi Hastalarında ALPK1 Geni Ekspresyon Seviyelerinin Değerlendirilmesi",
+       "en": "ALPK1 Gene Expression Levels in Patients with Familial Mediterranean Fever"
+      },
+      "presenter": "Büşra Yılmaz"
+     },
+     {
+      "id": "S-064",
+      "title": {
+       "tr": "Kanser Genomunun Aşil Topuğu: CpG-Bağımlı Arginin Kırılganlığı ve Paralog Tamponlama Dinamikleri",
+       "en": "The Achilles' Heel of the Cancer Genome: CpG-Dependent Arginine Vulnerability and Paralog Buffering Dynamics"
+      },
+      "presenter": "Sakine Dirikolu Buğrul"
+     }
+    ]
+   },
+   {
+    "no": 10,
+    "day": "4",
+    "room": "Salon 5",
+    "chairs": "Altuğ KOÇ, Kenan DELİL",
+    "talks": [
+     {
+      "id": "S-065",
+      "title": {
+       "tr": "Genetik Olarak Açıklanamayan 46,XY Cinsiyet Gelişim Bozukluklarında Optik Genom Haritalama: Tanısal Verim ve Klinik Değer",
+       "en": "Optical Genome Mapping in Genetically Unexplained 46,XY Disorders of Sex Development: Diagnostic Yield and Clinical Value"
+      },
+      "presenter": "Uğur Cem Yılmaz"
+     },
+     {
+      "id": "S-066",
+      "title": {
+       "tr": "Nonsendromik Retinal Distrofilerin Mutasyon Spektrumunun Yeni Nesil Dizileme Yöntemi ile İncelenmesi",
+       "en": "The Mutation Spectrum of Nonsyndromic Retinal Dystrophies Studied by Next-Generation Sequencing"
+      },
+      "presenter": "Fatma Zehra Yalçın"
+     },
+     {
+      "id": "S-067",
+      "title": {
+       "tr": "Uzun QT Sendromu Ön Tanılı Hastalarda Çoklu Gen Paneli ile Saptanan Varyant Spektrumu: Tek Merkez Deneyimi",
+       "en": "Variant Spectrum Detected by a Multigene Panel in Patients with Suspected Long QT Syndrome: A Single-Center Experience"
+      },
+      "presenter": "Sılanur Uğur"
+     },
+     {
+      "id": "S-068",
+      "title": {
+       "tr": "LARP7 ile İlişkili Alazami Sendromunun Klinik ve Moleküler Spektrumunun Genişletilmesi: Beş Aileden Sekiz Olguluk Bir Kohort",
+       "en": "Expanding the Clinical and Molecular Spectrum of LARP7-Related Alazami Syndrome: A Cohort of Eight Cases from Five Families"
+      },
+      "presenter": "Betül Kesriklioğlu"
+     },
+     {
+      "id": "S-069",
+      "title": {
+       "tr": "Ölümcül Olabilen Kalıtsal Genodermatoz: Epidermolizis Bülloza Ön Tanılı Hastalarda Merkezimizin Genetik Tanı Deneyimi",
+       "en": "A Potentially Lethal Inherited Genodermatosis: Our Center's Genetic Diagnosis Experience in Patients with Suspected Epidermolysis Bullosa"
+      },
+      "presenter": "Javid Taghiyev"
+     },
+     {
+      "id": "S-070",
+      "title": {
+       "tr": "Fraser Sendromunda Genotipik ve Fenotipik Heterojenite: FRAS1, FREM2 ve GRIP1 Genlerinde Biallelik Varyant Saptanan Üç Olgu",
+       "en": "Genotypic and Phenotypic Heterogeneity in Fraser Syndrome: Three Cases with Biallelic Variants in FRAS1, FREM2 and GRIP1"
+      },
+      "presenter": "Rumeysa Atasay"
+     },
+     {
+      "id": "S-071",
+      "title": {
+       "tr": "Nadir Bir Nörogelişimsel Tablo: KMT2A Varyantı Saptanan İki Wiedemann-Steiner Sendromu Olgusu",
+       "en": "A Rare Neurodevelopmental Condition: Two Cases of Wiedemann-Steiner Syndrome with KMT2A Variants"
+      },
+      "presenter": "Mina Balasar"
+     }
+    ]
+   },
+   {
+    "no": 11,
+    "day": "4",
+    "room": "Salon 6",
+    "chairs": "Aslı SUBAŞIOĞLU, Semih AŞIKOVALI",
+    "talks": [
+     {
+      "id": "S-072",
+      "title": {
+       "tr": "Somatic Mosaicism Beyond Blood: A Clinical and Molecular Cohort Study"
+      },
+      "presenter": "Furkan Baştan"
+     },
+     {
+      "id": "S-073",
+      "title": {
+       "tr": "2020–2026 Yılları Arasında MODY Şüphesiyle Genetik Tanısal Verim, Gen Dağılımı ve Moleküler Tanıyı Öngören Klinik Belirteçler: Tek Merkez Deneyimi",
+       "en": "Genetic Diagnostic Yield, Gene Distribution and Clinical Markers Predicting a Molecular Diagnosis in Suspected MODY, 2020–2026: A Single-Center Experience"
+      },
+      "presenter": "Meryem Akcan"
+     },
+     {
+      "id": "S-074",
+      "title": {
+       "tr": "Herediter Multipl Ekzostoz Tanılı Hastaların Moleküler Genetik ve Klinik Değerlendirmesi",
+       "en": "Molecular Genetic and Clinical Evaluation of Patients with Hereditary Multiple Exostoses"
+      },
+      "presenter": "Gizem Merve Şirvancı"
+     },
+     {
+      "id": "S-075",
+      "title": {
+       "tr": "Allele Dropout due to SMN1 c.842G>C in Digital PCR: A False Homozygous SMN1 Exon 7 Deletion in Newborn Screening"
+      },
+      "presenter": "Burak Emiroğlu"
+     },
+     {
+      "id": "S-076",
+      "title": {
+       "tr": "Güneydoğu Anadolu'da SMARCAL1 İlişkili Schimke İmmünoosseöz Displazi: Tekrarlayan p.Arg820His Varyantı, Olası Bölgesel Kurucu Etki ve Fenotipik Heterojenite",
+       "en": "SMARCAL1-Related Schimke Immuno-Osseous Dysplasia in Southeastern Anatolia: The Recurrent p.Arg820His Variant, a Possible Regional Founder Effect and Phenotypic Heterogeneity"
+      },
+      "presenter": "Murat Öztürk"
+     },
+     {
+      "id": "S-077",
+      "title": {
+       "tr": "Kalıtsal Göz Hastalıklarında Yeni Nesil Dizileme ile Saptanan Genetik Varyantların Değerlendirilmesi",
+       "en": "Genetic Variants Detected by Next-Generation Sequencing in Inherited Eye Diseases"
+      },
+      "presenter": "Süheyl Önal"
+     },
+     {
+      "id": "S-078",
+      "title": {
+       "tr": "Primer Ailesel Beyin Kalsifikasyonunun Klinik ve Genetik Spektrumu: Ege Deneyimi",
+       "en": "Clinical and Genetic Spectrum of Primary Familial Brain Calcification: The Ege Experience"
+      },
+      "presenter": "Şevval Zeycan Şahan"
+     }
+    ]
+   },
+   {
+    "no": 12,
+    "day": "4",
+    "room": "Salon 7",
+    "chairs": "Erhan PARILTAY, Pelin ÖZYAVUZ ÇUBUK",
+    "talks": [
+     {
+      "id": "S-079",
+      "title": {
+       "tr": "PYGM Varyantları Saptanan Bireylerde Klinik ve Moleküler Spektrum: Tek Merkez Deneyimi",
+       "en": "Clinical and Molecular Spectrum in Individuals with PYGM Variants: A Single-Center Experience"
+      },
+      "presenter": "Meryem Nur Murt"
+     },
+     {
+      "id": "S-080",
+      "title": {
+       "tr": "Kabuki Sendromu Tanılı Üç Olgunun Klinik ve Moleküler Bulguları",
+       "en": "Clinical and Molecular Findings in Three Cases of Kabuki Syndrome"
+      },
+      "presenter": "Hilal Onay İlhan"
+     },
+     {
+      "id": "S-081",
+      "title": {
+       "tr": "Göz Hastalıkları Paneli Yapılan 76 Hastada Varyant Spektrumu ve Klinik Deneyimlerimiz",
+       "en": "Variant Spectrum and Our Clinical Experience in 76 Patients Tested with an Eye Disease Panel"
+      },
+      "presenter": "Elif Gül"
+     },
+     {
+      "id": "S-082",
+      "title": {
+       "tr": "Demans ve İlişkili Nörolojik Tablolarla Başvuran 79 Hastada Klinik ve Tüm Ekzom Dizileme Bulguları: Tek Merkez Deneyimi",
+       "en": "Clinical and Whole Exome Sequencing Findings in 79 Patients Presenting with Dementia and Related Neurological Conditions: A Single-Center Experience"
+      },
+      "presenter": "Öykü Özbek"
+     },
+     {
+      "id": "S-083",
+      "title": {
+       "tr": "TRIP12 Geninde Farklı Varyantlar Taşıyan Üç Aileden Dört Hastanın Ayrıntılı Klinik ve Moleküler Değerlendirmesi",
+       "en": "Detailed Clinical and Molecular Evaluation of Four Patients from Three Families Carrying Different TRIP12 Variants"
+      },
+      "presenter": "Esra Habiloğlu"
+     },
+     {
+      "id": "S-084",
+      "title": {
+       "tr": "İzole Kreatin Kinaz Yüksekliğinden Yürüme Kaybına: Biallelik ANO5 Varyantı Taşıyan 14 Olguda Klinik Çeşitlilik ve Olası Kurucu Etki",
+       "en": "From Isolated Creatine Kinase Elevation to Loss of Ambulation: Clinical Variability and a Possible Founder Effect in 14 Cases with Biallelic ANO5 Variants"
+      },
+      "presenter": "Afife Büke"
+     },
+     {
+      "id": "S-085",
+      "title": {
+       "tr": "Monogenik Obezite Panelinde Patojenik/Olası Patojenik Varyant Saptanmayan Hastalarda Poligenik Risk ile İlişkili SNP'lerin Retrospektif Değerlendirilmesi: Tek Merkez Deneyimi",
+       "en": "Retrospective Evaluation of Polygenic Risk-Associated SNPs in Patients with No Pathogenic/Likely Pathogenic Variant on a Monogenic Obesity Panel: A Single-Center Experience"
+      },
+      "presenter": "Mizgin Köprücü"
+     }
+    ]
+   },
+   {
+    "no": 13,
+    "day": "5",
+    "room": "Salon 2",
+    "chairs": "Büşranur ÇAVDARLI, Sinem YALÇINTEPE",
+    "talks": [
+     {
+      "id": "S-086",
+      "title": {
+       "tr": "Evaluation and Reclassification of MC4R Variants of Uncertain Significance (VUS) in the Turkish Population: The Most Common Cause of Monogenic Obesity"
+      },
+      "presenter": "Zeki Sakallı"
+     },
+     {
+      "id": "S-087",
+      "title": {
+       "tr": "Herediter Kas Hastalıklarında Genetik Spektrum: Tek Merkez Deneyimi",
+       "en": "Genetic Spectrum of Hereditary Muscle Diseases: A Single-Center Experience"
+      },
+      "presenter": "Tuna Apuhan"
+     },
+     {
+      "id": "S-088",
+      "title": {
+       "tr": "PCDH19 İlişkili Gelişimsel ve Epileptik Ensefalopatide Fenotipik Değişkenlik ve X'e Bağlı Atipik Kalıtım",
+       "en": "Phenotypic Variability and Atypical X-Linked Inheritance in PCDH19-Related Developmental and Epileptic Encephalopathy"
+      },
+      "presenter": "Mükerrem Yılmaz"
+     },
+     {
+      "id": "S-089",
+      "title": {
+       "tr": "Evidence for a Putative Founder Allele in SPG11: Shared Haplotype Analysis in Families from Central and Southeastern Anatolia"
+      },
+      "presenter": "Ayşe Nur Şenocak"
+     },
+     {
+      "id": "S-090",
+      "title": {
+       "tr": "Pediyatrik İnflamatuvar Bağırsak Hastalıklarında Genetik Etiyolojinin Değerlendirilmesi: Tek Merkez Deneyimi",
+       "en": "The Genetic Etiology of Pediatric Inflammatory Bowel Disease: A Single-Center Experience"
+      },
+      "presenter": "Elif Saraç"
+     },
+     {
+      "id": "S-091",
+      "title": {
+       "tr": "Gaucher Hastalığında Moleküler Tanısal Güçlükler: 2432 Bireylik Kohorttan Dersler",
+       "en": "Molecular Diagnostic Challenges in Gaucher Disease: Lessons from a Cohort of 2,432 Individuals"
+      },
+      "presenter": "Gizem Kök"
+     },
+     {
+      "id": "S-092",
+      "title": {
+       "tr": "Clinical Variability in POU3F3-Related Snijders Blok–Fisher Syndrome: Three Cases with De Novo Variants"
+      },
+      "presenter": "Ceren Furtana"
+     }
+    ]
+   },
+   {
+    "no": 14,
+    "day": "5",
+    "room": "Salon 3",
+    "chairs": "Özge ÖZALP, Alperhan ÇEBİ",
+    "talks": [
+     {
+      "id": "S-093",
+      "title": {
+       "tr": "Klinik Ekzomdan Mitokondriyal Tanıya: 11.825 Hastada mtDNA Varyantlarının Sistematik Analizi",
+       "en": "From Clinical Exome to Mitochondrial Diagnosis: Systematic Analysis of mtDNA Variants in 11,825 Patients"
+      },
+      "presenter": "Öznur Kaya Güneş"
+     },
+     {
+      "id": "S-094",
+      "title": {
+       "tr": "Tekrarlayan Alt Solunum Yolu Enfeksiyonu ve Kronik Akciğer Hastalığı Olan Çocuklarda Yeni Nesil Dizilemenin Uygulanması",
+       "en": "Next-Generation Sequencing in Children with Recurrent Lower Respiratory Tract Infections and Chronic Lung Disease"
+      },
+      "presenter": "Mustafa Güneş"
+     },
+     {
+      "id": "S-095",
+      "title": {
+       "tr": "NOTCH3 Sistein Değişimlerine Lokalizasyon Temelli Sınıflama Işığında Yaklaşım",
+       "en": "An Approach to NOTCH3 Cysteine-Altering Variants in Light of a Localization-Based Classification"
+      },
+      "presenter": "Kutalp Özekicioğlu"
+     },
+     {
+      "id": "S-096",
+      "title": {
+       "tr": "Mitokondriyal Genom Varyantlarının Dokuya Özgü Heteroplazmi Dağılımı, Eşik Değer Etkisi ve Türk Popülasyonundaki Haplogrup Profilinin Değerlendirilmesi",
+       "en": "Tissue-Specific Heteroplasmy Distribution and Threshold Effects of Mitochondrial Genome Variants, and the Haplogroup Profile of the Turkish Population"
+      },
+      "presenter": "Miray Zorluer"
+     },
+     {
+      "id": "S-097",
+      "title": {
+       "tr": "TrioWGS: Tüm Genom Dizilemede Varyant Karmaşasını Klinik Açıdan Anlamlandırmak",
+       "en": "TrioWGS: Making Clinical Sense of Variant Complexity in Whole Genome Sequencing"
+      },
+      "presenter": "Ömer Çağrı Akçin"
+     },
+     {
+      "id": "S-098",
+      "title": {
+       "tr": "Klinik Önemi Belirsiz Varyantlar Gerçekten Belirsiz mi Kalıyor? Genetik Danışmanlık Sonrası Klinik Kararların Retrospektif Analizi",
+       "en": "Do Variants of Uncertain Significance Really Remain Uncertain? A Retrospective Analysis of Clinical Decisions After Genetic Counseling"
+      },
+      "presenter": "Emre Akbaş"
+     },
+     {
+      "id": "S-099",
+      "title": {
+       "tr": "Soft-Clipped Read Analysis in IGV Combined with Sanger Sequencing for Base-Pair Resolution of Intragenic Deletions: An Affordable CNV Validation Strategy in Four Patients"
+      },
+      "presenter": "Özge Beyza Gündoğdu Öğütlü"
+     }
+    ]
+   },
+   {
+    "no": 15,
+    "day": "5",
+    "room": "Salon 4",
+    "chairs": "Evren GÜMÜŞ, Elif YILMAZ GÜLEÇ",
+    "talks": [
+     {
+      "id": "S-100",
+      "title": {
+       "tr": "Noonan Sendromu ve Noonan Benzeri Fenotipe Sahip Olgularda Klinik ve Moleküler Spektrum: Tek Merkez Deneyimi",
+       "en": "Clinical and Molecular Spectrum in Cases with Noonan Syndrome and Noonan-Like Phenotypes: A Single-Center Experience"
+      },
+      "presenter": "Maide Korkmaz Özkan"
+     },
+     {
+      "id": "S-101",
+      "title": {
+       "tr": "FGFR3 Varyantlarının Dağılımı ve Klinik Bulgularla İlişkisi: Tek Merkezli Retrospektif Çalışma",
+       "en": "Distribution of FGFR3 Variants and Their Relationship with Clinical Findings: A Single-Center Retrospective Study"
+      },
+      "presenter": "Samet Ercan"
+     },
+     {
+      "id": "S-102",
+      "title": {
+       "tr": "Yeni Nesil Dizileme ile Patojenik Üçlü Tekrar Artışı Saptamak Mümkün: Bir Okulofaringeal Musküler Distrofi Olgusu",
+       "en": "Pathogenic Trinucleotide Repeat Expansions Can Be Detected by Next-Generation Sequencing: A Case of Oculopharyngeal Muscular Dystrophy"
+      },
+      "presenter": "Hatice Gündoğan"
+     },
+     {
+      "id": "S-103",
+      "title": {
+       "tr": "Herediter Spastik Parapleji Ön Tanılı Olgularda Genetik Tanıya Ulaşma Oranı ve Otozomal Resesif Formların Baskınlığı",
+       "en": "Diagnostic Yield and the Predominance of Autosomal Recessive Forms in Cases with Suspected Hereditary Spastic Paraplegia"
+      },
+      "presenter": "Mehmet Akif Yücesoy"
+     },
+     {
+      "id": "S-104",
+      "title": {
+       "tr": "C9orf72 Tekrar Sayısı Artışı Olan ALS Olgularında Hayat Kalitesi ve Genetik Danışmanlık Sürecinin Değerlendirilmesi: Multidisipliner Takip ve Tekrarlayan Genetik Danışmanın Önemi",
+       "en": "Quality of Life and the Genetic Counseling Process in ALS Patients with C9orf72 Repeat Expansions: The Importance of Multidisciplinary Follow-Up and Repeated Genetic Counseling"
+      },
+      "presenter": "Hande Demirci"
+     },
+     {
+      "id": "S-105",
+      "title": {
+       "tr": "Dislipidemi Ön Tanılı Hastalarda Moleküler Genetik İncelemenin Katkısı: Tek Merkez Deneyimi",
+       "en": "The Contribution of Molecular Genetic Testing in Patients with Suspected Dyslipidemia: A Single-Center Experience"
+      },
+      "presenter": "Kübra Müge Çelik"
+     },
+     {
+      "id": "S-106",
+      "title": {
+       "tr": "Nonsendromik Orantılı Boy Kısalığı Olan Bireylerde Yeni Nesil Dizilemenin Uygulanması",
+       "en": "Next-Generation Sequencing in Individuals with Nonsyndromic Proportionate Short Stature"
+      },
+      "presenter": "Sena Çetin Topal"
+     }
+    ]
+   },
+   {
+    "no": 16,
+    "day": "5",
+    "room": "Salon 5",
+    "chairs": "Esra ARSLAN ATEŞ, Güneş ÇAKMAK GENÇ",
+    "talks": [
+     {
+      "id": "S-107",
+      "title": {
+       "tr": "Kalıtsal Periferik Nöropati Şüphesi Olan Hastalarda Ardışık PMP22 Kopya Sayısı Analizi ve NGS Yaklaşımının Tanısal Verimi",
+       "en": "Sequential PMP22 Copy Number Analysis and the Diagnostic Yield of an NGS Approach in Patients with Suspected Hereditary Peripheral Neuropathy"
+      },
+      "presenter": "Hacer Ukba Altundağ"
+     },
+     {
+      "id": "S-108",
+      "title": {
+       "tr": "Prenatal Korpus Kallozum Anomalilerinde Genetik Tanı ve Postnatal Nörogelişim: Danışmanlıkta Belirsizlik",
+       "en": "Genetic Diagnosis and Postnatal Neurodevelopment in Prenatally Detected Corpus Callosum Anomalies: Uncertainty in Counseling"
+      },
+      "presenter": "Ayşe Ceren Sağdıç"
+     },
+     {
+      "id": "S-109",
+      "title": {
+       "tr": "Tanısız Nörogelişimsel Bozukluklarda Gözden Kaçan Sık Bir Neden: Fenotipik Veri Madenciliği ile ReNU Sendromu Tanısı Alan Üç Olgu",
+       "en": "A Common but Overlooked Cause of Undiagnosed Neurodevelopmental Disorders: Three Cases Diagnosed with ReNU Syndrome Through Phenotypic Data Mining"
+      },
+      "presenter": "Süleyman Talha Özden"
+     },
+     {
+      "id": "S-110",
+      "title": {
+       "tr": "Clinical Heterogeneity in Three Patients with Different Molecular Alterations in the SLC7A7 Gene"
+      },
+      "presenter": "Müberra Dağlar"
+     },
+     {
+      "id": "S-111",
+      "title": {
+       "tr": "Ailesel İntrakraniyal Anevrizmalı Hastalarda Periferik Kandan Tüm Ekzom Dizileme Çalışması",
+       "en": "A Whole Exome Sequencing Study of Peripheral Blood in Patients with Familial Intracranial Aneurysms"
+      },
+      "presenter": "Etkin Özkan"
+     },
+     {
+      "id": "S-112",
+      "title": {
+       "tr": "Kerubizm Tanısı Alan Olguda OGFRL1 Geninde Tanımlanan Novel c.351_376del Varyantının Hastalık ile İlişkisinin mRNA ve Protein Düzeyinde Değerlendirilmesi",
+       "en": "mRNA- and Protein-Level Evaluation of the Disease Association of a Novel c.351_376del Variant in OGFRL1 Identified in a Patient with Cherubism"
+      },
+      "presenter": "İpek Şahin"
+     },
+     {
+      "id": "S-113",
+      "title": {
+       "tr": "A Retrospective Evaluation of the Relationship Between BTD Gene Variants and Enzyme Activity"
+      },
+      "presenter": "Sena Nur Subaşı"
+     }
+    ]
+   },
+   {
+    "no": 17,
+    "day": "5",
+    "room": "Salon 6",
+    "chairs": "Özgür BALASAR, Umut ALTUNOĞLU",
+    "talks": [
+     {
+      "id": "S-114",
+      "title": {
+       "tr": "21-Hidroksilaz Eksikliğinde CYP21A2 MLPA Bulgularının ve Genetik Yeniden Düzenlenmelerin Retrospektif Değerlendirilmesi: Tek Merkez Deneyimi",
+       "en": "Retrospective Evaluation of CYP21A2 MLPA Findings and Genetic Rearrangements in 21-Hydroxylase Deficiency: A Single-Center Experience"
+      },
+      "presenter": "Fatma Nur Önal"
+     },
+     {
+      "id": "S-115",
+      "title": {
+       "tr": "Novel RAB3GAP1 Variant Expanding the Mutational Spectrum of Warburg Micro Syndrome: Two New Cases and a Single-Center Experience"
+      },
+      "presenter": "İremnur Kansu"
+     },
+     {
+      "id": "S-116",
+      "title": {
+       "tr": "Three Siblings Harboring the Same SMARCE1 Variant: Evidence Suggestive of Parental Gonadal Mosaicism in Coffin–Siris Syndrome 5"
+      },
+      "presenter": "Esra Dirimtekin"
+     },
+     {
+      "id": "S-117",
+      "title": {
+       "tr": "CLCN7 Geni ve PERCC1 Düzenleyici Bölgesini İçeren 16p13.3 Delesyonunda Olası Kurucu Etkinin Araştırılması",
+       "en": "Investigating a Possible Founder Effect in a 16p13.3 Deletion Encompassing the CLCN7 Gene and the PERCC1 Regulatory Region"
+      },
+      "presenter": "Yusuf Bahap"
+     },
+     {
+      "id": "S-118",
+      "title": {
+       "tr": "At the Intersection of Bone and Genome: Clinical and Genetic Diversity in Skeletal Dysplasias"
+      },
+      "presenter": "Şenol Demir"
+     },
+     {
+      "id": "S-119",
+      "title": {
+       "tr": "Renal Agenezi/Displazili Olguda Homozigot WNT9B c.11dup Varyantı: Aday Bir CAKUT Geninde Türkiye'den İlk Aile ve Değişken Ekspresivite",
+       "en": "Homozygous WNT9B c.11dup Variant in a Patient with Renal Agenesis/Dysplasia: The First Family from Türkiye with Variants in a Candidate CAKUT Gene, and Variable Expressivity"
+      },
+      "presenter": "Alperen Fettahlıoğlu"
+     },
+     {
+      "id": "S-120",
+      "title": {
+       "tr": "Klasik Alternan Hemipleji Ön Tanısı Olmadan ATP1A3 Patojenik Varyantı Saptanan Üç Olgu: Fenotipik Heterojenite ve Tanısal Zorluk",
+       "en": "Three Cases with Pathogenic ATP1A3 Variants Without a Prior Suspicion of Classic Alternating Hemiplegia: Phenotypic Heterogeneity and Diagnostic Difficulty"
+      },
+      "presenter": "Murat Tezdiğ"
+     },
+     {
+      "id": "S-121",
+      "title": {
+       "tr": "Primer Siliyer Diskinezi Ön Tanılı Hastalarda Tüm Genom Dizilemenin ve Kopya Sayısı Değişikliklerinin Tanısal Katkısının Araştırılması",
+       "en": "The Diagnostic Contribution of Whole Genome Sequencing and Copy Number Changes in Patients with Suspected Primary Ciliary Dyskinesia"
+      },
+      "presenter": "Fatma Demir"
+     }
+    ]
+   },
+   {
+    "no": 18,
+    "day": "5",
+    "room": "Salon 7",
+    "chairs": "Filiz ÖZEN, Hilmi BOLAT",
+    "talks": [
+     {
+      "id": "S-122",
+      "title": {
+       "tr": "A Wide Diagnostic Spectrum in Dyslipidemia: From Polymorphism to Rare Disease"
+      },
+      "presenter": "Emine Karataş"
+     },
+     {
+      "id": "S-123",
+      "title": {
+       "tr": "Aynı Merkez, İki Farklı Aile: PHARC Sendromunun Tanınmasında Klinik Farkındalığın Önemi",
+       "en": "Same Center, Two Different Families: The Importance of Clinical Awareness in Recognizing PHARC Syndrome"
+      },
+      "presenter": "Zeynep Su İstanbullu"
+     },
+     {
+      "id": "S-124",
+      "title": {
+       "tr": "Joubert Sendromunda Klinik Tablodan Genetik Tanıya: COACH Sendromu Dahil Beş Hastanın Tek Merkezli Retrospektif Analizi",
+       "en": "From Clinical Presentation to Genetic Diagnosis in Joubert Syndrome: A Single-Center Retrospective Analysis of Five Patients, Including COACH Syndrome"
+      },
+      "presenter": "Erkam Başar"
+     },
+     {
+      "id": "S-125",
+      "title": {
+       "tr": "Doğuştan Bağışıklık Kusuru Şüphesiyle Değerlendirilen Hastalarda Tüm Ekzom Dizileme Temelli Genetik İncelemelerin Tanısal Katkısı: Tek Merkezli Retrospektif Çalışma",
+       "en": "Diagnostic Contribution of Whole Exome Sequencing-Based Genetic Testing in Patients Evaluated for Suspected Inborn Errors of Immunity: A Single-Center Retrospective Study"
+      },
+      "presenter": "Oğuzhan Demir"
+     },
+     {
+      "id": "S-126",
+      "title": {
+       "tr": "Beyond Williams-Beuren Syndrome: Clinical and Molecular Spectrum of 7q11.23 Copy Number Variations in Seven Pediatric Cases"
+      },
+      "presenter": "Saliha Esra Kayıkçı"
+     },
+     {
+      "id": "S-127",
+      "title": {
+       "tr": "Moleküler Tanı Konulamamış Konjenital Böbrek ve Üriner Kanal Anomalisi Olan Hastalarda Tüm Ekzom Dizileme Verilerinin Retrospektif Analizi ve Aday Genlerin Değerlendirilmesi",
+       "en": "Retrospective Analysis of Whole Exome Sequencing Data and Evaluation of Candidate Genes in Patients with Congenital Anomalies of the Kidney and Urinary Tract Without a Molecular Diagnosis"
+      },
+      "presenter": "Hilal Esmanur Kaya"
+     },
+     {
+      "id": "S-128",
+      "title": {
+       "tr": "DNA Onarım Genlerinde Moleküler Alt Tipe Bağlı Kopya Sayısı–Ekspresyon Etkileşimlerinin Değerlendirilmesi",
+       "en": "Molecular Subtype-Dependent Copy Number–Expression Interactions in DNA Repair Genes"
+      },
+      "presenter": "Sezin Sungur"
+     },
+     {
+      "id": "S-129",
+      "title": {
+       "tr": "RNA-Seq Kullanımının Klinik Tanıdaki Rolü: Ekzom Analiziyle Sonuç Alınamayan Dismorfik Vakaların İncelenmesi",
+       "en": "The Role of RNA-Seq in Clinical Diagnosis: Dysmorphic Cases Unresolved by Exome Analysis"
+      },
+      "presenter": "Leyla Rezan Eren"
+     }
+    ]
+   }
+  ]
+ }
+}

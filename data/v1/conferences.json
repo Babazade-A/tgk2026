@@ -1,0 +1,21 @@
+{
+ "schema": 1,
+ "conferences": [
+  {
+   "id": "tgk2026",
+   "short": "TGK 2026",
+   "name": {
+    "tr": "17. Ulusal Tıbbi Genetik Kongresi",
+    "en": "17th National Medical Genetics Congress"
+   },
+   "dates": {
+    "tr": "2–6 Aralık 2026",
+    "en": "December 2–6, 2026"
+   },
+   "venue": "Kaya Palazzo Golf Resort, Antalya",
+   "start": "2026-12-02",
+   "end": "2026-12-06",
+   "rev": 1
+  }
+ ]
+}
