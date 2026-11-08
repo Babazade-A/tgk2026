@@ -179,7 +179,7 @@ tr:{
   nTitle:(r,tm)=>`${tm} · ${r} · 10 dk sonra`,
   confs:"Kongreler",confsSub:"Programını görmek istediğiniz kongreyi seçin.",nPicked:k=>`${k} seçim`,loading:"Yükleniyor…",
   loadErr:"Program yüklenemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.",retry:"Tekrar dene",
-  exactHint:"Telefonunuz hatırlatmaları birkaç dakika geciktirebilir. Tam zamanında gelmeleri için \"Alarmlar ve hatırlatıcılar\" iznini verin.",exactBtn:"İzin ver"
+  exactHint:"Android hatırlatmaları bir saate kadar geciktirebilir. Oturumdan 10 dakika önce gelmeleri için \"Alarmlar ve hatırlatıcılar\" iznini verin.",exactBtn:"İzin ver"
 },
 en:{
   brand:"Kongrem",planner:"Planner",mine:"My Program",mineAria:n=>`My Program, ${n} selected`,langAria:"Language / Dil",
@@ -209,7 +209,7 @@ en:{
   nTitle:(r,tm)=>`${tm} · ${r} · in 10 min`,
   confs:"Congresses",confsSub:"Choose the congress whose program you want to see.",nPicked:k=>`${k} selected`,loading:"Loading…",
   loadErr:"The program couldn't be loaded. Check your internet connection and try again.",retry:"Try again",
-  exactHint:"Your phone may deliver reminders a few minutes late. To get them on time, allow \"Alarms & reminders\".",exactBtn:"Allow"
+  exactHint:"Android may deliver reminders up to an hour late. To get them 10 minutes before each session, allow \"Alarms & reminders\".",exactBtn:"Allow"
 }};
 const T=k=>UI[lang][k];
 // İçerik: başlıklar, salonlar, roller, günler
@@ -298,7 +298,6 @@ function mineHTML(){
     ${NATIVE?`<button class="btn${remOn?" primary":""}" id="rem" aria-pressed="${remOn}">${esc(remOn?T("remOn"):T("remOff"))}</button>`:`<button class="btn primary" id="cal">${esc(T("cal"))}</button>`}
     <button class="btn" id="share">${esc(T("share"))}</button>
     <button class="btn danger" id="clear">${esc(T("clear"))}</button><span class="note" id="msg">${NATIVE&&remOn&&notifDenied?esc(T("remDenied")):""}</span></div>`;
-  if(ANDROID&&remOn&&!notifDenied&&!exactOK)h+=`<div class="cxsum">${esc(T("exactHint"))} <button class="btn" id="exact">${esc(T("exactBtn"))}</button></div>`;
   if(cx.size)h+=`<div class="cxsum">${esc(T("cx")(cx.size))}</div>`;
   for(const D of DAYS){
     const rows=sorted(D.k);if(!rows.length)continue;
@@ -322,6 +321,10 @@ function homeHTML(){
     h+=`<button class="card cpick" data-conf="${esc(c.id)}"><span class="tags"><span class="tag conf">${esc(c.short)}</span>${k?`<span class="tag">${esc(T("nPicked")(k))}</span>`:""}</span><span class="ttl">${esc(tx(c.name))}</span><span class="mod">${esc([tx(c.dates),c.venue].filter(Boolean).join(" · "))}</span></button>`;
   }
   return h+`</div>`;
+}
+// Android: tam zamanlı alarm izni yoksa hatırlatmalar bir saate kadar gecikebilir; seçim varsa her görünümün üstünde uyar
+function exactHTML(){
+  return ANDROID&&remOn&&sel.size&&!notifDenied&&!exactOK?`<div class="cxsum">${esc(T("exactHint"))} <button class="btn" id="exact">${esc(T("exactBtn"))}</button></div>`:"";
 }
 function textList(){
   let out=tx(C.name)+" · "+T("mine")+"\n";
@@ -369,7 +372,7 @@ function tabsRender(){
 function render(){
   tabsRender();
   if(tab==="home"||!C)view.innerHTML=homeHTML();
-  else view.innerHTML=tab==="mine"?mineHTML():tab==="oral"?oralHTML():dayHTML(tab);
+  else view.innerHTML=exactHTML()+(tab==="mine"?mineHTML():tab==="oral"?oralHTML():dayHTML(tab));
   const wide=tab==="oral";view.classList.toggle("wide",wide);document.getElementById("hwrap").classList.toggle("wide",wide);
   document.querySelector(".search").hidden=tab==="mine"||tab==="home"||!C;
   if(C&&tab!=="home"){marks();applyFilter();liveMarks();}else document.getElementById("nowbar").hidden=true;
@@ -489,7 +492,7 @@ async function doPlan(){
     // izin yoksa sessizce yaklaşık zamanlı planla ve Programım'da tek seferlik bir "İzin ver" düğmesi göster.
     let exact=true;
     if(ANDROID&&LN.checkExactNotificationSetting){try{exact=(await LN.checkExactNotificationSetting()).exact_alarm==="granted";}catch(e){}}
-    if(exact!==exactOK){exactOK=exact;if(tab==="mine")render();}
+    if(exact!==exactOK){exactOK=exact;if(tab!=="home")render();}
     // iOS en fazla 64 bekleyen bildirime izin verir: en yakın olanlar planlanır, kalanlar uygulama açıldıkça eklenir
     const room=Math.max(0,60-others);
     const soon=[...sel].map(entry).map(e=>({e,at:startMs(e)-600000})).filter(x=>x.at>Date.now()+5000).sort((a,b)=>a.at-b.at).slice(0,room);
