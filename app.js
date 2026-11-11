@@ -16,6 +16,7 @@ const SCHEMA=1; // bu sürümün okuyabildiği veri biçimi
 // ---- Kayıt. Tarayıcı belleği + uygulamada sistemin silmediği yerel depolama (Preferences)
 const lsGet=k=>{try{return localStorage.getItem(k);}catch(e){return null;}};
 function store(k,v){try{localStorage.setItem(k,v)}catch(e){}if(NATIVE&&NP.Preferences)NP.Preferences.set({key:k,value:v}).catch(()=>{});}
+function unstore(k){try{localStorage.removeItem(k)}catch(e){}if(NATIVE&&NP.Preferences)NP.Preferences.remove({key:k}).catch(()=>{});}
 // Anahtarlar: genel olanlar + kongre başına olanlar
 const G={lang:"kongrem:dil",rem:"kongrem:hatirlatma",last:"kongrem:kongre",index:"kongrem:liste"};
 const K=id=>({sel:`kongrem:${id}:secim`,notes:`kongrem:${id}:notlar`,tab:`kongrem:${id}:sekme`,data:`kongrem:${id}:veri`});
@@ -38,15 +39,17 @@ async function prefsToLocal(){
 // ---- Durum
 let IDX=[];      // kongre listesi
 let C=null;      // açık kongre (veri dosyası)
-let DAYS=[],M=[],BYID={},TALKS={},SESS={},ODAYS=[],ORAL_S=480,ORAL_E=530,PER=7;
-let sel=new Set(),notes={},tab="",oralDay="",q="",NOW0=null;
+const map=()=>Object.create(null); // sözlükler: veri içindeki "constructor" gibi kimlikler karışmasın
+let DAYS=[],M=[],BYID=map(),TALKS=map(),SESS=map(),ODAYS=[],ORAL_S=480,ORAL_E=530,PER=7;
+let sel=new Set(),notes=map(),tab="",oralDay="",q="",NOW0=null;
 let lang=(()=>{const v=lsGet(G.lang)||lsGet("tgk2026-dil");return v==="tr"||v==="en"?v:(/^tr/i.test(navigator.language||"tr")?"tr":"en");})();
 let remOn=lsGet(G.rem)!=="0"&&lsGet("tgk2026-hatirlatma")!=="0",notifDenied=false,exactOK=true;
 const ANDROID=NATIVE&&CAP.getPlatform&&CAP.getPlatform()==="android";
 
 // ---- Yardımcılar
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const low=s=>String(s).toLocaleLowerCase("tr");
+// Arama için metni sadeleştirir: büyük/küçük harf, I/ı/İ ve ş, ğ, ç, ö, ü farkları önemsizdir ("yilmaz" = "YILMAZ" = "Yılmaz")
+const low=s=>String(s).toLocaleLowerCase("tr").replace(/ı/g,"i").normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 const mins=t=>{const [h,m]=t.split(":").map(Number);return h*60+m};
 const hm=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
 const tx=o=>o==null?"":typeof o==="string"?o:(o[lang]||o.tr||o.en||"");   // çok dilli metin
@@ -56,54 +59,121 @@ function datTR(t){const [h,m]=t.split(":").map(Number),n=m||h;if(n===0)return "a
   return u?["","e","ye","e","e","e","ya","ye","e","a"][u]:["","a","ye","a","a","ye"][n/10];}
 
 // ---- Veri biçimi denetimi (uzaktan gelen dosyaya güvenilmez)
-const isStr=v=>typeof v==="string",isTime=v=>isStr(v)&&/^\d\d:\d\d$/.test(v),isML=v=>isStr(v)||(v&&typeof v==="object"&&(isStr(v.tr)||isStr(v.en)));
+// <veri-denetimi> Bu bölüm tools/validate.mjs tarafından da aynen çalıştırılır: yayından önceki denetim ile uygulama aynı kuralları kullanır.
+// Uygulamanın kullandığı her alan burada denetlenir: geçen bir dosya hiçbir görünümü çökertemez.
+const MAXTXT=4000,MAXBYTES=3e6;
+const isStr=v=>typeof v==="string"&&v.length<=MAXTXT,isTime=v=>isStr(v)&&/^([01]\d|2[0-3]):[0-5]\d$/.test(v);
+const isML=v=>isStr(v)||(!!v&&typeof v==="object"&&!Array.isArray(v)&&(isStr(v.tr)||isStr(v.en))&&(v.tr==null||isStr(v.tr))&&(v.en==null||isStr(v.en)));
+const optStr=v=>v==null||isStr(v),optML=v=>v==null||isML(v);
+const ID_RE=/^[A-Za-z0-9_.-]{1,40}$/,CONF_RE=/^[a-z0-9-]{2,40}$/,DAY_RE=/^[A-Za-z0-9_-]{1,20}$/;
+const tmin=t=>+t.slice(0,2)*60+ +t.slice(3);
 function validConf(d){
   try{
-    if(!d||d.schema!==SCHEMA||!isStr(d.id)||!/^[a-z0-9-]{2,40}$/.test(d.id)||typeof d.rev!=="number")return false;
-    if(!isML(d.name)||!isStr(d.short)||typeof d.utcOffsetMin!=="number"||!Array.isArray(d.days)||!d.days.length)return false;
-    if(!d.days.every(x=>isStr(x.k)&&/^\d{4}-\d\d-\d\d$/.test(x.date)&&isML(x.label)&&isML(x.weekday)))return false;
-    if(!Array.isArray(d.items)||!d.items.every(x=>isStr(x.id)&&isStr(x.day)&&isTime(x.start)&&isTime(x.end)&&isStr(x.type)&&isML(x.title)))return false;
-    if(d.oral){const o=d.oral;if(!isTime(o.start)||!isTime(o.end)||typeof o.minutesPerTalk!=="number"||!Array.isArray(o.sessions))return false;
-      if(!o.sessions.every(s=>isStr(s.day)&&isStr(s.room)&&Array.isArray(s.talks)&&s.talks.every(t=>isStr(t.id)&&isML(t.title))))return false;}
+    if(!d||typeof d!=="object"||d.schema!==SCHEMA||!isStr(d.id)||!CONF_RE.test(d.id))return false;
+    if(!Number.isInteger(d.rev)||d.rev<1||d.rev>1e6)return false;
+    if(!isML(d.name)||!isStr(d.short)||!optML(d.dates)||!optML(d.note)||!optStr(d.venue)||!optStr(d.mainRoom))return false;
+    if(!Number.isInteger(d.utcOffsetMin)||Math.abs(d.utcOffsetMin)>840)return false;
+    if(d.rooms!=null&&(typeof d.rooms!=="object"||Array.isArray(d.rooms)||!Object.values(d.rooms).every(r=>r&&typeof r==="object"&&optStr(r.en))))return false;
+    if(!Array.isArray(d.days)||!d.days.length||d.days.length>31)return false;
+    const dk=new Set();
+    for(const x of d.days){
+      if(!x||!isStr(x.k)||!DAY_RE.test(x.k)||dk.has(x.k)||x.k==="mine"||x.k==="oral"||x.k==="home")return false;
+      if(!isStr(x.date)||!/^\d{4}-\d\d-\d\d$/.test(x.date)||isNaN(Date.parse(x.date))||!isML(x.label)||!isML(x.weekday))return false;
+      dk.add(x.k);
+    }
+    const ids=new Set(),okId=v=>isStr(v)&&ID_RE.test(v)&&!ids.has(v)&&(ids.add(v),true);
+    if(!Array.isArray(d.items)||d.items.length>3000)return false;
+    for(const x of d.items){
+      if(!x||!okId(x.id)||!dk.has(x.day)||!isTime(x.start)||!isTime(x.end)||tmin(x.end)<=tmin(x.start))return false;
+      if(!isStr(x.type)||!isML(x.title)||!optML(x.sub)||!optStr(x.speakers)||!optStr(x.chairs)||!optStr(x.room))return false;
+    }
+    if(d.oral!=null){const o=d.oral;
+      if(typeof o!=="object"||!isTime(o.start)||!isTime(o.end)||tmin(o.end)<=tmin(o.start))return false;
+      if(!Number.isInteger(o.minutesPerTalk)||o.minutesPerTalk<1||o.minutesPerTalk>240||!Array.isArray(o.sessions)||o.sessions.length>500)return false;
+      const nos=new Set();let n=0;
+      for(const [i,x] of o.sessions.entries()){
+        if(!x||!dk.has(x.day)||!isStr(x.room)||!optStr(x.chairs)||!Array.isArray(x.talks)||x.talks.length>200)return false;
+        const no=x.no==null?i+1:x.no;if(!Number.isInteger(no)||no<1||nos.has(no))return false;nos.add(no);
+        for(const t of x.talks){if(!t||!okId(t.id)||!isML(t.title)||!optStr(t.presenter))return false;if(++n>10000)return false;}
+      }
+    }
     return true;
   }catch(e){return false;}
 }
-const validIndex=d=>d&&d.schema===SCHEMA&&Array.isArray(d.conferences)&&d.conferences.every(c=>isStr(c.id)&&/^[a-z0-9-]{2,40}$/.test(c.id)&&isStr(c.short)&&isML(c.name));
+const validIndex=d=>{try{return !!d&&d.schema===SCHEMA&&Array.isArray(d.conferences)&&d.conferences.length<=500&&d.conferences.every(c=>c&&isStr(c.id)&&CONF_RE.test(c.id)&&isStr(c.short)&&isML(c.name)&&optML(c.dates)&&optStr(c.venue));}catch(e){return false;}};
+// </veri-denetimi>
+// Boyut sınırlı indirme: bozuk ya da aşırı büyük bir dosya uygulamayı yormasın
 async function getJSON(url,ms){
   const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),ms||8000);
-  try{const r=await fetch(url,{cache:"no-cache",signal:ctl.signal,credentials:"omit"});if(!r.ok)throw new Error(r.status);return await r.json();}
+  try{const r=await fetch(url,{cache:"no-cache",signal:ctl.signal,credentials:"omit"});if(!r.ok)throw new Error(r.status);
+    const len=+r.headers.get("content-length");if(len>MAXBYTES)throw new Error("too large");
+    const txt=await r.text();if(txt.length>MAXBYTES)throw new Error("too large");return JSON.parse(txt);}
   finally{clearTimeout(t);}
 }
 const readCache=k=>{try{return JSON.parse(lsGet(k)||"null");}catch(e){return null;}};
 
 // ---- Kongre listesi ve kongre verisi
+// Listeler kimliğe göre birleştirilir: sonraki listedeki bilgiler (daha yeni) öncekinin üzerine yazar, hiçbir kongre kaybolmaz
+const mergeIdx=(...ls)=>{const m=new Map();for(const l of ls)if(l)for(const c of l)m.set(c.id,c);return [...m.values()];};
 async function loadIndex(){
-  let idx=null;try{const d=await getJSON(DATA_DIR+"conferences.json",5000);if(validIndex(d))idx=d;}catch(e){}
-  const c=readCache(G.index);if(validIndex(c)&&(!idx||c.conferences.length>=idx.conferences.length))idx=c;
-  IDX=idx?idx.conferences:[];
-  if(REMOTE)getJSON(REMOTE+"conferences.json",8000).then(d=>{if(validIndex(d)){store(G.index,JSON.stringify(d));IDX=d.conferences;if(tab==="home")render();updateHeader();}}).catch(()=>{});
+  let bundled=null;try{const d=await getJSON(DATA_DIR+"conferences.json",5000);if(validIndex(d))bundled=d.conferences;}catch(e){}
+  const c=readCache(G.index);
+  IDX=mergeIdx(bundled,validIndex(c)?c.conferences:null);
+  if(REMOTE)getJSON(REMOTE+"conferences.json",8000).then(d=>{if(!validIndex(d))return;
+    store(G.index,JSON.stringify(d));const n=mergeIdx(IDX,d.conferences);const grew=n.length!==IDX.length;IDX=n;
+    try{if(tab==="home"||grew){if(tab==="home")render();updateHeader();}}catch(e){}}).catch(()=>{});
 }
+let newRemote=null; // uzaktan ilk kez alınan veri: ekranda sorunsuz çizildikten sonra kaydedilir
 async function loadConfData(id){
-  let best=null;
+  let best=null;newRemote=null;
   const cached=readCache(K(id).data);if(validConf(cached)&&cached.id===id)best=cached;
   try{const d=await getJSON(DATA_DIR+id+".json",6000);if(validConf(d)&&d.id===id&&(!best||d.rev>=best.rev))best=d;}catch(e){}
-  if(!best&&REMOTE){try{const d=await getJSON(REMOTE+id+".json",10000);if(validConf(d)&&d.id===id){best=d;store(K(id).data,JSON.stringify(d));}}catch(e){}}
+  if(!best&&REMOTE){try{const d=await getJSON(REMOTE+id+".json",10000);if(validConf(d)&&d.id===id){best=d;newRemote=d;}}catch(e){}}
   return best;
 }
 // Uygulamada: arka planda daha yeni program var mı? Varsa kaydet ve ekranı yenile.
+// Yeni veri önce denenir (tüm görünümler bir kez üretilir); sorun çıkarsa eski veriye dönülür ve hiçbir şey kaydedilmez.
+let checking=false;
 function checkRemote(id){
-  if(!REMOTE)return;
+  if(!REMOTE||checking)return;checking=true;
   getJSON(REMOTE+id+".json",10000).then(d=>{
-    if(validConf(d)&&d.id===id&&C&&C.id===id&&d.rev>C.rev){store(K(id).data,JSON.stringify(d));setConf(d);render();planNotifs();}
-  }).catch(()=>{});
+    if(!(validConf(d)&&d.id===id&&C&&C.id===id&&d.rev>C.rev))return;
+    const old=snap();
+    if(!tryConf(d)){restore(old);return;}
+    try{render();}catch(e){console.warn("yeni program çizilemedi",e);restore(old);render();return;}
+    store(K(id).data,JSON.stringify(d));planNotifs();
+  }).catch(()=>{}).finally(()=>{checking=false;});
+}
+// Durumun anlık kopyası: yeni veri sorun çıkarırsa her şey eski hâline döner
+const snap=()=>({C,sel:new Set(sel),notes,tab,oralDay,NOW0});
+function restore(o){if(o.C)setConf(o.C);else C=null;sel=o.sel;notes=o.notes;tab=o.tab;oralDay=o.oralDay;NOW0=o.NOW0;}
+// Veriyi uygular ve her görünümü ekrana basmadan bir kez üretir. Hata çıkarsa false döner (çağıran eski veriye döner).
+function tryConf(d){
+  try{
+    setConf(d);fixState();
+    const od=oralDay;
+    for(const D of DAYS)dayHTML(D.k);
+    for(const k of ODAYS){oralDay=k;oralHTML();}
+    oralDay=od;mineHTML();textList();icsText();homeHTML();
+    for(const e of [...sel].map(entry))startMs(e);
+    return true;
+  }catch(e){console.warn("veri kullanılamadı",e);return false;}
+}
+// Veri değişince seçimleri, sekmeyi ve gün seçimini geçerli değerlere çeker (kaldırılan kodlar çökme yapmasın)
+function fixState(){
+  sel=new Set([...sel].filter(i=>BYID[i]||TALKS[i]));
+  if(!(tab==="mine"||tab==="home"||(tab==="oral"&&ODAYS.length)||dayOf(tab)))tab=DAYS[0].k;
+  if(!ODAYS.includes(oralDay))oralDay=ODAYS[0]||"";
+  NOW0=nowConf();
 }
 // Veri dosyasını uygulamanın kullandığı yapılara çevirir
 function setConf(d){
   C=d;
   DAYS=d.days.map(x=>({k:x.k,date:x.date,label:x.label,weekday:x.weekday}));
   M=d.items.map(x=>({id:x.id,d:x.day,s:x.start,e:x.end,t:x.type,title:x.title,sp:x.speakers||"",mod:x.chairs||"",room:x.room||d.mainRoom||"",sub:x.sub||null}));
-  BYID={};M.forEach(x=>BYID[x.id]=x);
-  TALKS={};SESS={};
+  M.sort((a,b)=>mins(a.s)-mins(b.s)); // aynı saatteki oturumlar dosyadaki sırasını korur
+  BYID=map();M.forEach(x=>BYID[x.id]=x);
+  TALKS=map();SESS=map();
   const o=d.oral;
   if(o){ORAL_S=mins(o.start);ORAL_E=mins(o.end);PER=o.minutesPerTalk;
     o.sessions.forEach((s,i)=>{const no=s.no||i+1;SESS[no]={no,d:s.day,salon:s.room,chair:s.chairs||"",ids:[]};
@@ -116,15 +186,18 @@ function setConf(d){
 async function openConf(id){
   const d=await loadConfData(id);
   if(!d)return false;
-  setConf(d);store(G.last,id);
+  const rem=newRemote,old=snap();
+  if(!tryConf(d)){restore(old);return false;}
+  store(G.last,id);
   sel=new Set();try{const r=JSON.parse(lsGet(K(id).sel)||"[]");if(Array.isArray(r))r.forEach(i=>{if(BYID[i]||TALKS[i])sel.add(i)});}catch(e){}
-  notes={};try{const r=JSON.parse(lsGet(K(id).notes)||"{}");if(r&&typeof r==="object"&&!Array.isArray(r))for(const [k,v] of Object.entries(r))if(isStr(v))notes[k]=v;}catch(e){}
+  notes=map();try{const r=JSON.parse(lsGet(K(id).notes)||"{}");if(r&&typeof r==="object"&&!Array.isArray(r))for(const [k,v] of Object.entries(r))if(typeof v==="string")notes[k]=v.slice(0,5000);}catch(e){}
   const t=lsGet(K(id).tab);tab=t&&(t==="mine"||(t==="oral"&&ODAYS.length)||DAYS.some(x=>x.k===t))?t:DAYS[0].k;
   oralDay=ODAYS[0]||"";q="";const qi=document.getElementById("q");if(qi)qi.value="";
   // Kongre günlerinde uygulama o günün programıyla açılır
   NOW0=nowConf();
   if(NOW0){if(tab==="oral"&&ODAYS.includes(NOW0.d))oralDay=NOW0.d;else if(tab!=="mine")tab=NOW0.d;}
-  checkRemote(id);
+  if(rem)store(K(id).data,JSON.stringify(rem));
+  else checkRemote(id);
   return true;
 }
 
@@ -142,7 +215,7 @@ function nowConf(){
   if(!C)return null;
   const p=new URLSearchParams(location.search).get("now");
   if(p){const m=p.match(/^(\w+)T(\d\d):(\d\d)$/);if(m&&DAYS.some(x=>x.k===m[1]))return{d:m[1],m:+m[2]*60+ +m[3]};}
-  const t=new Date(Date.now()+C.utcOffsetMin*60000),ds=t.toISOString().slice(0,10);
+  const t=new Date(Date.now()+C.utcOffsetMin*60000);if(isNaN(t))return null;const ds=t.toISOString().slice(0,10);
   const D=DAYS.find(x=>x.date===ds);return D?{d:D.k,m:t.getUTCHours()*60+t.getUTCMinutes()}:null;
 }
 const dayOf=k=>DAYS.find(x=>x.k===k);
@@ -170,7 +243,7 @@ tr:{
   noteL:"Not",icsDesc:(no,p)=>`Oturum ${no}, ${p}. sunum (saat yaklaşık)`,icsFile:s=>`${s}-programim.ics`,
   now:"Şimdi",next:"Sıradaki",today:"Bugün",
   inMin:m=>m<60?`${m} dk sonra`:`${Math.floor(m/60)} sa ${m%60?m%60+" dk ":""}sonra`,
-  doneToday:"Bugünkü seçimleriniz bitti.",noneToday:"Henüz seçiminiz yok. Programa bakmak için dokunun.",
+  doneToday:"Bugünkü seçimleriniz bitti.",noneToday:"Henüz seçiminiz yok. Programa bakmak için dokunun.",noneTodayOther:"Bugün için seçiminiz yok. Programa bakmak için dokunun.",
   nSel:k=>`${k} seçili`,nTalks:k=>`${k} bildiri seçili`,noSel:"Henüz seçim yok",
   calOk:"Takvim dosyası açıldı. Telefonunuz sorarsa \"Tümünü ekle\" deyin.",calErr:"Takvim dosyası bu görünümde açılamadı.",
   shareTitle:s=>`${s} programım`,copied:"Liste kopyalandı. WhatsApp ya da e-postaya yapıştırabilirsiniz.",copyManual:"Aşağıdaki metni seçip kopyalayın.",
@@ -200,7 +273,7 @@ en:{
   noteL:"Note",icsDesc:(no,p)=>`Session ${no}, talk ${p} (approximate time)`,icsFile:s=>`${s}-my-program.ics`,
   now:"Now",next:"Next",today:"Today",
   inMin:m=>m<60?`in ${m} min`:`in ${Math.floor(m/60)} h${m%60?" "+m%60+" min":""}`,
-  doneToday:"Your selections for today are over.",noneToday:"No selections yet. Tap to see the program.",
+  doneToday:"Your selections for today are over.",noneToday:"No selections yet. Tap to see the program.",noneTodayOther:"Nothing selected for today. Tap to see the program.",
   nSel:k=>`${k} selected`,nTalks:k=>`${k} ${k===1?"talk":"talks"} selected`,noSel:"Nothing selected yet",
   calOk:"Calendar file opened. If your phone asks, choose “Add All”.",calErr:"The calendar file couldn't be opened here.",
   shareTitle:s=>`My ${s} program`,copied:"List copied. You can paste it into WhatsApp or an email.",copyManual:"Select and copy the text below.",
@@ -342,7 +415,9 @@ function textList(){
 // Takvim dosyası: olaylar UTC olarak yazılır
 function icsText(){
   const ie=s=>String(s).replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\r?\n/g,"\\n");
-  const fold=l=>{let o="",i=0;while(l.length-i>73){o+=l.slice(i,i+73)+"\r\n ";i+=73;}return o+l.slice(i);};
+  // Satırlar en fazla 75 bayt (RFC 5545); bir karakter asla ikiye bölünmez
+  const u8=ch=>{const c=ch.codePointAt(0);return c<0x80?1:c<0x800?2:c<0x10000?3:4;};
+  const fold=l=>{let o="",n=0;for(const ch of l){const b=u8(ch);if(n+b>74){o+="\r\n ";n=1;}o+=ch;n+=b;}return o;};
   const z=ms=>new Date(ms).toISOString().replace(/[-:]/g,"").replace(/\.\d+/,"");
   const stamp=z(Date.now());
   const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Kongrem//TR","CALSCALE:GREGORIAN","METHOD:PUBLISH",fold("X-WR-CALNAME:"+ie(C.short))];
@@ -414,7 +489,7 @@ function nowbar(){
   const L=[];
   if(cur.length)L.push(`<span class="nl"><b>${esc(T("now"))}</b>${esc(nm(cur[0]))}${cur.length>1?` (+${cur.length-1})`:""}</span>`);
   if(nx)L.push(`<span class="nl"><b>${esc(T("next"))}</b>${esc((nx.approx?"~":"")+hm(nx.s)+" · "+T("inMin")(nx.s-n.m)+" · "+nm(nx))}</span>`);
-  if(!L.length)L.push(`<span class="nl"><b>${esc(T("today"))}</b>${esc(es.length?T("doneToday"):T("noneToday"))}</span>`);
+  if(!L.length)L.push(`<span class="nl"><b>${esc(T("today"))}</b>${esc(es.length?T("doneToday"):sel.size?T("noneTodayOther"):T("noneToday"))}</span>`);
   bar.innerHTML=L.join("");bar.dataset.target=(cur[0]||nx||{}).id||"";bar.hidden=false;
 }
 function tick(){if(C&&tab!=="home"){nowbar();liveMarks();}}
@@ -474,36 +549,46 @@ function fallbackText(txt,anchor){
 // ---- Uygulama: yerel hatırlatma bildirimleri (seçilen her oturumdan 10 dk önce)
 // Bildirimler kongreye göre etiketlenir; başka kongrelerin hatırlatmalarına dokunulmaz.
 const notifId=key=>{let h=7;for(const c of key)h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)%2000000000+1;};
-let planT=null;
-function planNotifs(now){if(!NATIVE||!NP.LocalNotifications||!C)return;clearTimeout(planT);planT=setTimeout(doPlan,now?0:700);}
-async function doPlan(){
-  const LN=NP.LocalNotifications,cid=C.id;
+let planT=null,planGen=0,planQ=Promise.resolve();
+// Planlama işleri sırayla çalışır; yeni bir istek gelince eskisi kaldığı yerde bırakılır (yarış durumunda yanlış/çift hatırlatma olmasın)
+function planNotifs(now){if(!NATIVE||!NP.LocalNotifications||!C)return;clearTimeout(planT);const g=++planGen;
+  planT=setTimeout(()=>{planQ=planQ.then(()=>doPlan(g)).catch(()=>{});},now?0:700);}
+async function doPlan(g){
+  if(g!==planGen||!C)return;
+  // Her şey baştan kopyalanır: planlama sürerken başka kongreye geçilse de bu kongrenin hatırlatmaları doğru kurulur
+  const LN=NP.LocalNotifications,cid=C.id,on=remOn,stale=()=>g!==planGen;
+  const list=[];
+  for(const id of sel){try{const e=entry(id),at=startMs(e)-600000,t=TALKS[id];
+    if(isFinite(at))list.push({at,n:{id:notifId(cid+":"+e.id),title:T("nTitle")(roomN(e.room),(e.approx?"~":"")+hm(e.s)),
+      body:t?t.id+" · "+tTitle(t):mTitle(BYID[id]),extra:{k:cid,tgk:e.id}}});}catch(e){}}
   try{
     const pend=(await LN.getPending()).notifications||[];
-    const mine=pend.filter(n=>n.extra&&n.extra.k===cid),others=pend.length-mine.length;
-    if(mine.length)await LN.cancel({notifications:mine.map(n=>({id:n.id}))});
-    if(!remOn||!sel.size)return;
-    let perm=await LN.checkPermissions();
-    if(perm.display!=="granted"&&perm.display!=="denied")perm=await LN.requestPermissions();
-    const denied=perm.display!=="granted";
-    if(denied!==notifDenied){notifDenied=denied;if(tab==="mine")render();}
-    if(denied)return;
-    // Android 12+: tam zamanlı alarm izni yoksa eklenti her planlamada ayarlar ekranını açar. Önce denetle;
-    // izin yoksa sessizce yaklaşık zamanlı planla ve Programım'da tek seferlik bir "İzin ver" düğmesi göster.
+    const mine=pend.filter(n=>n.extra&&n.extra.k===cid);
+    // Diğer kongrelerin yalnızca henüz gelmemiş hatırlatmaları sayılır
+    const others=pend.filter(n=>!(n.extra&&n.extra.k===cid)&&!(n.schedule&&n.schedule.at&&new Date(n.schedule.at).getTime()<Date.now())).length;
     let exact=true;
-    if(ANDROID&&LN.checkExactNotificationSetting){try{exact=(await LN.checkExactNotificationSetting()).exact_alarm==="granted";}catch(e){}}
-    if(exact!==exactOK){exactOK=exact;if(tab!=="home")render();}
+    if(on&&list.length){
+      let perm=await LN.checkPermissions();
+      if(perm.display!=="granted"&&perm.display!=="denied")perm=await LN.requestPermissions();
+      const denied=perm.display!=="granted";
+      if(denied!==notifDenied){notifDenied=denied;if(tab==="mine")render();}
+      // Android 12+: tam zamanlı alarm izni yoksa eklenti her planlamada ayarlar ekranını açar. Önce denetle;
+      // izin yoksa sessizce yaklaşık zamanlı planla ve ekranın üstünde "İzin ver" düğmesi göster.
+      if(!denied&&ANDROID&&LN.checkExactNotificationSetting){try{exact=(await LN.checkExactNotificationSetting()).exact_alarm==="granted";}catch(e){}}
+      if(exact!==exactOK){exactOK=exact;if(tab!=="home")render();}
+      if(denied)list.length=0;
+    }
+    if(stale())return; // daha yeni bir planlama sırada; o yapacak
     // iOS en fazla 64 bekleyen bildirime izin verir: en yakın olanlar planlanır, kalanlar uygulama açıldıkça eklenir
-    const room=Math.max(0,60-others);
-    const soon=[...sel].map(entry).map(e=>({e,at:startMs(e)-600000})).filter(x=>x.at>Date.now()+5000).sort((a,b)=>a.at-b.at).slice(0,room);
-    if(!soon.length)return;
-    await LN.schedule({notifications:soon.map(({e,at})=>{const t=TALKS[e.id];
-      return{id:notifId(cid+":"+e.id),title:T("nTitle")(roomN(e.room),(e.approx?"~":"")+hm(e.s)),
-        body:t?t.id+" · "+tTitle(t):mTitle(BYID[e.id]),schedule:{at:new Date(at),allowWhileIdle:true},isExactNotification:exact,extra:{k:cid,tgk:e.id}};})});
+    const soon=on?list.filter(x=>x.at>Date.now()+5000).sort((a,b)=>a.at-b.at).slice(0,Math.max(0,60-others)):[];
+    // Silme ve yeniden kurma arka arkaya yapılır
+    if(mine.length)await LN.cancel({notifications:mine.map(n=>({id:n.id}))});
+    if(soon.length)await LN.schedule({notifications:soon.map(({at,n})=>({...n,schedule:{at:new Date(at),allowWhileIdle:true},isExactNotification:exact}))});
   }catch(err){console.warn("bildirim planlanamadı",err);}
 }
 async function openItem(k,id){
-  if(k&&(!C||C.id!==k)){if(!(await openConf(k)))return;applyLang();}
+  if(typeof id!=="string"||(k!=null&&(typeof k!=="string"||!CONF_RE.test(k)||!IDX.some(c=>c.id===k))))return;
+  if(k&&(!C||C.id!==k)){if(!(await openConf(k)))return;applyLang();render();planNotifs();}
   if(!id||!(BYID[id]||TALKS[id]))return;
   tab="mine";saveTab();render();
   const r=[...view.querySelectorAll("[data-mrow]")].find(r=>r.dataset.mrow===id);if(r){r.scrollIntoView({block:"center"});r.classList.add("flash");}
@@ -592,8 +677,12 @@ document.getElementById("nowbar").addEventListener("click",e=>{
   const want=new URLSearchParams(location.search).get("k"),last=lsGet(G.last);
   const ids=IDX.map(c=>c.id);
   const id=(want&&/^[a-z0-9-]{2,40}$/.test(want)&&want)||(last&&ids.includes(last)&&last)||(ids.length===1?ids[0]:null)||(ids.length?null:"tgk2026");
-  if(id&&await openConf(id)){applyLang();render();}
-  else{C=null;tab="home";applyLang();render();}
+  let ok=false;
+  const tryOpen=async()=>{try{if(await openConf(id)){applyLang();render();return true;}}catch(e){console.warn("açılamadı",e);}return false;};
+  if(id){ok=await tryOpen();
+    // Kayıtlı kopya sorunluysa sil ve uygulamayla gelen programla yeniden dene
+    if(!ok&&lsGet(K(id).data)!=null){unstore(K(id).data);ok=await tryOpen();}}
+  if(!ok){C=null;tab="home";applyLang();try{render();}catch(e){view.innerHTML=`<div class="empty">${esc(T("loadErr"))}</div>`;}}
   // Uygulama: açılış ekranını sayfa çizildikten sonra kapat (yapılandırmada 4 sn'lik güvenlik süresi var)
   if(NATIVE&&NP.SplashScreen)requestAnimationFrame(()=>NP.SplashScreen.hide({fadeOutDuration:200}).catch(()=>{}));
   // Kongre gününde açılışta o an süren (ya da sıradaki) oturuma kaydır
@@ -607,10 +696,10 @@ document.getElementById("nowbar").addEventListener("click",e=>{
     const LN=NP.LocalNotifications;
     if(LN)LN.addListener("localNotificationActionPerformed",ev=>{const x=ev&&ev.notification&&ev.notification.extra;if(x)openItem(x.k,x.tgk);});
     if(NP.App){
-      NP.App.addListener("appStateChange",st=>{if(st.isActive){tick();planNotifs();if(C)checkRemote(C.id);}});
+      NP.App.addListener("appStateChange",st=>{if(st.isActive){if(C)NOW0=nowConf();tick();planNotifs();if(C)checkRemote(C.id);}});
       // Android geri tuşu: Programım/Sözlü bildirilerden güne, gün sekmesinden kongre listesine (birden çok kongre varsa), sonra çıkış
       NP.App.addListener("backButton",()=>{
-        if(C&&(tab==="mine"||tab==="oral")){tab=(NOW0&&NOW0.d)||DAYS[0].k;saveTab();render();window.scrollTo(0,0);}
+        if(C&&(tab==="mine"||tab==="oral")){NOW0=nowConf();tab=(NOW0&&NOW0.d)||DAYS[0].k;saveTab();render();window.scrollTo(0,0);}
         else if(C&&tab!=="home"&&IDX.length>1){tab="home";render();window.scrollTo(0,0);}
         else NP.App.exitApp();});
     }
